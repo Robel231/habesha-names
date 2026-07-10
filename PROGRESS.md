@@ -7,7 +7,7 @@
 | Task | Title | Status | Verified evidence |
 |---|---|---|---|
 | 0 | Repo scaffold + CI | ✔ VERIFIED (evidence below) | Session 1, 2026-07-10 |
-| 1 | Fidel tables + syllables | ☐ not started | — |
+| 1 | Fidel tables + syllables | ✔ VERIFIED (evidence below) | Session 2, 2026-07-10 |
 | 2 | Fidel normalization | ☐ not started | — |
 | 3 | Transliteration (practical) | ☐ not started | — |
 | 4 | Data layer + seed lexicons | ☐ not started | — |
@@ -25,6 +25,7 @@ Status values: `☐ not started` · `◐ in progress` · `✕ blocked (reason)` 
 Items the agent must NOT resolve itself:
 - [ ] PyPI name availability result (Task 0) — confirm final package name.
   Agent finding 2026-07-10: PyPI JSON API returned 404 for all of `habesha-names`, `habeshanames`, `etnames` → all three available. Proceeding with `habesha-names` pending Robel's confirmation. (Note: the HTML page `pypi.org/project/habesha-names/` returned HTTP 200, but it was a "Client Challenge" anti-bot page, not a project page — the JSON API is the authoritative check.)
+- [ ] Consonant label override in `scripts/gen_fidel_tables.py` (Task 1): `TS → "ts'"` (ejective marking, pinned by the plan). All other labels are mechanical lowercased Unicode name fragments (e.g. ሐ→`hh`, ኀ→`x`, ጠ→`th`, ፀ→`tz`, አ→`glottal`, ዐ→`pharyngeal`) — internal series IDs, NOT romanizations; confirm they are acceptable as internal labels or extend the override map when Task 3 defines the PRACTICAL scheme.
 - [ ] `translit/schemes.py` PRACTICAL table — native-speaker review
 - [ ] All `given_names.json` entries with `"verified": false`
 - [ ] Golden corpus entries marked `"needs_human": true`
@@ -123,6 +124,50 @@ Known issues / TODOs introduced: none. CI workflow is committed but has never ex
 
 Next session should start with: Task 1 — Fidel tables + syllable decomposition (`scripts/gen_fidel_tables.py`, generated `fidel/tables.py`, `fidel/syllable.py`).
 
+## Session 2 — 2026-07-10
+
+Task attempted: Task 1 — Fidel tables + syllable decomposition
+
+What was actually done:
+- Explored the real Unicode structure of U+1200–U+137F and U+1380–U+139F via a scratchpad script (`unicodedata` 15.1.0) before writing anything: 342 syllables, 42 non-syllable codepoints (marks/punct/digits/tonal). Three structural irregularities found and handled: U+131F GGWAA uses eighth-column suffix `WAA`; U+1359 MYA and U+135A FYA are standalone one-off syllables inside the RYA row; supplement block is 4-aligned groups (orders 1/3/5/6) with a `SEBATBEIT ` name prefix on each group base.
+- `scripts/gen_fidel_tables.py`: derives every mapping from `unicodedata.name()` (nothing hand-typed), validates block structure (fails loudly on unknown suffixes / misaligned orders / label collisions / non-bijective reverse table), emits `src/habesha_names/fidel/tables.py` with a GENERATED header; `--check` mode diffs regenerated output against the committed file.
+- Generated `fidel/tables.py`: `ETHIOPIC_RANGES`, `LABIALIZED_ORDER`, `CONSONANT_BY_BASE` (50 series), `SYLLABLES` (342 entries, codepoint → (consonant label, order 1–8)), `CODEPOINT_BY_SYLLABLE` (reverse bijection).
+- `fidel/syllable.py`: `Syllable` NamedTuple, `decompose`, `compose`, `is_ethiopic` (block-range based; whitespace ignored, mixed script → False), all with runnable docstring examples using only plan-given glyphs.
+- `tests/test_fidel_syllable.py`: 15 tests — the 5 plan pin glyphs each cross-checked against `unicodedata.name` inside the test; full-table roundtrip; independent unicodedata scan proving table coverage is exact; independent re-derivation of series/orders from Unicode names; error paths; `is_ethiopic` cases.
+- Consonant labels are mechanical lowercased Unicode fragments except one override `TS → "ts'"` (plan-pinned, ejective) — flagged `verified: false` in the generator and generated header, added to Human review queue.
+
+Verification output (paste FULL command + output, unedited):
+
+Command (cmd, per Task 1 Verify block, after `cd /d D:\habesha-names && call .venv\Scripts\activate.bat`):
+
+    python scripts\gen_fidel_tables.py --check && pytest tests\test_fidel_syllable.py -q && mypy src && echo EXIT CODE: %ERRORLEVEL%
+
+Output (final run):
+
+    OK: tables.py is current (342 syllables, 50 series)
+    ...............                                                          [100%]
+    15 passed in 0.06s
+    Success: no issues found in 8 source files
+    EXIT CODE: 0
+
+Full repo gate also run clean in the same session (`ruff check . && pytest -q && mypy src`):
+
+    All checks passed!
+    .................                                                        [100%]
+    17 passed in 0.10s
+    Success: no issues found in 8 source files
+    EXIT CODE: 0
+
+Files touched: `scripts/gen_fidel_tables.py` (new), `src/habesha_names/fidel/tables.py` (generated, new), `src/habesha_names/fidel/syllable.py` (new), `tests/test_fidel_syllable.py` (new), `PROGRESS.md`
+
+Deviations from plan (and why):
+- Plan says "series bases → … vowel orders, labialized forms" without prescribing shape: labialized forms are represented as vowel order 8 (`LABIALIZED_ORDER`) within their parent series rather than as separate series, because Unicode lays them out at row offset 7 (suffixes -WA/-OA/-WAA); the five labialized-velar series (qw/qhw/xw/kw/kxw/gw at their own row bases) and the four supplement series (mw/bw/fw/pw) ARE separate series, matching Unicode structure.
+- `ETHIOPIC_RANGES` includes Ethiopic Extended U+2D80–U+2DDF (per ARCHITECTURE §4.1 Unicode coverage) so `is_ethiopic` recognizes it; it has no syllable table in v0.1 (Task 1 scope is the two blocks named in the plan), so `decompose` raises ValueError for it — documented and tested.
+
+Known issues / TODOs introduced: consonant labels for non-obvious series (hh/x/sz/tz/qh/kx/dd/gg/th/ch/ph/glottal/pharyngeal…) are internal Unicode-derived IDs, not romanizations — Task 3's PRACTICAL scheme must not blindly reuse them (queued for human review above).
+
+Next session should start with: Task 2 — Fidel normalization (`fidel/normalize.py`: homophone collapsing via decompose/compose, NFC, Ethiopic punctuation strip, whitespace normalize, idempotency property test).
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -132,6 +177,9 @@ Next session should start with: Task 1 — Fidel tables + syllable decomposition
 | 2026-07-10 | all agent-seeded linguistic data ships `verified: false` | Native-speaker gate |
 | 2026-07-10 | no `python_version` pin in `[tool.mypy]` | mypy 2.x dropped 3.9 as a check target; CI 3.9 job covers 3.9 semantics |
 | 2026-07-10 | PEP 639 license metadata (`license = "MIT"`, setuptools>=77) | Table-form `license` is deprecated/being removed in setuptools |
+| 2026-07-10 | Labialized fidel = vowel order 8 within its series (`LABIALIZED_ORDER`) | Matches Unicode row layout (offset 7, -WA/-OA/-WAA names); keeps decompose/compose a clean bijection |
+| 2026-07-10 | Consonant labels = lowercased Unicode name fragments + minimal override map (`TS→ts'`) | Mechanical derivation carries zero hallucination risk; overrides are flagged linguistic data |
+| 2026-07-10 | `is_ethiopic` is block-range based (incl. Extended, punct, digits, marks); all-non-whitespace-chars semantics | Simple, deterministic; parser does finer-grained script detection in Task 5 |
 
 ## Known issues
 
