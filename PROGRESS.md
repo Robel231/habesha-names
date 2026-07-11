@@ -8,7 +8,7 @@
 |---|---|---|---|
 | 0 | Repo scaffold + CI | ✔ VERIFIED (evidence below) | Session 1, 2026-07-10 |
 | 1 | Fidel tables + syllables | ✔ VERIFIED (evidence below) | Session 2, 2026-07-10 |
-| 2 | Fidel normalization | ☐ not started | — |
+| 2 | Fidel normalization | ✔ VERIFIED (evidence below) | Session 3, 2026-07-11 |
 | 3 | Transliteration (practical) | ☐ not started | — |
 | 4 | Data layer + seed lexicons | ☐ not started | — |
 | 5 | Parser | ☐ not started | — |
@@ -26,6 +26,8 @@ Items the agent must NOT resolve itself:
 - [ ] PyPI name availability result (Task 0) — confirm final package name.
   Agent finding 2026-07-10: PyPI JSON API returned 404 for all of `habesha-names`, `habeshanames`, `etnames` → all three available. Proceeding with `habesha-names` pending Robel's confirmation. (Note: the HTML page `pypi.org/project/habesha-names/` returned HTTP 200, but it was a "Client Challenge" anti-bot page, not a project page — the JSON API is the authoritative check.)
 - [ ] Consonant label override in `scripts/gen_fidel_tables.py` (Task 1): `TS → "ts'"` (ejective marking, pinned by the plan). All other labels are mechanical lowercased Unicode name fragments (e.g. ሐ→`hh`, ኀ→`x`, ጠ→`th`, ፀ→`tz`, አ→`glottal`, ዐ→`pharyngeal`) — internal series IDs, NOT romanizations; confirm they are acceptable as internal labels or extend the override map when Task 3 defines the PRACTICAL scheme.
+- [ ] Order-8 (labialized) homophone collapses in `fidel/normalize.py` (Task 2): the plan pins "preserve vowel order", and our tables treat the labialized column as order 8, so mechanically ሗ (HHWA)→ሇ (HOA), ኇ (XOA)→ሇ (HOA), ሧ (SZWA)→ሷ (SWA), ፇ (TZOA)→ጿ (TSWA). Orders 1–7 are uncontroversial; confirm these four order-8 mappings are linguistically right (ሇ is rare).
+- [ ] Labialized-velar series ኈ/ቘ/ዀ (xw/qhw/kxw) are NOT collapsed by `normalize` (Task 2) — the plan lists only ሀ/ሐ/ኀ, ሠ, ፀ, ዐ, and no "hw" target series exists in Unicode. Question for Robel: should ኋ (XWAA) collapse to anything (e.g. is ኋ/ሗ homophony worth handling), or is pass-through correct?
 - [ ] `translit/schemes.py` PRACTICAL table — native-speaker review
 - [ ] All `given_names.json` entries with `"verified": false`
 - [ ] Golden corpus entries marked `"needs_human": true`
@@ -168,6 +170,47 @@ Known issues / TODOs introduced: consonant labels for non-obvious series (hh/x/s
 
 Next session should start with: Task 2 — Fidel normalization (`fidel/normalize.py`: homophone collapsing via decompose/compose, NFC, Ethiopic punctuation strip, whitespace normalize, idempotency property test).
 
+## Session 3 — 2026-07-11
+
+Task attempted: Task 2 — Fidel normalization
+
+What was actually done:
+- Scratchpad exploration first (same discipline as Session 2): confirmed via `unicodedata` 15.1.0 that every vowel order of the four collapse sources (hh, x, sz, tz, pharyngeal — orders 1–8, pharyngeal 1–7) has a same-order target in its destination series, so the collapse is total and `compose` can never fail; Ethiopic punctuation is exactly U+1360–U+1368 (all category Po); both tabled blocks are NFC-stable.
+- `src/habesha_names/fidel/normalize.py`: `normalize(text)` = NFC → homophone collapse → Ethiopic punctuation handling → whitespace collapse/trim. Collapse map (`HOMOPHONE_SERIES`: hh→h, x→h, sz→s, tz→ts', pharyngeal→glottal) is applied per-character via a `str.translate` table built at import from the generated tables (`SYLLABLES` + `CODEPOINT_BY_SYLLABLE`) — no fidel↔codepoint pair hand-typed in source. Wordspace ፡ becomes an ASCII space; the other eight punctuation marks are stripped. Digits, tonal marks, combining marks, Extended block, and non-Ethiopic text pass through (documented in module docstring).
+- `tests/test_fidel_normalize.py`: 24 tests — plan-pinned collapses cross-checked against `unicodedata.name`; full-table property tests (order preserved for every collapsed syllable, non-homophones byte-identical, no homophone source survives in output); punctuation set re-derived independently from `unicodedata.category`; idempotency over every assigned Ethiopic codepoint and over plan-given strings; NFC, whitespace, Latin/mixed pass-through, and docstring-example tests. All fidel test strings come from the plan/architecture documents (ኃይለ ሥላሴ, ወይዘሮ ጸሐይ ገብረመድህን, ፀሐይ) — no invented names.
+
+Verification output (paste FULL command + output, unedited):
+
+Command (cmd, per Task 2 Verify block, after `cd /d D:\habesha-names && call .venv\Scripts\activate.bat`):
+
+    pytest tests\test_fidel_normalize.py -q && echo EXIT CODE: %ERRORLEVEL%
+
+Output:
+
+    ........................                                                 [100%]
+    24 passed in 0.14s
+    EXIT CODE: 0
+
+Full repo gate also run clean in the same session (`ruff check . && pytest -q && mypy src`):
+
+    All checks passed!
+    .........................................                                [100%]
+    41 passed in 0.17s
+    Success: no issues found in 9 source files
+    EXIT CODE: 0
+
+Files touched: `src/habesha_names/fidel/normalize.py` (new), `tests/test_fidel_normalize.py` (new), `PROGRESS.md`
+
+Deviations from plan (and why):
+- Plan says "Ethiopic punctuation strip"; U+1361 ETHIOPIC WORDSPACE ፡ is converted to an ASCII space instead of deleted, because it is a word separator — deleting it would merge two name tokens into one (e.g. ወይዘሮ፡ጸሐይ would become one token). The other eight marks (U+1360, U+1362–U+1368) are stripped as specified.
+- The labialized (order-8) members of the collapsed series map mechanically along with orders 1–7 (ሗ→ሇ etc.) since the plan pins "preserving vowel order"; queued for human review above because ሇ is a rare character and I cannot verify the homophony as a non-speaker.
+
+Known issues / TODOs introduced:
+- Combining gemination/vowel-length marks (U+135D–U+135F) pass through `normalize` untouched; whether matching should strip them is a Task 6/8 (or human) decision, not taken here.
+- Labialized-velar series ኈ/ቘ/ዀ not collapsed (queued for Robel above).
+
+Next session should start with: Task 3 — Transliteration practical scheme (`translit/schemes.py` PRACTICAL table seeded from generated consonant labels + marked `verified: false`, `translit/to_latin.py` `transliterate()`; round-trip sanity on ተስፋዬ→Tesfaye, ገብረመድህን→Gebremedhin, ጸሐይ→Tsehay, ኃይለ ሥላሴ→Haile Selassie). Note for Task 3: `normalize` collapses ፀ→ጸ and ኃ→ሃ first, so the PRACTICAL table only needs Latin values for the canonical (post-collapse) series if transliteration normalizes first — decide and document.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -180,6 +223,9 @@ Next session should start with: Task 2 — Fidel normalization (`fidel/normalize
 | 2026-07-10 | Labialized fidel = vowel order 8 within its series (`LABIALIZED_ORDER`) | Matches Unicode row layout (offset 7, -WA/-OA/-WAA names); keeps decompose/compose a clean bijection |
 | 2026-07-10 | Consonant labels = lowercased Unicode name fragments + minimal override map (`TS→ts'`) | Mechanical derivation carries zero hallucination risk; overrides are flagged linguistic data |
 | 2026-07-10 | `is_ethiopic` is block-range based (incl. Extended, punct, digits, marks); all-non-whitespace-chars semantics | Simple, deterministic; parser does finer-grained script detection in Task 5 |
+| 2026-07-11 | Homophone collapse = series-label map applied via `str.translate` table built at import from generated tables | Mechanical derivation, zero hand-typed fidel; O(1) per char |
+| 2026-07-11 | ፡ wordspace → ASCII space; other Ethiopic punct (U+1360, U+1362–U+1368) stripped; punct set derived from `unicodedata.category` | ፡ is a word separator — stripping it would merge name tokens |
+| 2026-07-11 | `normalize` passes through digits/tonal/combining marks/Extended block and never raises | Task 2 scope is exactly the plan's four collapses + punct + whitespace; safety on arbitrary input |
 
 ## Known issues
 
