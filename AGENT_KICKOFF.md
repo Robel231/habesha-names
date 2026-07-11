@@ -11,6 +11,7 @@ You are the implementation agent for **habesha-names**, an open-source Python li
 - Windows, **cmd shell — NOT PowerShell**. Use `\` paths, `&&` chaining, `venv\Scripts\activate.bat`.
 - Repo: `D:\habesha-names`. Python 3.11 local, CI matrix 3.9–3.13.
 - Runtime dependencies: **stdlib only. Zero exceptions.** Dev deps limited to pytest, ruff, mypy.
+- All verification commands run inside `.venv` — use `check.bat` at repo root (pytest -q && ruff check . && mypy src) as the full gate.
 
 ## Session protocol
 1. Read PROGRESS.md. Pick the FIRST task that is not `✔ VERIFIED`. Work ONE task per session.
@@ -37,7 +38,49 @@ You are the implementation agent for **habesha-names**, an open-source Python li
 - Deterministic outputs everywhere — stable sort orders, no randomness, no network calls, no file writes outside the repo.
 - Pure functions in `fidel/`, `translit/`, `match/`; state only in the lazy data loader.
 - Small commits, meaningful test names, property tests where the plan specifies them.
+SESSION START — housekeeping first, then Task 3.
 
+HOUSEKEEPING (do before Task 3, include in the same session):
+1. Human verification complete: Tasks 0, 1, and 2 are confirmed VERIFIED by Robel
+   (repo-level check: 41 passed, ruff clean, mypy clean, normalize() spot-checked
+   on "ወይዘሮ ፀሐይ ገብረመድህን።" → correct collapse, 3 tokens). Update PROGRESS.md
+   status board to reflect human verification of Tasks 0–2.
+2. A check.bat now exists at repo root (activates .venv, runs pytest -q && ruff
+   check . && mypy src). Add to AGENT_KICKOFF.md environment section: "All
+   verification commands run inside .venv — use check.bat at repo root."
+   Use check.bat as the full gate from now on.
+
+TASK 3 — Practical transliteration scheme (fidel → Latin), per
+IMPLEMENTATION_PLAN.md, with these HARD REQUIREMENTS on top of the plan:
+
+1. transliterate() MUST call normalize() first, unconditionally. Consequence:
+   the PRACTICAL table only defines cells for post-collapse series (no rows for
+   ሐ/ኀ/ሠ/ፀ/ዐ — they can never reach the table).
+2. Pinned invariant test required:
+   transliterate("ፀሐይ") == transliterate("ጸሀይ")
+3. The PRACTICAL table in schemes.py ships with a "verified: false" header
+   comment. You are not a native speaker — every non-obvious cell choice must
+   be listed in PROGRESS.md → Human review queue WITH the alternatives you
+   considered and why you picked your default. At minimum I expect entries for:
+   - ቀ series: q vs k
+   - 6th-order vowel: rendered "e", "i", or dropped — word-medial vs word-final
+   - ጸ series: ts vs tse handling across vowel orders
+   - ቸ/ጨ: ch collision handling
+   - ኘ: ny/gn choice
+   - Any labialized-form romanization
+   I decide these, not you. Pick sensible defaults so tests pass, flag them all.
+4. Round-trip sanity tests from the plan are mandatory:
+   ተስፋዬ→Tesfaye, ገብረመድህን→Gebremedhin, ጸሐይ→Tsehay, ኃይለ ሥላሴ→Haile Selassie.
+   If your default table choices can't produce one of these exactly, do NOT
+   silently special-case it — log the conflict in PROGRESS.md and mark the test
+   xfail with a reason. Table-vs-expected conflicts are review-queue items.
+
+Protocol reminders: one task, run check.bat plus the Task 3 Verify block, paste
+full unedited output into PROGRESS.md Session log, commit as
+"task-3: practical transliteration (fidel → Latin)". Report which review-queue
+items you added.
+
+Read PROGRESS.md first, confirm Task 3 is the first open task, then begin.
 ## Scope discipline
 - v0.1 scope = Tasks 0–10 exactly. v0.2/v0.3 backlog items in IMPLEMENTATION_PLAN.md are forbidden without explicit instruction — do not "improve" ahead.
 - Do not add dependencies, CLI entry points, async, plugins, or config files not in the architecture.

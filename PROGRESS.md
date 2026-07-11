@@ -6,9 +6,9 @@
 
 | Task | Title | Status | Verified evidence |
 |---|---|---|---|
-| 0 | Repo scaffold + CI | ✔ VERIFIED (evidence below) | Session 1, 2026-07-10 |
-| 1 | Fidel tables + syllables | ✔ VERIFIED (evidence below) | Session 2, 2026-07-10 |
-| 2 | Fidel normalization | ✔ VERIFIED (evidence below) | Session 3, 2026-07-11 |
+| 0 | Repo scaffold + CI | ✔ VERIFIED (evidence below) | Session 1, 2026-07-10 · human-verified by Robel 2026-07-11 |
+| 1 | Fidel tables + syllables | ✔ VERIFIED (evidence below) | Session 2, 2026-07-10 · human-verified by Robel 2026-07-11 |
+| 2 | Fidel normalization | ✔ VERIFIED (evidence below) | Session 3, 2026-07-11 · human-verified by Robel 2026-07-11 (41 passed, ruff/mypy clean, normalize() spot-checked on "ወይዘሮ ፀሐይ ገብረመድህን።") |
 | 3 | Transliteration (practical) | ☐ not started | — |
 | 4 | Data layer + seed lexicons | ☐ not started | — |
 | 5 | Parser | ☐ not started | — |
