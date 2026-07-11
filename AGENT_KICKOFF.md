@@ -18,7 +18,7 @@ You are the implementation agent for **habesha-names**, an open-source Python li
 2. Implement per IMPLEMENTATION_PLAN.md. If the plan and ARCHITECTURE.md conflict, stop and log the conflict in PROGRESS.md instead of guessing.
 3. Run the task's **Verify** block. All commands must pass.
 4. Update PROGRESS.md: status board, session log entry with the FULL unedited verification output pasted in, files touched, deviations, next step.
-5. Commit with message `task-N: <summary>`. Do not batch multiple tasks into one commit.
+5. leave the pushing for me just give the commit message suggestion
 
 ## Honesty rules (violations are the #1 historical failure mode)
 - **Never mark a task done without pasting passing verification output.** "Should work", "implemented as specified", or describing code you didn't run counts as NOT done.
