@@ -9,7 +9,7 @@
 | 0 | Repo scaffold + CI | ✔ VERIFIED (evidence below) | Session 1, 2026-07-10 · human-verified by Robel 2026-07-11 |
 | 1 | Fidel tables + syllables | ✔ VERIFIED (evidence below) | Session 2, 2026-07-10 · human-verified by Robel 2026-07-11 |
 | 2 | Fidel normalization | ✔ VERIFIED (evidence below) | Session 3, 2026-07-11 · human-verified by Robel 2026-07-11 (41 passed, ruff/mypy clean, normalize() spot-checked on "ወይዘሮ ፀሐይ ገብረመድህን።") |
-| 3 | Transliteration (practical) | ☐ not started | — |
+| 3 | Transliteration (practical) | ✔ VERIFIED (evidence below) | Session 4, 2026-07-11 |
 | 4 | Data layer + seed lexicons | ☐ not started | — |
 | 5 | Parser | ☐ not started | — |
 | 6 | Phonetic key + token sim | ☐ not started | — |
@@ -28,7 +28,18 @@ Items the agent must NOT resolve itself:
 - [ ] Consonant label override in `scripts/gen_fidel_tables.py` (Task 1): `TS → "ts'"` (ejective marking, pinned by the plan). All other labels are mechanical lowercased Unicode name fragments (e.g. ሐ→`hh`, ኀ→`x`, ጠ→`th`, ፀ→`tz`, አ→`glottal`, ዐ→`pharyngeal`) — internal series IDs, NOT romanizations; confirm they are acceptable as internal labels or extend the override map when Task 3 defines the PRACTICAL scheme.
 - [ ] Order-8 (labialized) homophone collapses in `fidel/normalize.py` (Task 2): the plan pins "preserve vowel order", and our tables treat the labialized column as order 8, so mechanically ሗ (HHWA)→ሇ (HOA), ኇ (XOA)→ሇ (HOA), ሧ (SZWA)→ሷ (SWA), ፇ (TZOA)→ጿ (TSWA). Orders 1–7 are uncontroversial; confirm these four order-8 mappings are linguistically right (ሇ is rare).
 - [ ] Labialized-velar series ኈ/ቘ/ዀ (xw/qhw/kxw) are NOT collapsed by `normalize` (Task 2) — the plan lists only ሀ/ሐ/ኀ, ሠ, ፀ, ዐ, and no "hw" target series exists in Unicode. Question for Robel: should ኋ (XWAA) collapse to anything (e.g. is ኋ/ሗ homophony worth handling), or is pass-through correct?
-- [ ] `translit/schemes.py` PRACTICAL table — native-speaker review
+- [ ] `translit/schemes.py` PRACTICAL table — native-speaker review. Every default below is agent-chosen (`verified: false`), Session 4, 2026-07-11. Robel decides each:
+  - [ ] **ቀ series → "k"** (as in Kenenisa, Kelemu — practical spelling merges ejective k' into k). Alternatives considered: "q" (preserves the distinction, common in Eritrean/Tigrinya contexts). Task 7's variant engine emits q↔k either way.
+  - [ ] **6th-order vowel (ə)**: bare consonant when word-final or after a vowel; epenthetic **"i"** appended when word-initial or after a consonant. This is the smallest rule reproducing the plan seeds: ተስፋዬ→Tesfaye (bare after vowel), ገብረመድህን→Gebremedhin ("i" after consonant), ጸሐይ→Tsehay (bare final), ስላሴ→Silase ("i" initial). Alternatives: always "i", always "e", always dropped, cluster-counting insertion. **Known imperfection**: word-final is always bare, so word-final clusters lose the vowel (e.g. ፍቅር would come out "Fikr", not "Fikir") — decide whether final clusters should epenthesize.
+  - [ ] **ጸ series → "ts" + vowel** across all orders (tse/tsu/tsi/tsa/tse/ts[+i]/tso/tswa). Alternatives: "s" (Sehay), "tz" (Tzehay). Picked "ts" because the plan's canonical form is Tsehay; variants engine covers ts↔s↔tz.
+  - [ ] **ቸ and ጨ both → "ch"** (deliberate lossy collision — practical spelling doesn't distinguish them). Alternatives: ጨ → "ch'" (violates no-apostrophe practical contract), "tch", "c".
+  - [ ] **ኘ → "gn"** (as in Agegnehu, "Tigrigna"). Alternative: "ny" (as in "Tigrinya"). Note: "gn" output is ambiguous with a genuine g+n letter sequence in Latin-side matching; "ny" would avoid that.
+  - [ ] **Labialized romanization**: order-8 column → consonant + "wa" (ሏ→lwa, ሟ→mwa; -OA forms like ሇ also →"wa"; ኧ→"wa"). Separate labialized-velar series: ቈ qw→"kw" (follows q→k), ኰ kw→"kw", ጐ gw→"gw" (ጓ→gwa), ኈ xw→"hw" (ኋ→hwa), ዀ kxw→"hw", ቘ qhw→"qw"; Sebatbeit ᎀᎄᎈᎌ → "mw/bw/fw/pw". Alternatives: "ua"/"we" renderings (ኋላ → Huala vs Hwala).
+  - [ ] **Guttural order-1 → "a"** for h and glottal series only (ሀ→"ha", አ→"a"; yields Tsehay, Haile, Abebe instead of *Tsehey, *Hey…). Question: should ኸ (kx→"h") and ኈ/ዀ (hw) also count as guttural for order 1 ("ha"/"hwa" vs current "he"/"hwe")?
+  - [ ] **6th-order የ glide**: after a vowel → "i" word-medially (ኃይለ→Haile, ወይዘሮ→Weizero) but "y" word-finally (ጸሐይ→Tsehay). Alternatives: always "y" (→Hayle), "i" finally too (→Tsehai). Variant engine covers -ay↔-ai↔-aye.
+  - [ ] **ወ order 1 → "we"** → ወይዘሮ comes out "Weizero", but the conventional title form is "Woizero" (Task 4 titles list). Alternative: w,1 → "wo" (fixes the title, changes every other ወ). Decide before Task 4 seeds titles.json.
+  - [ ] **Order-5 é → plain "e"** (ሴ→"se"). Conventional "Selassie" spells it "ie" — not derivable from a general table, and the "ss" gemination is unmarked in fidel, so the plan's ኃይለ ሥላሴ→"Haile Selassie" round-trip is **xfail** (table yields "Haile Silase"; no silent special-case added, per kickoff). Alternatives: é→"ie" or "ee" globally.
+  - [ ] **Remaining consonant defaults** (all flagged): ጠ th→"t" (Taitu), ጰ ph→"p" (Paulos), ቐ qh→"q", ኸ kx→"h" (alt "kh"), ዠ zh→"zh" (alt "j"), ዸ dd→"dh" (Oromo dh), ጘ gg→"ng", ፘ/ፙ/ፚ ry/my/fy→"rya/mya/fya", አ glottal→vowel only, ቨ v→"v", ፐ p→"p" (collides with ጰ).
 - [ ] All `given_names.json` entries with `"verified": false`
 - [ ] Golden corpus entries marked `"needs_human": true`
 - [ ] Final match-score thresholds (Task 8 tuning)
@@ -211,6 +222,50 @@ Known issues / TODOs introduced:
 
 Next session should start with: Task 3 — Transliteration practical scheme (`translit/schemes.py` PRACTICAL table seeded from generated consonant labels + marked `verified: false`, `translit/to_latin.py` `transliterate()`; round-trip sanity on ተስፋዬ→Tesfaye, ገብረመድህን→Gebremedhin, ጸሐይ→Tsehay, ኃይለ ሥላሴ→Haile Selassie). Note for Task 3: `normalize` collapses ፀ→ጸ and ኃ→ሃ first, so the PRACTICAL table only needs Latin values for the canonical (post-collapse) series if transliteration normalizes first — decide and document.
 
+## Session 4 — 2026-07-11
+
+Task attempted: Housekeeping (per session kickoff) + Task 3 — Transliteration (practical scheme, fidel → Latin)
+
+What was actually done:
+- Housekeeping: status board now records Robel's human verification of Tasks 0–2; AGENT_KICKOFF.md environment section documents `check.bat` as the full gate. Committed separately (`housekeeping: record human verification of tasks 0-2, adopt check.bat gate`) so the task commit stays single-purpose.
+- `src/habesha_names/translit/schemes.py`: `PRACTICAL` table `(consonant label, vowel order) → Latin`, built at import by crossing `_CONSONANTS` (45 post-collapse series → Latin onset) × `_VOWELS` (order → vowel) over exactly the syllables in the generated `SYLLABLES` table — no hand-typed fidel↔Latin pair, coverage is testable. Per the kickoff hard requirement, series collapsed by `normalize()` (hh ሐ, x ኀ, sz ሠ, tz ፀ, pharyngeal ዐ) have NO rows. `verified: false` header comment; `SCHEMES` registry holds only `"practical"` in v0.1.
+- `src/habesha_names/translit/to_latin.py`: `transliterate(text, scheme="practical")` — calls `normalize()` first, unconditionally; per-word rendering with three context rules (all flagged unverified): 6th-order ə bare when word-final/after-vowel else +epenthetic "i"; 6th-order የ glide "i" medial / "y" final after a vowel; guttural (h, glottal) order-1 vowel "a". Fidel-initial words are name-cased; Latin/digits/marks/Extended pass through. Unknown scheme → `ValueError`.
+- `tests/test_translit_latin.py`: 21 tests — pinned invariant `transliterate("ፀሐይ") == transliterate("ጸሀይ") == "Tsehay"` (chars cross-checked via `unicodedata.name`); plan round-trips Tesfaye/Gebremedhin/Tsehay; ኃይለ ሥላሴ→"Haile Selassie" marked `xfail(strict=True)` with logged reason (see deviations) plus a behavior pin of the actual "Haile Silase" output and a passing "ኃይለ"→"Haile" check; full-table property tests (every homophone-source syllable transliterates identically to its target; table covers exactly the post-collapse syllables; no collapsed-series rows; ASCII-lowercase-only cells); normalize-first equivalence; passthrough/casing/scheme/empty/stability/doctest tests.
+- Review queue: expanded the PRACTICAL-table item with 12 decision sub-items (ቀ, 6th-order ə, ጸ, ቸ/ጨ, ኘ, labialized forms, guttural order-1, የ glide, ወ "we"/"wo", order-5 é + Selassie conflict, remaining consonants), each with alternatives considered and the rationale for the default.
+
+Verification output (paste FULL command + output, unedited):
+
+Task 3 Verify block (cmd, after `call .venv\Scripts\activate.bat`):
+
+    pytest tests\test_translit_latin.py -q && echo EXIT CODE: %ERRORLEVEL%
+
+Output:
+
+    ....x................                                                    [100%]
+    20 passed, 1 xfailed in 0.57s
+    EXIT CODE: 0
+
+Full repo gate (`D:\habesha-names\check.bat` = pytest -q && ruff check . && mypy src, inside .venv):
+
+    .............................................x................           [100%]
+    61 passed, 1 xfailed in 0.44s
+    All checks passed!
+    Success: no issues found in 11 source files
+    EXIT CODE: 0
+
+Files touched: `src/habesha_names/translit/schemes.py` (new), `src/habesha_names/translit/to_latin.py` (new), `tests/test_translit_latin.py` (new), `PROGRESS.md`, plus housekeeping commit (`AGENT_KICKOFF.md`, `PROGRESS.md` status board, `check.bat` first tracked).
+
+Deviations from plan (and why):
+- Plan round-trip ኃይለ ሥላሴ→"Haile Selassie" is `xfail(strict=True)`, not passing: the conventional spelling needs geminated "ss" (gemination is unmarked in fidel) and "ie" for the order-5 vowel (a per-name convention). No table choice produces it without special-casing, which the kickoff forbids. Default output is "Haile Silase" ("Haile" itself matches). Review-queue item added; Robel decides (e.g. é→"ie" globally, lexicon-level exceptions in Task 4, or accept the xfail).
+- The 6th-order epenthetic vowel and glide handling live as context rules in `to_latin.py` rather than as static table cells (a cell can't see word position); the table's order-6 cells hold the bare consonant and the rules are documented in both module docstrings.
+- `check.bat` had to be invoked by absolute path in this session's shell harness (`cmd /c D:\habesha-names\check.bat`); relative invocation was not resolved. Contents ran unmodified.
+
+Known issues / TODOs introduced:
+- Word-final 6th-order consonants never epenthesize → word-final clusters lose their vowel (ፍቅር-style names would come out "Fikr"). Flagged in the review queue; revisit with Robel's 6th-order decision.
+- "Weizero" (ወይዘሮ) vs conventional "Woizero" mismatch — must be settled before Task 4 seeds `titles.json`.
+
+Next session should start with: Task 4 — Data layer (`data/schema.md`, `titles.json`, `compounds.json`, `given_names.json` all `"verified": false`, lazy loader `_data.py`). Check the review queue first in case Robel has decided the ወ/ኘ/ቀ defaults — titles.json spellings depend on them.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -226,6 +281,11 @@ Next session should start with: Task 3 — Transliteration practical scheme (`tr
 | 2026-07-11 | Homophone collapse = series-label map applied via `str.translate` table built at import from generated tables | Mechanical derivation, zero hand-typed fidel; O(1) per char |
 | 2026-07-11 | ፡ wordspace → ASCII space; other Ethiopic punct (U+1360, U+1362–U+1368) stripped; punct set derived from `unicodedata.category` | ፡ is a word separator — stripping it would merge name tokens |
 | 2026-07-11 | `normalize` passes through digits/tonal/combining marks/Extended block and never raises | Task 2 scope is exactly the plan's four collapses + punct + whitespace; safety on arbitrary input |
+| 2026-07-11 | `transliterate()` normalizes first, unconditionally; PRACTICAL has no rows for collapsed series | Kickoff hard requirement; homophone identity holds by construction, one source of truth |
+| 2026-07-11 | PRACTICAL built at import as `_CONSONANTS` × `_VOWELS` over the generated `SYLLABLES` | No hand-typed fidel↔Latin cells; exact-coverage property test possible |
+| 2026-07-11 | 6th-order ə: bare if word-final/after-vowel, else +"i"; የ glide i/y; guttural (h, glottal) order-1 "a" | Smallest context-rule set reproducing all plan round-trip seeds; all flagged for review |
+| 2026-07-11 | ኃይለ ሥላሴ→"Haile Selassie" = strict xfail, no special-case | Gemination + "ie" not table-derivable; kickoff forbids silent special-casing |
+| 2026-07-11 | Fidel-initial words name-cased in output; non-Ethiopic tokens byte-preserved | It's a names library; must not mangle Latin/mixed input |
 
 ## Known issues
 
