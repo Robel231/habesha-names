@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "entries": [
+    {
+      "canonical": "Ato",
+      "abbreviations": [],
+      "fidel": ["አቶ"],
+      "gender": "m",
+      "category": "civil",
+      "verified": false
+    },
+    {
+      "canonical": "Woizero",
+      "abbreviations": ["W/ro"],
+      "fidel": ["ወይዘሮ", "ወ/ሮ"],
+      "gender": "f",
+      "category": "civil",
+      "verified": false
+    },
+    {
+      "canonical": "Woizerit",
+      "abbreviations": ["W/rt"],
+      "fidel": ["ወይዘሪት", "ወ/ሪት"],
+      "gender": "f",
+      "category": "civil",
+      "verified": false
+    },
+    {
+      "canonical": "Dr",
+      "abbreviations": ["Dr.", "Doctor"],
+      "fidel": ["ዶክተር", "ዶ/ር"],
+      "gender": null,
+      "category": "academic",
+      "verified": false
+    },
+    {
+      "canonical": "Prof",
+      "abbreviations": ["Prof.", "Professor"],
+      "fidel": ["ፕሮፌሰር"],
+      "gender": null,
+      "category": "academic",
+      "verified": false
+    },
+    {
+      "canonical": "Eng",
+      "abbreviations": ["Eng.", "Engineer"],
+      "fidel": ["ኢንጂነር"],
+      "gender": null,
+      "category": "professional",
+      "verified": false
+    },
+    {
+      "canonical": "Qes",
+      "abbreviations": ["Kes"],
+      "fidel": ["ቄስ"],
+      "gender": "m",
+      "category": "religious",
+      "verified": false
+    },
+    {
+      "canonical": "Abba",
+      "abbreviations": ["Aba"],
+      "fidel": ["አባ"],
+      "gender": "m",
+      "category": "religious",
+      "verified": false
+    },
+    {
+      "canonical": "Abune",
+      "abbreviations": ["Abuna"],
+      "fidel": ["አቡነ"],
+      "gender": "m",
+      "category": "religious",
+      "verified": false
+    },
+    {
+      "canonical": "Memhir",
+      "abbreviations": ["Memher"],
+      "fidel": ["መምህር", "መ/ር"],
+      "gender": null,
+      "category": "professional",
+      "verified": false
+    },
+    {
+      "canonical": "Sheikh",
+      "abbreviations": ["Sheik", "Shek"],
+      "fidel": ["ሼህ"],
+      "gender": "m",
+      "category": "religious",
+      "verified": false
+    },
+    {
+      "canonical": "Haji",
+      "abbreviations": ["Hajji"],
+      "fidel": ["ሀጂ"],
+      "gender": "m",
+      "category": "religious",
+      "verified": false
+    }
+  ]
+}

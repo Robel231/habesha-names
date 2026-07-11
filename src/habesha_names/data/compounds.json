@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "prefixes": [
+    { "latin": "Gebre", "fidel": "ገብረ", "gender": "m", "verified": false },
+    { "latin": "Wolde", "fidel": "ወልደ", "gender": "m", "verified": false },
+    { "latin": "Haile", "fidel": "ኃይለ", "gender": "m", "verified": false },
+    { "latin": "Tekle", "fidel": "ተክለ", "gender": "m", "verified": false },
+    { "latin": "Kidane", "fidel": "ኪዳነ", "gender": "m", "verified": false },
+    { "latin": "Zera", "fidel": "ዘርአ", "gender": "m", "verified": false },
+    { "latin": "Amde", "fidel": "አምደ", "gender": "m", "verified": false },
+    { "latin": "Fikre", "fidel": "ፍቅረ", "gender": "m", "verified": false },
+    { "latin": "Berhane", "fidel": "ብርሃነ", "gender": "m", "verified": false },
+    { "latin": "Welete", "fidel": "ወለተ", "gender": "f", "verified": false }
+  ],
+  "second_elements": [
+    { "latin": "Mariam", "fidel": "ማርያም", "verified": false },
+    { "latin": "Michael", "fidel": "ሚካኤል", "verified": false },
+    { "latin": "Giorgis", "fidel": "ጊዮርጊስ", "verified": false },
+    { "latin": "Selassie", "fidel": "ሥላሴ", "verified": false },
+    { "latin": "Medhin", "fidel": "መድህን", "verified": false },
+    { "latin": "Iyesus", "fidel": "ኢየሱስ", "verified": false },
+    { "latin": "Kristos", "fidel": "ክርስቶስ", "verified": false },
+    { "latin": "Egziabher", "fidel": "እግዚአብሔር", "verified": false },
+    { "latin": "Hiwot", "fidel": "ሕይወት", "verified": false },
+    { "latin": "Haymanot", "fidel": "ሃይማኖት", "verified": false },
+    { "latin": "Ab", "fidel": "አብ", "verified": false },
+    { "latin": "Tsadik", "fidel": "ጻድቅ", "verified": false }
+  ],
+  "abbreviation_expansions": [
+    {
+      "abbrev": "G",
+      "candidates": [
+        { "expansion": "Gebre", "weight": 0.8 },
+        { "expansion": "Girma", "weight": 0.2 }
+      ],
+      "verified": false
+    },
+    {
+      "abbrev": "W",
+      "candidates": [
+        { "expansion": "Wolde", "weight": 0.6 },
+        { "expansion": "Welete", "weight": 0.4 }
+      ],
+      "verified": false
+    },
+    {
+      "abbrev": "H",
+      "candidates": [{ "expansion": "Haile", "weight": 1.0 }],
+      "verified": false
+    },
+    {
+      "abbrev": "T",
+      "candidates": [{ "expansion": "Tekle", "weight": 1.0 }],
+      "verified": false
+    },
+    {
+      "abbrev": "K",
+      "candidates": [{ "expansion": "Kidane", "weight": 1.0 }],
+      "verified": false
+    },
+    {
+      "abbrev": "B",
+      "candidates": [{ "expansion": "Berhane", "weight": 1.0 }],
+      "verified": false
+    },
+    {
+      "abbrev": "F",
+      "candidates": [{ "expansion": "Fikre", "weight": 1.0 }],
+      "verified": false
+    },
+    {
+      "abbrev": "Z",
+      "candidates": [{ "expansion": "Zera", "weight": 1.0 }],
+      "verified": false
+    },
+    {
+      "abbrev": "A",
+      "candidates": [{ "expansion": "Amde", "weight": 1.0 }],
+      "verified": false
+    }
+  ]
+}

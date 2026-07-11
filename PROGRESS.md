@@ -10,7 +10,7 @@
 | 1 | Fidel tables + syllables | ✔ VERIFIED (evidence below) | Session 2, 2026-07-10 · human-verified by Robel 2026-07-11 |
 | 2 | Fidel normalization | ✔ VERIFIED (evidence below) | Session 3, 2026-07-11 · human-verified by Robel 2026-07-11 (41 passed, ruff/mypy clean, normalize() spot-checked on "ወይዘሮ ፀሐይ ገብረመድህን።") |
 | 3 | Transliteration (practical) | ✔ VERIFIED (evidence below) | Session 4, 2026-07-11 |
-| 4 | Data layer + seed lexicons | ☐ not started | — |
+| 4 | Data layer + seed lexicons | ✔ VERIFIED (evidence below) | Session 5, 2026-07-11 |
 | 5 | Parser | ☐ not started | — |
 | 6 | Phonetic key + token sim | ☐ not started | — |
 | 7 | Variant generator | ☐ not started | — |
@@ -40,6 +40,14 @@ Items the agent must NOT resolve itself:
   - [ ] **ወ order 1 → "we"** → ወይዘሮ comes out "Weizero", but the conventional title form is "Woizero" (Task 4 titles list). Alternative: w,1 → "wo" (fixes the title, changes every other ወ). Decide before Task 4 seeds titles.json.
   - [ ] **Order-5 é → plain "e"** (ሴ→"se"). Conventional "Selassie" spells it "ie" — not derivable from a general table, and the "ss" gemination is unmarked in fidel, so the plan's ኃይለ ሥላሴ→"Haile Selassie" round-trip is **xfail** (table yields "Haile Silase"; no silent special-case added, per kickoff). Alternatives: é→"ie" or "ee" globally.
   - [ ] **Remaining consonant defaults** (all flagged): ጠ th→"t" (Taitu), ጰ ph→"p" (Paulos), ቐ qh→"q", ኸ kx→"h" (alt "kh"), ዠ zh→"zh" (alt "j"), ዸ dd→"dh" (Oromo dh), ጘ gg→"ng", ፘ/ፙ/ፚ ry/my/fy→"rya/mya/fya", አ glottal→vowel only, ቨ v→"v", ፐ p→"p" (collides with ጰ).
+- [ ] `data/titles.json` (Task 4, Session 5) — all 12 entries agent-seeded (`verified: false`). The Latin canonicals are plan-pinned (Ato, Woizero, W/ro, …); everything else needs review: fidel spellings (esp. **Sheikh → ሼህ**, alternatives ሼክ/ሸይኽ; **Haji → ሀጂ**, often written ሐጂ — normalize collapses both), fidel slash abbreviations (ወ/ሮ, ወ/ሪት, ዶ/ር, መ/ር), the Latin abbreviation lists, category assignments (**Memhir → "professional"** — could be academic or religious), and gender flags (Qes/Abba/Abune/Sheikh/Haji marked `m`; Dr/Prof/Eng/Memhir `null`).
+- [ ] `data/compounds.json` (Task 4, Session 5) — prefixes and second elements are exactly the ARCHITECTURE §4.3 lists, but the fidel spellings are agent-typed (esp. Zera ዘርአ, Egziabher እግዚአብሔር, Hiwot ሕይወት, Tsadik ጻድቅ). Prefix genders: all `m` except Welete `f` — confirm. **ALL abbreviation-expansion weights are invented**: G/→Gebre 0.8 / Girma 0.2 (ratio from the ARCHITECTURE example, magnitude mine); W/→Wolde 0.6 / Welete 0.4; H/T/K/B/F/Z/A single-candidate 1.0 — are other expansions common (e.g. H/→Habte, T/→Tesfa)?
+- [ ] `data/given_names.json` (Task 4, Session 5) — 56 entries, **every field agent-guessed**: fidel spelling, canonical Latin, variants list, gender distribution (all 1.0 single-gender except Tsehay 0.97/0.03 from the ARCHITECTURE example and Selam 0.9/0.1), origin tags (amharic/tigrinya/geez/arabic/biblical/oromo), freq_tier 1–3. Mechanical cross-check `transliterate(fidel)` vs canonical ran in Session 5: **39 OK, 11 = a listed variant, 6 mismatches** for Robel to adjudicate (fidel typo vs. canonical spelling vs. engine rule):
+  - ኃይለማርያም → "Hailemaryam" vs canonical "Hailemariam" (ya-rendering; same for second element ማርያም → "Maryam" vs "Mariam")
+  - መሐመድ → "Mehamed" vs "Mohammed" (no plain fidel form yields "Mo-"; Task 7's Arabic-origin table covers the variants)
+  - ትግስት → "Tigsit", ቅድስት → "Kidsit" (6th-order epenthetic "i" lands after the wrong consonant in C₁C₂-final clusters — same family as the ፍቅር→"Fikr" issue from Session 4)
+  - ዮሐንስ → "Yohans" vs "Yohannes"; ዳንኤል → "Danel" vs "Daniel"
+  - Second elements not matching their Latin: ሚካኤል→"Mikael" (Michael), ጊዮርጊስ→"Giyorgis" (Giorgis), ክርስቶስ→"Kirsitos" (Kristos), እግዚአብሔር→"Igziabher" (Egziabher), ሕይወት→"Hiiwet" (Hiwot — the የ-glide-after-"i" rule doubles the i), ሃይማኖት→"Haimanot" (Haymanot), ጻድቅ→"Tsadk" (Tsadik), ሥላሴ→"Silase" (known xfail). Titles: ወይዘሮ→"Weizero" (known ወ we/wo item), ሼህ→"Sheh", and the Dr/Prof/Eng loanwords ዶክተር/ፕሮፌሰር/ኢንጂነር→"Dokter"/"Pirofeser"/"Injiner" (expected — titles are matched by lexicon lookup, not transliteration).
 - [ ] All `given_names.json` entries with `"verified": false`
 - [ ] Golden corpus entries marked `"needs_human": true`
 - [ ] Final match-score thresholds (Task 8 tuning)
@@ -266,6 +274,57 @@ Known issues / TODOs introduced:
 
 Next session should start with: Task 4 — Data layer (`data/schema.md`, `titles.json`, `compounds.json`, `given_names.json` all `"verified": false`, lazy loader `_data.py`). Check the review queue first in case Robel has decided the ወ/ኘ/ቀ defaults — titles.json spellings depend on them.
 
+## Session 5 — 2026-07-11
+
+Task attempted: Task 4 — Data layer + seed lexicons
+
+What was actually done:
+- `src/habesha_names/data/schema.md`: contracts for the three JSON files, the `verified` workflow (agent seeds `false`, only Robel flips), general loader-enforced rules (exact keys, Ethiopic-script fidel, NFC, ASCII Latin, weights/gender sums = 1, duplicates rejected, file order = canonical order), and a per-entry review checklist for Robel.
+- `src/habesha_names/data/titles.json`: 12 entries — exactly the plan list (Ato, Woizero/W-ro, Woizerit/W-rt, Dr, Prof, Eng, Qes, Abba, Abune, Memhir, Sheikh, Haji) with fidel forms incl. slash abbreviations (ወ/ሮ etc.). Latin canonical spellings come from the plan itself, so this did NOT need the still-open ወ→we/wo transliteration decision; ወይዘሮ stays canonical "Woizero" regardless of what `transliterate` outputs.
+- `src/habesha_names/data/compounds.json`: the exact ARCHITECTURE §4.3 prefix list (10, Welete marked `f`) and second-element list (12), plus 9 slash-abbreviation expansions with weights (G/→Gebre 0.8/Girma 0.2 per the architecture's example; the rest agent-invented, flagged).
+- `src/habesha_names/data/given_names.json`: 56 entries in the ARCHITECTURE §4.5 contract shape (incl. the ፀሐይ/Tsehay example verbatim), covering every name the plan/architecture tests reference (Tesfaye, Gebremedhin, Tsehay, Abebe, Bikila, Wolde, Hailemariam, Desalegn, Girma, Mohammed, Hussein, Fatuma, Kebede, Alemu, Almaz, Tesfahun, Abebech, Bethlehem, …) plus high-frequency seeds. ALL `"verified": false`.
+- `src/habesha_names/_data.py`: lazy singleton loader (`@cache`, `importlib.resources`), frozen dataclasses (`Title`, `CompoundPrefix`, `CompoundSecond`, `AbbreviationExpansion`, `GivenName`, `Lexicon`), strict validation raising `LexiconError` (exact-key checks, type checks, `is_ethiopic` + NFC on every fidel value, gender/weight distributions sum to 1, weights non-increasing, case-insensitive duplicate rejection, cross-file check that every abbreviation expansion resolves to a known prefix or given name).
+- `tests/test_data_loader.py`: 54 tests — lazy-singleton behavior; plan/architecture pins (title list, prefix/second lists, G/-expansion ranking, Tsehay contract example, seed-name presence, ≥50 entries, ALL unverified); whole-lexicon invariants (Ethiopic fidel, gender sums, no duplicates, variants ≠ canonical, abbreviations resolve + ranked); plan-pinned translit consistency (Tesfaye/Gebremedhin/Tsehay fidel → canonical); 34 malformed-payload cases against the pure `_parse_*` functions; doctests.
+- Scratchpad cross-check script (Session-2 discipline): transliterated every agent-typed fidel string and compared against intended Latin — results pasted into the Human review queue above (39 OK / 11 variant / 6 mismatch for given names; all title/compound mismatches itemized). No LexiconError on real data, i.e. every typed string is valid NFC Ethiopic.
+
+Verification output (paste FULL command + output, unedited):
+
+Task 4 Verify block (cmd, after `call .venv\Scripts\activate.bat`):
+
+    pytest tests\test_data_loader.py -q && python -c "from habesha_names._data import lexicon; print(len(lexicon().given_names))" && echo EXIT CODE: %ERRORLEVEL%
+
+Output:
+
+    ......................................................                   [100%]
+    54 passed in 0.28s
+    56
+    EXIT CODE: 0
+
+Full repo gate (`D:\habesha-names\check.bat` = pytest -q && ruff check . && mypy src, inside .venv):
+
+    ........................................................................ [ 62%]
+    ...........................x................                             [100%]
+    115 passed, 1 xfailed in 0.70s
+    All checks passed!
+    Success: no issues found in 12 source files
+    EXIT CODE: 0
+
+(The first check.bat run failed ruff with 4 UP045/UP033 findings in the new `_data.py`; fixed via `ruff check --fix --unsafe-fixes` — `Optional[str]`→`str | None`, `lru_cache(maxsize=None)`→`cache`, both 3.9-safe — then the gate above ran clean.)
+
+Files touched: `src/habesha_names/data/schema.md` (new), `src/habesha_names/data/titles.json` (new), `src/habesha_names/data/compounds.json` (new), `src/habesha_names/data/given_names.json` (new), `src/habesha_names/_data.py` (new), `tests/test_data_loader.py` (new), `PROGRESS.md`
+
+Deviations from plan (and why):
+- Plan says "~50" given names; shipped 56 so that every name referenced by plan/architecture test cases (Tasks 3/5/6/7) exists in the lexicon alongside the high-frequency seeds.
+- Data files carry a top-level `{"schema": 1, ...}` wrapper (not specified by the plan) so future contract changes are detectable at load; the entry shape itself follows ARCHITECTURE §4.5 exactly.
+- `given_names.json` fidel forms are stored as conventionally written (ፀሐይ, ኃይለ), NOT pre-collapsed, per schema.md — consumers normalize at comparison time. The loader enforces NFC but deliberately not homophone-collapsedness.
+
+Known issues / TODOs introduced:
+- The 6 given-name translit mismatches + second-element mismatches (review queue above) are data-vs-engine conflicts for Robel; none block Task 5 (the parser matches lexicon strings, it does not re-transliterate).
+- Two engine-rule weaknesses surfaced by the cross-check (not fixed here — out of Task 4 scope, related to open review-queue items): 6th-order epenthesis in C₁C₂-final clusters (ትግስት→"Tigsit") and የ-glide after "i" doubling the vowel (ሕይወት→"Hiiwet").
+- Per the updated session protocol, nothing was committed: tree left ready for Robel. Suggested commit message: `task-4: data layer + seed lexicons (schema, titles, compounds, given names, validated lazy loader)`.
+
+Next session should start with: Task 5 — Parser (`parse/titles.py`, `parse/compounds.py` incl. G/Medhin expansion, `parse/parser.py` → `ParsedName`). The lexicon now contains every name the Task 5 test list needs; check the review queue first in case Robel has flipped any Task 4 decisions.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -286,6 +345,11 @@ Next session should start with: Task 4 — Data layer (`data/schema.md`, `titles
 | 2026-07-11 | 6th-order ə: bare if word-final/after-vowel, else +"i"; የ glide i/y; guttural (h, glottal) order-1 "a" | Smallest context-rule set reproducing all plan round-trip seeds; all flagged for review |
 | 2026-07-11 | ኃይለ ሥላሴ→"Haile Selassie" = strict xfail, no special-case | Gemination + "ie" not table-derivable; kickoff forbids silent special-casing |
 | 2026-07-11 | Fidel-initial words name-cased in output; non-Ethiopic tokens byte-preserved | It's a names library; must not mangle Latin/mixed input |
+| 2026-07-11 | Data files: `{"schema": 1, ...}` wrapper + exact-key validation, `LexiconError` at load | Typo safety for hand-edited linguistic data; fail loudly, never corrupt matching |
+| 2026-07-11 | Loader = `@cache` lazy singleton over `importlib.resources`; the library's only stateful component | ARCHITECTURE §2; deterministic frozen dataclasses |
+| 2026-07-11 | titles.json canonical Latin = plan-pinned spellings ("Woizero"), independent of the open ወ→we/wo translit default | Plan Task 4 list is the source of truth for title spellings; titles are matched by lookup, not transliteration |
+| 2026-07-11 | Lexicon fidel stored as conventionally written (ፀሐይ), NFC-enforced, NOT pre-collapsed | Reviewers see real spellings; normalize() is applied by consumers at comparison time |
+| 2026-07-11 | Abbreviation expansions must resolve to a known prefix or given-name canonical (cross-file check) | Catches dangling references (e.g. G/→"Girma" requires Girma in the lexicon) at load |
 
 ## Known issues
 
