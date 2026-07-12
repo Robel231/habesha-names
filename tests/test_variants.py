@@ -1,0 +1,182 @@
+"""Tests for translit.variants -- the spelling-variant generator (Task 7).
+
+Every name string here comes from IMPLEMENTATION_PLAN / ARCHITECTURE 4.2
+(Tsehay ts<->s<->tz, Gebre sixth-order vowel, Tesfay/Tesfai/Tesfaye,
+Kebede/Kebbede, Alemu/Allemu, Bethlehem/Betelhem, the Arabic-origin
+groups, the Gebremedhin compound forms) or from the seeded lexicon.
+Mechanics tests that need none of those use non-name ASCII vectors --
+algorithm behavior pins, not linguistic claims.
+
+The ARCHITECTURE 6 property (every variant matches its source at >= 0.8)
+is wired against Task 6's ``sim`` directly, with one documented carve-out:
+slash/dot abbreviation forms ("G/Medhin") need the Task 8 full matcher's
+expansion step and are exempted here (PROGRESS.md review queue).
+"""
+
+from __future__ import annotations
+
+import pytest
+
+from habesha_names._data import lexicon
+from habesha_names.match.token import sim
+from habesha_names.translit.variants import variants
+
+# Plan/architecture names used as property-test sources.
+PLAN_NAMES = [
+    "Tsehay",
+    "Tesfaye",
+    "Kebede",
+    "Alemu",
+    "Gebre",
+    "Gebremedhin",
+    "Hailemariam",
+    "Bethlehem",
+    "Mohammed",
+    "Hussein",
+    "Fatuma",
+    "ፀሐይ",
+    "ገብረመድህን",
+    "ተስፋዬ",
+]
+
+
+def all_sources() -> list[str]:
+    return sorted(set(PLAN_NAMES) | {entry.canonical for entry in lexicon().given_names})
+
+
+def test_base_spelling_is_first_and_name_cased() -> None:
+    assert variants("Tesfaye")[0] == "Tesfaye"
+    assert variants("TESFAYE")[0] == "Tesfaye"
+    assert variants("tesfaye")[0] == "Tesfaye"
+    assert variants("ተስፋዬ")[0] == "Tesfaye"
+
+
+def test_terminal_glide_group() -> None:
+    # ARCHITECTURE 4.2: terminal -ay|-ai|-aye (Tesfay/Tesfai/Tesfaye).
+    group = ("Tesfaye", "Tesfay", "Tesfai")
+    for source in group:
+        produced = set(variants(source))
+        for other in group:
+            assert other in produced, f"{source} did not produce {other}"
+
+
+def test_tsehay_family_and_fidel_identity() -> None:
+    # ARCHITECTURE 4.2: ts<->s<->tz on the canonical example.
+    produced = variants("ጸሐይ")
+    assert {"Tsehay", "Tsehai", "Sehay", "Tzehay"} <= set(produced)
+    # Homophone fidel spellings generate the identical variant list.
+    assert variants("ፀሐይ") == variants("ጸሀይ") == produced
+
+
+def test_gemination_doubling_and_collapse() -> None:
+    # ARCHITECTURE 4.2: Kebede/Kebbede, Alemu/Allemu -- both directions.
+    assert "Kebbede" in variants("Kebede")
+    assert "Allemu" in variants("Alemu")
+    assert "Kebede" in variants("Kebbede")
+
+
+def test_sixth_order_vowel_ambiguity() -> None:
+    # ARCHITECTURE 4.2: Gäbrä -> Gebre|Gabre|Gebra.
+    assert {"Gabre", "Gebra"} <= set(variants("Gebre"))
+
+
+def test_q_k_alternation() -> None:
+    # ARCHITECTURE 4.2: q<->k (ቀ); Bekele/Beqele is the seeded lexicon pair.
+    assert "Beqele" in variants("Bekele")
+    assert "Bekele" in variants("Beqele")
+
+
+def test_h_kh_alternation() -> None:
+    # ARCHITECTURE 4.2: h<->kh (ኀ). Non-name ASCII vector for the mechanics.
+    assert "Bakha" in variants("Bakha")  # identity survives
+    assert "Baha" in variants("Bakha")
+    assert "Sekhay" in variants("Sehay")
+
+
+def test_arabic_origin_groups() -> None:
+    # ARCHITECTURE 4.2 Arabic-origin table (lives in given_names.json).
+    assert {"Mohamed", "Muhammed", "Mohammad", "Mahamed"} <= set(variants("Mohammed"))
+    assert {"Husen", "Hussen"} <= set(variants("Hussein"))
+    assert "Fatima" in variants("Fatuma")
+    # A listed variant maps back to its group.
+    assert "Fatuma" in variants("Fatima")
+
+
+def test_bethlehem_pair() -> None:
+    # ARCHITECTURE 4.2: é<->ie<->e family (Bethlehem/Betelhem).
+    assert {"Betelhem", "Betlehem"} <= set(variants("Bethlehem"))
+
+
+def test_compound_splits_joins_abbreviations() -> None:
+    # ARCHITECTURE 4.2: Gebremedhin <-> Gebre Medhin <-> Gebre-Medhin
+    # <-> G/Medhin <-> G.Medhin.
+    produced = set(variants("Gebremedhin"))
+    assert {"Gebre Medhin", "Gebre-Medhin", "G/Medhin", "G.Medhin"} <= produced
+    assert "Gebremedhin" in variants("Gebre Medhin")
+    assert "Gebremedhin" in variants("Gebre-Medhin")
+    assert "Gebremedhin" in variants("G/Medhin")
+    assert "Gebremedhin" in variants("G.Medhin")
+
+
+def test_abbreviation_expansion_covers_all_candidates() -> None:
+    # G/ has two lexicon candidates: Gebre- (compound) and Girma (given).
+    produced = set(variants("G/Medhin"))
+    assert "Gebremedhin" in produced
+    assert "Girma Medhin" in produced
+
+
+def test_multi_token_names() -> None:
+    produced = set(variants("Tsehay Gebremedhin"))
+    assert "Tsehay Gebre Medhin" in produced
+    assert "Sehay Gebremedhin" in produced
+    # Fidel full name from the plan parses through the same path.
+    assert "Tsehay Gebremedhin" in variants("ጸሐይ ገብረመድህን")
+
+
+def test_top_n_and_validation() -> None:
+    assert variants("Kebede", n=1) == ["Kebede"]
+    assert len(variants("Kebede", n=5)) == 5
+    assert len(variants("Kebede")) <= 25
+    with pytest.raises(ValueError):
+        variants("Kebede", n=0)
+
+
+def test_n_is_a_prefix_slice_of_the_ranking() -> None:
+    full = variants("Gebremedhin", n=25)
+    assert variants("Gebremedhin", n=5) == full[:5]
+    assert variants("Gebremedhin", n=10) == full[:10]
+
+
+def test_no_duplicates_and_deterministic() -> None:
+    for source in all_sources():
+        produced = variants(source)
+        assert len(produced) == len(set(produced)), f"duplicates for {source}"
+        assert produced == variants(source), f"nondeterministic for {source}"
+
+
+def test_empty_and_letterless_input() -> None:
+    assert variants("") == []
+    assert variants("   ") == []
+    assert variants("።") == []
+
+
+def test_property_every_variant_matches_its_source() -> None:
+    # ARCHITECTURE 6 / plan Task 7 property, wired against Task 6's sim.
+    # Carve-out (review queue): slash/dot abbreviation forms lose letters
+    # and need the Task 8 full matcher's expansion step to score.
+    for source in all_sources():
+        for variant in variants(source):
+            if "/" in variant or "." in variant:
+                continue
+            score = sim(source, variant)
+            assert score >= 0.8, f"sim({source!r}, {variant!r}) = {score:.3f}"
+
+
+def test_docstring_examples() -> None:
+    import doctest
+
+    import habesha_names.translit.variants as mod
+
+    results = doctest.testmod(mod)
+    assert results.attempted > 0
+    assert results.failed == 0

@@ -12,8 +12,8 @@
 | 3 | Transliteration (practical) | ✔ VERIFIED (evidence below) | Session 4, 2026-07-11 |
 | 4 | Data layer + seed lexicons | ✔ VERIFIED (evidence below) | Session 5, 2026-07-11 |
 | 5 | Parser | ✔ VERIFIED (evidence below) | Session 6, 2026-07-12 |
-| 6 | Phonetic key + token sim | ☐ not started | — |
-| 7 | Variant generator | ☐ not started | — |
+| 6 | Phonetic key + token sim | ✔ VERIFIED (evidence below) | Session 7, 2026-07-12 |
+| 7 | Variant generator | ✔ VERIFIED (evidence below) | Session 8, 2026-07-12 |
 | 8 | Full matcher + golden corpus | ☐ not started | — |
 | 9 | API polish + README | ☐ not started | — |
 | 10 | Packaging + release prep | ☐ not started | — |
@@ -57,6 +57,23 @@ Items the agent must NOT resolve itself:
   - [ ] **Initials never expanded** ("Abebe B." keeps patronym "B." + note; only letter+slash/dot+known-second-element forms like G/Medhin expand). v0.2 backlog has expansion confidence scores.
   - [ ] **Compounds in patronym/avonym position** are noted but not flagged — `ParsedName` (ARCHITECTURE §4.3) only has `given_is_compound`; extending the dataclass is an architecture change I did not make.
   - [ ] Hyphenated compound forms ("Gebre-Medhin") are NOT handled by the parser — ARCHITECTURE §4.2 lists them under the Task 7 variant engine; confirm that split is the right home.
+- [ ] HabeshaKey rules (Task 6, Session 7) in `match/phonetic.py` — the ARCHITECTURE §4.4 sketch says exact rules are tuned in Task 8, so all of these are provisional agent defaults; Robel reviews the linguistic ones now, tuning revisits the rest:
+  - [ ] **First-vowel classes a / e,i / o,u** in the key's single vowel slot. Required by the plan pin Mohammed=Muhammed (o vs u must merge). Alternatives: exact first vowel (breaks that pin), no vowel slot at all (coarser keys — more false merges).
+  - [ ] **Terminal glide marker covers only -aye/-ay/-ai** (Tesfaye=Tesfay=Tesfai). -ey/-ei endings (e.g. a "Tsehey" spelling) do NOT fold; decide whether they should.
+  - [ ] **Digraph fold set is exactly the §4.4 sketch** (ts/tz→s, sh, ch, kh/gh→h, ph→f, th→t). Consequences flagged: **q and k are NOT folded** (a "Qes"-style q-spelling keys differently from its k-spelling; §4.2 lists q↔k as a variant rule — Task 7 covers it, but key equality won't); **medial ay/ai are NOT folded** (Haymanot vs Haimanot key differently — same family as the Task 4 cross-check finding); ch-vs-c and sh-vs-x internal symbols; y and w count as consonants.
+  - [ ] **Gemination handled only as adjacent-double collapse** (Kebbede→Kebede); non-adjacent repeats stay (Abebe keeps a b-b skeleton, which is what keeps Abebe≠Abebech honest).
+  - [ ] **`PHONETIC_WEIGHT = 0.9`** in `match/token.py` — the score a shared key guarantees in `sim()`. Invented magnitude; Task 8 tunes against the golden corpus.
+  - [ ] **Jaro-Winkler parameters**: prefix scale 0.1, prefix cap 4, boost only when Jaro > 0.7 (the standard published parameterization, pinned by textbook vectors in tests). Also: both-empty compares 1.0 in `jaro_winkler` but `sim` returns 0.0 when either side has no letters.
+- [ ] Variant engine rules (Task 7, Session 8) in `translit/variants.py` — every rule, weight, and constraint is an agent default (`verified: false` module header); Task 8 tunes magnitudes against the golden corpus, but Robel decides the linguistic shape:
+  - [ ] **All rewrite weights are invented**: lexicon-group alternate 0.85; compound joined↔spaced 0.8, hyphenated 0.6, slash 0.5, dot 0.4; terminal -aye/-ay/-ai 0.6–0.8; ts↔tz↔s 0.4–0.7; kh→h 0.7; th→t 0.6; ie→e 0.6; ou→w 0.3; q→k 0.7 vs k→q 0.3 (asymmetric on purpose: k is the practical default per the open Task 3 ቀ item); h→kh 0.15; final w→ou 0.3; final e→ie 0.2; e→a 0.15; double-collapse 0.6; intervocalic doubling 0.12.
+  - [ ] **Engine constraints** (all invented): cumulative-likelihood floor 0.02; at most 3 simultaneous key-preserving rewrites; a HabeshaKey-breaking rewrite (q↔k, first-vowel e→a, w↔ou, lexicon alternate, slash/dot form) is only ever applied ALONE — this is what keeps every emitted variant ≥ 0.8 token similarity; exploration caps 64 combinations/stage, 4096 heap pops.
+  - [ ] **Asymmetries to confirm**: plain `s` is never rewritten to `ts` ("Sehay" only reaches "Tsehay" via its lexicon group — a non-lexicon s-spelling won't); `a→e` is not applied (only e→a); `t→th` is not applied (only th→t). Are the reverse directions common enough to need rules?
+  - [ ] **First-vowel e→a gated to tokens with ≤ 2 e's**: on e-heavier names (Bekele→Bakele = 0.78, Kebede→Kabede) greedy Jaro-Winkler scrambles below the 0.8 property and there is no phonetic backstop. Consequence: no "Bakele"/"Kabede" variants. Alternative: fold vowel-class a/e in HabeshaKey instead (Task 8 tuning decision).
+  - [ ] **h→kh only word-initial or after a vowel** (avoids "getackhew"-style junk after consonants); **w→ou only word-final** (Getachew→Getachou but never Wolde→Oulde).
+  - [ ] **Slash/dot abbreviation outputs are exempt from the ≥ 0.8 property** ("G/Medhin" loses letters; token `sim` can't score it — the Task 8 full matcher expands abbreviations before scoring, per ARCHITECTURE §4.4 step 1). Test carve-out documented in `tests/test_variants.py`.
+  - [ ] **Arabic-origin name table** (ARCHITECTURE §4.2) is NOT a separate table: it lives in `given_names.json` as the `origin: "arabic"` entries, and ALL lexicon spelling groups (canonical + variants) act as whole-token alternates at 0.85. Confirm this home, or split a dedicated table.
+  - [ ] **Hyphens are token separators**: "Gebre-Medhin" → base "Gebre Medhin"; a non-compound hyphenated name loses its hyphen in the base spelling.
+  - [ ] **Compound slash/dot forms emitted only when the prefix round-trips** through an `abbreviation_expansions` entry (G/→Gebre yes; a prefix with no abbreviation entry gets no G/-form).
 - [ ] All `given_names.json` entries with `"verified": false`
 - [ ] Golden corpus entries marked `"needs_human": true`
 - [ ] Final match-score thresholds (Task 8 tuning)
@@ -379,6 +396,101 @@ Known issues / TODOs introduced:
 
 Next session should start with: Task 6 — Phonetic key + token similarity (`match/phonetic.py` HabeshaKey per ARCHITECTURE §4.4, `match/token.py` with in-repo Jaro-Winkler + property tests against known JW values; key equality/inequality pins from the plan). Check the review queue first in case Robel has decided any Task 3/4/5 defaults.
 
+## Session 7 — 2026-07-12
+
+Task attempted: Task 6 — Phonetic key + token similarity
+
+What was actually done:
+- `src/habesha_names/match/phonetic.py`: `phonetic_key(name)` — HabeshaKey per the ARCHITECTURE §4.4 sketch: transliterate first (fidel keys like its romanization; Latin passes through), lowercase + strip non a-z (spaces too, so "Haile Mariam" keys like "Hailemariam"), left-to-right greedy digraph folding (ts/tz→s, sh→x, ch→c, kh/gh→h, ph→f, th→t), adjacent-double collapse, terminal -aye/-ay/-ai → "A" marker, key = uppercase consonant skeleton + ":" + first-vowel class (a / e,i / o,u — the class bucketing is what makes Mohammed=Muhammed hold). Letterless input → `""`. All rules flagged provisional in the module docstring (Task 8 tunes them).
+- `src/habesha_names/match/token.py`: `jaro_winkler(a, b)` implemented in-repo from the standard definition (prefix scale 0.1, cap 4, boost only when Jaro > 0.7; both-empty = 1.0, one-empty = 0.0), private `_jaro`, and `sim(a, b)` = max(PHONETIC_WEIGHT if HabeshaKeys match, JW over normalized tokens), where normalization = transliterate → lowercase → strip non-letters; identical normalized tokens = 1.0, letterless side = 0.0. `PHONETIC_WEIGHT = 0.9` (invented, review-queued). The §4.4 variant-set-overlap term is NOT wired — it needs Task 7's engine; plan Task 7 anticipates this circularity ("wire in Task 8").
+- `tests/test_match_phonetic.py`: 13 tests — all four plan equality groups (Tsehay/Sehay/Tsehai, Tesfaye/Tesfay/Tesfai, Mohammed/Mohamed/Muhammed, Kebede/Kebbede) and all three inequality pairs (Alemu/Almaz, Tesfaye/Tesfahun, Abebe/Abebech) parametrized; fidel-keys-like-Latin (ፀሐይ/ጸሀይ/Tsehay); case/punctuation/whitespace insensitivity; spaced-vs-joined compound; Bethlehem/Betelhem (§4.2 variant pair, exercises th→t); digraph mechanics on non-name ASCII vectors; empty-key cases; key-format regex; determinism; doctests.
+- `tests/test_match_token.py`: 15 tests — JW pinned to the standard published vectors with the arithmetic re-derived in comments (MARTHA/MARHTA = 17.3/18, DIXON/DICKSONX = 24.4/30, DWAYNE/DUANE = 37.8/45); no-boost-at-or-below-0.7 and prefix-cap-4 branch pins; identity/empty/zero-match cases; symmetry + boundedness over the first 12 lexicon canonicals; `sim` pins (fidel = Latin 1.0, phonetic backstop beats JW on Tzehay/Sehay, equality groups ≥ 0.9, Alemu/Almaz < 0.9, empty → 0.0, symmetric/bounded/deterministic); doctests. Name strings limited to plan pins, plan round-trip glyphs, ARCHITECTURE variant pairs, and lexicon canonicals — no invented names.
+
+Verification output (paste FULL command + output, unedited):
+
+Task 6 Verify block (cmd, after `call .venv\Scripts\activate.bat`):
+
+    pytest tests\test_match_phonetic.py tests\test_match_token.py -q && echo EXIT CODE: %ERRORLEVEL%
+
+Output:
+
+    ......................................                                   [100%]
+    38 passed in 0.52s
+    EXIT CODE: 0
+
+Full repo gate (`D:\habesha-names\check.bat` = pytest -q && ruff check . && mypy src, inside .venv):
+
+    ........................................................................ [ 40%]
+    ........................................................................ [ 80%]
+    ..................x................                                      [100%]
+    178 passed, 1 xfailed in 1.29s
+    All checks passed!
+    Success: no issues found in 17 source files
+    EXIT CODE: 0
+
+Files touched: `src/habesha_names/match/phonetic.py` (new), `src/habesha_names/match/token.py` (new), `tests/test_match_phonetic.py` (new), `tests/test_match_token.py` (new), `PROGRESS.md`
+
+Deviations from plan (and why):
+- ARCHITECTURE §4.4's `sim` formula includes a `variant_set_overlap` term; it is documented-but-absent here because `variants()` is Task 7 — exactly the circularity the plan's Task 7 note anticipates ("wire in Task 8 if circular"). Until Task 8, `sim` is a lower bound on the final design.
+- The §4.4 sketch encodes "first vowel"; implemented as first-vowel *class* (a / e,i / o,u) because the exact vowel breaks the plan's own Mohammed=Muhammed equality pin. Flagged in the review queue.
+- `check.bat` again required absolute-path invocation in this session's shell harness (same as Sessions 4–6); contents ran unmodified.
+
+Known issues / TODOs introduced:
+- Medial ay/ai not folded by HabeshaKey → Haymanot/Haimanot key differently (review queue; Task 8 tuning candidate alongside q↔k).
+- `sim("Abebe", "Abebech")` ≈ 0.94 via Jaro-Winkler alone (shared 5-char prefix) even though their phonetic keys correctly differ — whether token-level JW should be dampened for such pairs is a Task 8 threshold/weights decision, deliberately not taken here.
+- Per session protocol, nothing was committed: tree left ready for Robel. Suggested commit message: `task-6: phonetic key + token similarity (HabeshaKey, in-repo Jaro-Winkler, sim backstop)`.
+
+Next session should start with: Task 7 — Variant generator (`translit/variants.py`: weighted rewrite rules per ARCHITECTURE §4.2, top-N deterministic output; the `match_token ≥ 0.8` property can now use Task 6's `sim`). Check the review queue first in case Robel has decided any Task 3–6 defaults — the variant rule set overlaps heavily with the open transliteration decisions (q↔k, ts↔s↔tz, -ay/-ai/-aye, é↔ie↔e).
+
+## Session 8 — 2026-07-12
+
+Task attempted: Task 7 — Variant generator
+
+What was actually done:
+- `src/habesha_names/translit/variants.py`: `variants(name, *, n=25)` — ranked plausible Latin spellings for fidel or Latin input (input's own transliterated, name-cased spelling always first). Two-layer weighted rewrite engine per ARCHITECTURE §4.2:
+  - Token level: lexicon spelling groups from `given_names.json` (canonical + variants stand in for each other — this is where the Arabic-origin table lives, as the `origin: "arabic"` entries), compound splits/joins/hyphen/slash/dot forms (Gebremedhin ↔ Gebre Medhin ↔ Gebre-Medhin ↔ G/Medhin ↔ G.Medhin, detected via the public `parse.compounds` functions), and slash-abbreviation expansion of the input itself (every lexicon candidate emitted, e.g. G/Medhin → Gebremedhin 0.8 AND Girma Medhin 0.2).
+  - Character level per token: ts↔tz↔s, q↔k, h↔kh, th→t, ie↔e, terminal -ay/-ai/-aye, gemination doubling/collapse (intervocalic only), sixth-order e→a, final w↔ou.
+  - Every rewrite is classified by whether it preserves the base spelling's HabeshaKey. Key-preserving rewrites combine (≤ 3); a key-breaking rewrite applies only ALONE — with the phonetic backstop in `sim`, this is the mechanism that keeps every variant ≥ 0.8 similarity. Cumulative-likelihood floor 0.02; best-first (heap) enumeration with fixed exploration caps, so output is deterministic, `n` is a pure prefix slice of one global ranking, and combinatorial explosion is structurally impossible.
+- `tests/test_variants.py`: 18 tests — every ARCHITECTURE §4.2 rule family pinned on plan/lexicon names (Tsehay family + fidel homophone identity, Tesfaye glide group, Gebre→Gabre/Gebra, Kebede/Kebbede + Alemu/Allemu both directions, Bekele/Beqele both directions, h↔kh, all three Arabic-origin groups incl. variant→canonical direction, Bethlehem pair, all five compound shapes in all directions, G/ expansion showing BOTH candidates); ranking/validation pins (base first + name-cased, top-n exact, n=0 raises, n prefix-slice property); no-duplicates + determinism over all 56 lexicon canonicals; empty/letterless input; the ARCHITECTURE §6 property `sim(x, v) ≥ 0.8` wired against Task 6's `sim` NOW (not deferred) over all lexicon canonicals + plan names, with slash/dot forms carved out (documented, review-queued); doctests.
+- The property test did its job during development: first run failed with `sim('Bekele', 'Bakele') = 0.780` — first-vowel e→a on 3-e names scrambles greedy Jaro-Winkler with no phonetic backstop. Fixed by gating that rewrite to tokens with ≤ 2 e's (keeps the plan-pinned Gebre→Gabre), not by weakening the test. Review-queued.
+
+Verification output (paste FULL command + output, unedited):
+
+Task 7 Verify block (cmd, after `call .venv\Scripts\activate.bat`):
+
+    pytest tests\test_variants.py -q && echo EXIT CODE: %ERRORLEVEL%
+
+Output:
+
+    ..................                                                       [100%]
+    18 passed in 0.25s
+    EXIT CODE: 0
+
+Full repo gate (`D:\habesha-names\check.bat` = pytest -q && ruff check . && mypy src, inside .venv):
+
+    ........................................................................ [ 36%]
+    ........................................................................ [ 73%]
+    ..................x..................................                    [100%]
+    196 passed, 1 xfailed in 1.56s
+    All checks passed!
+    Success: no issues found in 18 source files
+    EXIT CODE: 0
+
+Files touched: `src/habesha_names/translit/variants.py` (new), `tests/test_variants.py` (new), `PROGRESS.md`
+
+Deviations from plan (and why):
+- The plan's property test (`match_token(x, v) >= 0.8`, "wire in Task 8 if circular") is wired NOW against Task 6's `sim` — no circularity exists in that direction (`translit.variants` never imports `match`; `match.token` will import `translit.variants` in Task 8 for the variant-overlap term, so the dependency arrow was kept pointing match→translit deliberately). One carve-out: slash/dot abbreviation forms ("G/Medhin") lose letters and cannot pass token-level `sim`; they are exempted with a comment and review-queue item — the Task 8 FULL matcher expands abbreviations before scoring (ARCHITECTURE §4.4 step 1), so the §6 property still holds end-to-end where it matters.
+- ARCHITECTURE §4.2 lists Bethlehem/Betelhem under `é↔ie↔e`; the l/e transposition in that pair is not derivable from any local rewrite rule, so it is satisfied via the lexicon group (both spellings are seeded variants). The ie↔e rule itself exists and is tested on Daniel→Danel-style rewrites.
+- `translit/variants.py` imports `parse.compounds` (public functions) for compound detection rather than re-implementing prefix/second matching — a new cross-package edge (translit→parse) not sketched in ARCHITECTURE §3's layering, but acyclic (parse never imports translit) and single-sourced.
+
+Known issues / TODOs introduced:
+- Slash/dot variants are below-0.8 by token `sim` until Task 8's matcher-level expansion (carved out, review-queued).
+- No s→ts, a→e, or t→th reverse rules (review queue) — a non-lexicon "Sehay"-style spelling cannot reach its ts-form by rules alone.
+- First-vowel e→a suppressed on tokens with 3+ e's (review queue; alternative is folding a/e in HabeshaKey — Task 8 tuning).
+- Per session protocol, nothing was committed: tree left ready for Robel (Task 6's files are also still uncommitted in the working tree). Suggested commit message: `task-7: variant generator (weighted rewrite engine, compound forms, top-N ranking)`.
+
+Next session should start with: Task 8 — Full-name matcher + golden corpus (`match/full.py` per ARCHITECTURE §4.4: alignment, swap/truncation tolerance, weights config, `MatchResult`; wire variant-set overlap into `sim`; `tests/golden/pairs.json` ≥150 pairs with ~60 agent-seeded + `"needs_human": true` markers; `scripts/benchmark.py --min-mps 50000`; record tuned thresholds in the decisions log). Check the review queue first — Task 8 tuning touches nearly every open Task 6/7 item.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -410,6 +522,13 @@ Next session should start with: Task 6 — Phonetic key + token similarity (`mat
 | 2026-07-12 | Slash abbreviation expands only when letter is a known abbreviation AND remainder a known second element; top candidate applied, all candidates in the note | Explainability (AML analysts see what was chosen over what); "W/ro" can never false-positive |
 | 2026-07-12 | `ParsedName.__str__` added beyond the §4.3 sketch | ARCHITECTURE §6 `parse(str(parsed))` stability property needs a canonical string form |
 | 2026-07-12 | Extra tokens beyond avonym and unhandled comma patterns are noted, never silently dropped | Honesty-first parsing; downstream can audit every discarded token |
+| 2026-07-12 | HabeshaKey = transliterate-first + §4.4 sketch pipeline; key format `SKELETON[A]:vowel-class`; first vowel bucketed a / e,i / o,u | Fidel and Latin spellings key identically by construction; exact first vowel breaks the plan's Mohammed=Muhammed pin |
+| 2026-07-12 | Jaro-Winkler in-repo with the standard parameterization (scale 0.1, prefix cap 4, boost only above 0.7), pinned by published vectors re-derived in test comments | stdlib-only rule; textbook values make the implementation independently checkable |
+| 2026-07-12 | `sim` = max(phonetic-exact 0.9, JW over transliterate+lowercase+strip); variant-overlap term deferred to Task 8 | §4.4 formula needs Task 7's `variants()`; plan explicitly allows wiring it in Task 8 |
+| 2026-07-12 | Variant engine = token-level alternatives (lexicon groups, compound shapes, abbreviations) × character-level rewrites, best-first k-best enumeration, one global ranking | Deterministic top-N with `n` a pure prefix slice; explosion capped structurally, not by pruning heuristics |
+| 2026-07-12 | Key-breaking rewrites (q↔k, first-vowel e→a, w↔ou, lexicon alternates, slash/dot forms) apply only in isolation; key-preserving rewrites combine up to 3 | Preserved HabeshaKey ⇒ `sim` ≥ 0.9 backstop for any combo; a lone breaking rewrite stays ≥ 0.8 by JW — together they enforce the ARCHITECTURE §6 property by construction |
+| 2026-07-12 | Arabic-origin table (§4.2) = `origin: "arabic"` lexicon entries; all lexicon groups act as 0.85 whole-token alternates | No second unverified data table to review; lexicon "boosts precision" exactly as §4.5 describes |
+| 2026-07-12 | `variants` property test wired against Task 6 `sim` now, slash/dot forms carved out | No import circularity in that direction; abbreviation forms need matcher-level expansion (§4.4 step 1), which is Task 8 |
 
 ## Known issues
 
