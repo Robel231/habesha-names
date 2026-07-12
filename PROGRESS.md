@@ -11,7 +11,7 @@
 | 2 | Fidel normalization | ✔ VERIFIED (evidence below) | Session 3, 2026-07-11 · human-verified by Robel 2026-07-11 (41 passed, ruff/mypy clean, normalize() spot-checked on "ወይዘሮ ፀሐይ ገብረመድህን።") |
 | 3 | Transliteration (practical) | ✔ VERIFIED (evidence below) | Session 4, 2026-07-11 |
 | 4 | Data layer + seed lexicons | ✔ VERIFIED (evidence below) | Session 5, 2026-07-11 |
-| 5 | Parser | ☐ not started | — |
+| 5 | Parser | ✔ VERIFIED (evidence below) | Session 6, 2026-07-12 |
 | 6 | Phonetic key + token sim | ☐ not started | — |
 | 7 | Variant generator | ☐ not started | — |
 | 8 | Full matcher + golden corpus | ☐ not started | — |
@@ -48,6 +48,15 @@ Items the agent must NOT resolve itself:
   - ትግስት → "Tigsit", ቅድስት → "Kidsit" (6th-order epenthetic "i" lands after the wrong consonant in C₁C₂-final clusters — same family as the ፍቅር→"Fikr" issue from Session 4)
   - ዮሐንስ → "Yohans" vs "Yohannes"; ዳንኤል → "Danel" vs "Daniel"
   - Second elements not matching their Latin: ሚካኤል→"Mikael" (Michael), ጊዮርጊስ→"Giyorgis" (Giorgis), ክርስቶስ→"Kirsitos" (Kristos), እግዚአብሔር→"Igziabher" (Egziabher), ሕይወት→"Hiiwet" (Hiwot — the የ-glide-after-"i" rule doubles the i), ሃይማኖት→"Haimanot" (Haymanot), ጻድቅ→"Tsadk" (Tsadik), ሥላሴ→"Silase" (known xfail). Titles: ወይዘሮ→"Weizero" (known ወ we/wo item), ሼህ→"Sheh", and the Dr/Prof/Eng loanwords ዶክተር/ፕሮፌሰር/ኢንጂነር→"Dokter"/"Pirofeser"/"Injiner" (expected — titles are matched by lexicon lookup, not transliteration).
+- [ ] Parser heuristics (Task 5, Session 6) — all agent-chosen defaults, pinned by tests in `tests/test_parse.py`; Robel decides each:
+  - [ ] **Compound-confidence constants** in `parse/parser.py`: joined-in-input 1.0; spaced pair joined when NOT joining would overflow the 3 roles 0.9; spaced pair where both readings fit ("Haile Mariam Desalegn") 0.65; slash abbreviation = weight of the chosen lexicon candidate (G/→0.8). Magnitudes are invented, not measured.
+  - [ ] **Two-token spaced compound** ("Haile Mariam" as the whole input) is JOINED to a given-only parse (given "Hailemariam", patronym None, confidence 0.65). Alternative: prefer the given+patronym reading when nothing follows. Chose joining for consistency with the 3-token case and better token alignment in Task 8 matching.
+  - [ ] **Title recorded as canonical Latin** even for fidel input (ወይዘሮ → title "Woizero", name tokens stay fidel). Alternative: keep the matched fidel token.
+  - [ ] **Single leading token that is a title** ("Ato" alone) is treated as a given name with a note, not an error. Alternative: raise ValueError.
+  - [ ] **Comma inversion** ("Bikila, Abebe") reorders and notes, but `has_surname` stays "no" — only `assume_diaspora` flips it to "unknown". Alternative: comma format itself implies "unknown".
+  - [ ] **Initials never expanded** ("Abebe B." keeps patronym "B." + note; only letter+slash/dot+known-second-element forms like G/Medhin expand). v0.2 backlog has expansion confidence scores.
+  - [ ] **Compounds in patronym/avonym position** are noted but not flagged — `ParsedName` (ARCHITECTURE §4.3) only has `given_is_compound`; extending the dataclass is an architecture change I did not make.
+  - [ ] Hyphenated compound forms ("Gebre-Medhin") are NOT handled by the parser — ARCHITECTURE §4.2 lists them under the Task 7 variant engine; confirm that split is the right home.
 - [ ] All `given_names.json` entries with `"verified": false`
 - [ ] Golden corpus entries marked `"needs_human": true`
 - [ ] Final match-score thresholds (Task 8 tuning)
@@ -325,6 +334,51 @@ Known issues / TODOs introduced:
 
 Next session should start with: Task 5 — Parser (`parse/titles.py`, `parse/compounds.py` incl. G/Medhin expansion, `parse/parser.py` → `ParsedName`). The lexicon now contains every name the Task 5 test list needs; check the review queue first in case Robel has flipped any Task 4 decisions.
 
+## Session 6 — 2026-07-12
+
+Task attempted: Task 5 — Parser
+
+What was actually done:
+- `src/habesha_names/parse/titles.py`: `match_title(token)` — lexicon lookup over canonical Latin forms + abbreviations (case-insensitive, trailing "." tolerated) + fidel forms (compared after `normalize`, so ሐጂ/ሀጂ-style homophone spellings hit the same title). Index built lazily (`@cache`) from `lexicon()`; no other state.
+- `src/habesha_names/parse/compounds.py`: three detectors against the compound lexicon — `split_joined` (one token = prefix + second element, e.g. "Hailemariam", ገብረመድህን), `match_pair` (two adjacent tokens = spaced compound), `expand_abbreviation` ("G/Medhin" / "G.Medhin": single letter must be a known abbreviation AND remainder a known second element; top-weight candidate applied, ALL candidates recorded in the returned note; prefix candidates yield one joined token, given-name candidates stay separate). Latin matched case-insensitively, fidel after `normalize` — homophone spellings behave identically by construction. "W/ro" can never expand here (remainder "ro" is not a second element), and titles are stripped before expansion anyway.
+- `src/habesha_names/parse/parser.py`: `ParsedName` frozen dataclass exactly per ARCHITECTURE §4.3 (plus `__str__` for the §6 `parse(str(parsed))` stability property), and `parse(raw, *, assume_diaspora=False)` with the pipeline: normalize → comma inversion (exactly one comma = "patronym, given"; other comma patterns treated as whitespace, both noted) → leading-title strip (first recorded as canonical Latin, extras noted) → script detection (ethiopic/latin/mixed) → slash-abbreviation expansion → compound joining (already-joined flagged in place; adjacent prefix+second joined) → positional roles (given/patronym/avonym; extras noted, never silently dropped) → initials noted verbatim → diaspora flag. `compound_confidence` = min over compound decisions taken (1.0 / 0.9 / 0.65 / candidate weight — agent-chosen constants, review-queued); `given_is_compound` scoped to the given name only. Empty-after-normalize input raises `ValueError`.
+- `tests/test_parse.py`: 25 tests — all nine plan-required cases ("Abebe Bikila Wolde", "Ato Abebe Bikila", "Hailemariam Desalegn", "Haile Mariam Desalegn" with confidence pinned in (0,1), "G/Medhin Tesfaye" with Gebre+Girma candidates asserted auditable in the note, "Bikila, Abebe", "Abebe B.", "ወይዘሮ ጸሐይ ገብረመድህን", diaspora mode); behavior pins around them (dot-form abbreviation, abbreviation in patronym position, case-insensitive/abbreviated/fidel titles, 4-token overflow confidence ordering, two-token spaced compound, fidel homophone parse identity, fidel spaced compound, mixed script, raw preserved verbatim, extra tokens noted, single-token title, empty raises); properties (parse(str(parsed)) structural stability over 8 samples, determinism); doctests for all three modules. Fidel expectations computed via `normalize()` in the tests — no second hand-typed copy of collapsed spellings; all names come from the plan list or the seeded lexicon.
+
+Verification output (paste FULL command + output, unedited):
+
+Task 5 Verify block (cmd, after `call .venv\Scripts\activate.bat`):
+
+    pytest tests\test_parse.py -q && echo EXIT CODE: %ERRORLEVEL%
+
+Output:
+
+    .........................                                                [100%]
+    25 passed in 0.51s
+    EXIT CODE: 0
+
+Full repo gate (`D:\habesha-names\check.bat` = pytest -q && ruff check . && mypy src, inside .venv):
+
+    ........................................................................ [ 51%]
+    ....................................................x................    [100%]
+    140 passed, 1 xfailed in 1.42s
+    All checks passed!
+    Success: no issues found in 15 source files
+    EXIT CODE: 0
+
+Files touched: `src/habesha_names/parse/titles.py` (new), `src/habesha_names/parse/compounds.py` (new), `src/habesha_names/parse/parser.py` (new), `tests/test_parse.py` (new), `PROGRESS.md`
+
+Deviations from plan (and why):
+- ARCHITECTURE §4.3 lists comma inversion and initials LAST in the logic order; comma inversion is applied during tokenization instead, because it reorders tokens for every later step (title strip, role assignment). Initials handling stays last as specified. Documented in the module docstring; no behavioral conflict with the plan.
+- `ParsedName` gained a `__str__` (not in the §4.3 sketch) because ARCHITECTURE §6 requires the `parse(str(parsed))` stability property, which needs a canonical string form. No other field or method added.
+- Test file is `tests/test_parse.py` (exactly the plan's Verify path); ARCHITECTURE §3 shows `tests/test_parse_*.py` — single file chosen so the Verify command matches the plan verbatim.
+
+Known issues / TODOs introduced:
+- Parser heuristic defaults (confidence constants, two-token compound policy, canonical-Latin titles, comma/has_surname policy, initials, hyphenated forms deferred to Task 7) are all agent-chosen — itemized in the Human review queue above.
+- Mid-string titles ("Dr" after a comma-inverted patronym, e.g. "Dr Bikila, Abebe") are not detected — only leading tokens are title-checked. Acceptable for v0.1; revisit if real inputs show it.
+- Per session protocol, nothing was committed: tree left ready for Robel. Suggested commit message: `task-5: parser (titles, compound detection + G/Medhin expansion, ParsedName)`.
+
+Next session should start with: Task 6 — Phonetic key + token similarity (`match/phonetic.py` HabeshaKey per ARCHITECTURE §4.4, `match/token.py` with in-repo Jaro-Winkler + property tests against known JW values; key equality/inequality pins from the plan). Check the review queue first in case Robel has decided any Task 3/4/5 defaults.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -350,6 +404,12 @@ Next session should start with: Task 5 — Parser (`parse/titles.py`, `parse/com
 | 2026-07-11 | titles.json canonical Latin = plan-pinned spellings ("Woizero"), independent of the open ወ→we/wo translit default | Plan Task 4 list is the source of truth for title spellings; titles are matched by lookup, not transliteration |
 | 2026-07-11 | Lexicon fidel stored as conventionally written (ፀሐይ), NFC-enforced, NOT pre-collapsed | Reviewers see real spellings; normalize() is applied by consumers at comparison time |
 | 2026-07-11 | Abbreviation expansions must resolve to a known prefix or given-name canonical (cross-file check) | Catches dangling references (e.g. G/→"Girma" requires Girma in the lexicon) at load |
+| 2026-07-12 | Parser matches lexicon forms after `normalize` (fidel) / lowercasing (Latin); indexes are `@cache`-built from `lexicon()` | Homophone spellings parse identically by construction; state stays in the lazy loader |
+| 2026-07-12 | Comma inversion handled at tokenization, not last as §4.3 lists it | It reorders tokens for every later pipeline step; behavior unchanged |
+| 2026-07-12 | `compound_confidence` = min over all compound decisions (1.0 joined / 0.9 overflow / 0.65 ambiguous / abbreviation candidate weight); `given_is_compound` scoped to the given | Deterministic, auditable; constants are review-queued heuristics |
+| 2026-07-12 | Slash abbreviation expands only when letter is a known abbreviation AND remainder a known second element; top candidate applied, all candidates in the note | Explainability (AML analysts see what was chosen over what); "W/ro" can never false-positive |
+| 2026-07-12 | `ParsedName.__str__` added beyond the §4.3 sketch | ARCHITECTURE §6 `parse(str(parsed))` stability property needs a canonical string form |
+| 2026-07-12 | Extra tokens beyond avonym and unhandled comma patterns are noted, never silently dropped | Honesty-first parsing; downstream can audit every discarded token |
 
 ## Known issues
 
