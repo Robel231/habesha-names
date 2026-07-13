@@ -1,0 +1,49 @@
+name: Release
+
+# Human-triggered, always: Robel pushes a v* tag; this workflow builds,
+# verifies the built artifacts (not the source tree), and publishes to PyPI
+# via Trusted Publishing (no API token; PyPI must have this repo + workflow
+# registered as a trusted publisher for the "pypi" environment).
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install build tools
+        run: pip install build twine
+      - name: Build sdist and wheel
+        run: python -m build
+      - name: Check metadata
+        run: twine check dist/*
+      - name: Smoke-test the built wheel (data files, version-tag match)
+        run: |
+          python -m venv /tmp/smoke
+          /tmp/smoke/bin/pip install dist/*.whl
+          cd /tmp && /tmp/smoke/bin/python "$GITHUB_WORKSPACE/scripts/smoke_wheel.py" "${GITHUB_REF_NAME#v}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/habesha-names
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

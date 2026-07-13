@@ -26,7 +26,7 @@ from habesha_names.parse.parser import parse
 from habesha_names.translit.to_latin import transliterate
 from habesha_names.translit.variants import variants
 
-__version__ = "0.1.0.dev0"
+__version__ = "0.1.0"
 
 __all__ = [
     "__version__",

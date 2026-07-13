@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_(nothing yet)_
+
+## [0.1.0] - 2026-07-13
+
+Initial release. All linguistic data (lexicons, transliteration defaults,
+variant rules, golden corpus) is agent-seeded and flagged
+`"verified": false` pending native-speaker review.
+
 ### Added
 
 - Fidel script core: generated Unicode Ethiopic tables (U+1200–U+137F,

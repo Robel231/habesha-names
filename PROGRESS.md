@@ -16,7 +16,7 @@
 | 7 | Variant generator | ✔ VERIFIED (evidence below) | Session 8, 2026-07-12 |
 | 8 | Full matcher + golden corpus | ✔ VERIFIED (evidence below) | Session 9, 2026-07-13 |
 | 9 | API polish + README | ✔ VERIFIED (evidence below) | Session 10, 2026-07-13 |
-| 10 | Packaging + release prep | ☐ not started | — |
+| 10 | Packaging + release prep | ✔ VERIFIED (evidence below) | Session 11, 2026-07-13 |
 
 Status values: `☐ not started` · `◐ in progress` · `✕ blocked (reason)` · `✔ VERIFIED (evidence below)`
 
@@ -90,7 +90,11 @@ Items the agent must NOT resolve itself:
 - [ ] All `given_names.json` entries with `"verified": false`
 - [ ] Golden corpus entries marked `"needs_human": true` (currently: all 201)
 - [ ] Final match-score thresholds (Task 8 tuning) — recorded in the decisions log (same ≥ 0.85, different ≤ 0.60 per §6; component weights above); revisit once the corpus contains human-curated pairs
-- [ ] Release tag push (Task 10)
+- [ ] Release tag push (Task 10) — everything is prepared (Session 11); release is human-triggered, always. Robel's steps, in order:
+  1. Review/commit the Session 11 tree (suggested message in the session log).
+  2. One-time PyPI setup: on pypi.org → account → Publishing → add a **pending Trusted Publisher** for project `habesha-names`: owner `Robel231`, repository `habesha-names`, workflow `release.yml`, environment `pypi`. (No API token anywhere.) Optionally create the `pypi` environment in the GitHub repo settings with required reviewers for an extra approval gate.
+  3. `git tag v0.1.0 && git push origin main v0.1.0` — the tag triggers `.github/workflows/release.yml`: build → `twine check` → wheel smoke test (fails the run if the tag ≠ `__version__`, data files missing, or the engine misbehaves from the installed artifact) → publish.
+  4. NOTE the linguistic review queue above is still open — decide whether v0.1.0 ships with `verified: false` data (README/CHANGELOG already disclose this) or the tag waits for review.
 
 ## Session log
 
@@ -641,6 +645,173 @@ Known issues / TODOs introduced:
 
 Next session should start with: Task 10 — Packaging + release prep (build sdist/wheel, `twine check`, release workflow with PyPI Trusted Publishing, tag prep — Robel pushes the tag). MUST fix the package-data gap (`data/*.json` into the wheel) and verify the lexicon loads from the built artifact, not the source tree. `build`/`twine` are not in the dev extras — decide whether to add them or install ad hoc. Check the review queue first.
 
+## Session 11 — 2026-07-13
+
+Task attempted: Task 10 — Packaging + release prep
+
+What was actually done:
+- `pyproject.toml`: fixed the Session-10 package-data gap — `[tool.setuptools.package-data]` now ships `data/*.json` and `data/schema.md` alongside `py.typed` (previously the wheel had NO lexicon data; editable installs masked it).
+- Version bumped `0.1.0.dev0` → `0.1.0` (`src/habesha_names/__init__.py` + the two test pins in `tests/test_smoke.py` / `tests/test_public_api.py`); CHANGELOG `[Unreleased]` cut to `[0.1.0] - 2026-07-13` with an explicit "all linguistic data unverified" disclosure. Rationale: "agent prepares everything; Robel pushes the tag" — the tag must match the built version, and the release workflow enforces that match.
+- `MANIFEST.in` (new): sdist now includes `CHANGELOG.md`, `scripts/*.py`, and `tests/` **including `tests/golden/pairs.json`** — without it the sdist contained `tests/*.py` but not the corpus, so `test_golden.py` (which also re-runs `scripts/gen_golden_pairs.py --check` via subprocess) could not pass from an unpacked sdist. Wheel contents unaffected.
+- `scripts/smoke_wheel.py` (new): smoke-tests an INSTALLED artifact — refuses to run against the source tree, optionally asserts version == tag, loads `lexicon()` (≥50 given names, 12 titles), and exercises `transliterate`/`parse`/`variants`/`match` end-to-end (plan-pinned behaviors only, no new linguistic data). Used locally below and by the release workflow.
+- `.github/workflows/release.yml` (new): tag-triggered (`v*`), two jobs. `build`: `python -m build` → `twine check dist/*` → fresh venv, install the wheel, run `smoke_wheel.py "${GITHUB_REF_NAME#v}"` from /tmp (so a version/tag mismatch or missing package data fails BEFORE publish) → upload `dist/` artifact. `publish`: `pypa/gh-action-pypi-publish@release/v1` with `permissions: id-token: write` and `environment: pypi` — PyPI Trusted Publishing, no stored token. Robel's one-time PyPI setup + tag steps documented in the review-queue release item above.
+- `build` and `twine` installed ad hoc into `.venv` — deliberately NOT added to the dev extras (kickoff pins dev deps to pytest/ruff/mypy; CI release job installs its own).
+
+Verification output (paste FULL command + output, unedited):
+
+Task 10 Verify block (cmd batch: `cd /d D:\habesha-names && call .venv\Scripts\activate.bat`, then):
+
+    if exist dist rmdir /s /q dist
+    python -m build && twine check dist\* && echo EXIT CODE: %ERRORLEVEL%
+
+Output (the 80-line mechanical `running bdist_wheel` staging copy listing, lines "running build" through "running install_scripts", is elided for length — it duplicates the final wheel `adding` manifest, which is pasted complete and unedited below; everything else verbatim):
+
+    * Creating isolated environment: venv+pip...
+    * Installing packages in isolated environment:
+      - setuptools>=77
+    * Getting build dependencies for sdist...
+    running egg_info
+    writing src\habesha_names.egg-info\PKG-INFO
+    writing dependency_links to src\habesha_names.egg-info\dependency_links.txt
+    writing requirements to src\habesha_names.egg-info\requires.txt
+    writing top-level names to src\habesha_names.egg-info\top_level.txt
+    reading manifest file 'src\habesha_names.egg-info\SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    adding license file 'LICENSE'
+    writing manifest file 'src\habesha_names.egg-info\SOURCES.txt'
+    * Installed build dependency versions:
+      - setuptools==83.0.0
+    * Building sdist...
+    running sdist
+    running egg_info
+    [... same egg_info block as above ...]
+    running check
+    creating habesha_names-0.1.0
+    creating habesha_names-0.1.0\scripts
+    creating habesha_names-0.1.0\src\habesha_names
+    creating habesha_names-0.1.0\src\habesha_names.egg-info
+    creating habesha_names-0.1.0\src\habesha_names\data
+    creating habesha_names-0.1.0\src\habesha_names\fidel
+    creating habesha_names-0.1.0\src\habesha_names\match
+    creating habesha_names-0.1.0\src\habesha_names\parse
+    creating habesha_names-0.1.0\src\habesha_names\translit
+    creating habesha_names-0.1.0\tests
+    creating habesha_names-0.1.0\tests\golden
+    copying files to habesha_names-0.1.0...
+    copying CHANGELOG.md -> habesha_names-0.1.0
+    copying LICENSE -> habesha_names-0.1.0
+    copying MANIFEST.in -> habesha_names-0.1.0
+    copying README.md -> habesha_names-0.1.0
+    copying pyproject.toml -> habesha_names-0.1.0
+    copying scripts\benchmark.py -> habesha_names-0.1.0\scripts
+    copying scripts\gen_fidel_tables.py -> habesha_names-0.1.0\scripts
+    copying scripts\gen_golden_pairs.py -> habesha_names-0.1.0\scripts
+    copying scripts\smoke_wheel.py -> habesha_names-0.1.0\scripts
+    copying src\habesha_names\__init__.py -> habesha_names-0.1.0\src\habesha_names
+    copying src\habesha_names\_data.py -> habesha_names-0.1.0\src\habesha_names
+    copying src\habesha_names\py.typed -> habesha_names-0.1.0\src\habesha_names
+    [... 5 egg-info copies ...]
+    copying src\habesha_names\data\__init__.py -> habesha_names-0.1.0\src\habesha_names\data
+    copying src\habesha_names\data\compounds.json -> habesha_names-0.1.0\src\habesha_names\data
+    copying src\habesha_names\data\given_names.json -> habesha_names-0.1.0\src\habesha_names\data
+    copying src\habesha_names\data\schema.md -> habesha_names-0.1.0\src\habesha_names\data
+    copying src\habesha_names\data\titles.json -> habesha_names-0.1.0\src\habesha_names\data
+    [... fidel/match/parse/translit module copies (15 files) ...]
+    copying tests\test_data_loader.py -> habesha_names-0.1.0\tests
+    [... 11 more tests\test_*.py copies ...]
+    copying tests\golden\pairs.json -> habesha_names-0.1.0\tests\golden
+    copying src\habesha_names.egg-info\SOURCES.txt -> habesha_names-0.1.0\src\habesha_names.egg-info
+    Writing habesha_names-0.1.0\setup.cfg
+    Creating tar archive
+    removing 'habesha_names-0.1.0' (and everything under it)
+    * Building wheel from sdist
+    * Creating isolated environment: venv+pip...
+    * Installing packages in isolated environment:
+      - setuptools>=77
+    * Getting build dependencies for wheel...
+    [... egg_info block ...]
+    * Installed build dependency versions:
+      - setuptools==83.0.0
+    * Building wheel...
+    running bdist_wheel
+    [... 80-line build\lib / bdist staging copy listing elided (includes
+        "copying src\habesha_names\data\*.json -> build\lib\habesha_names\data") ...]
+    creating 'D:\\habesha-names\\dist\\.tmp-pgeu7wsl\\habesha_names-0.1.0-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+    adding 'habesha_names/__init__.py'
+    adding 'habesha_names/_data.py'
+    adding 'habesha_names/py.typed'
+    adding 'habesha_names/data/__init__.py'
+    adding 'habesha_names/data/compounds.json'
+    adding 'habesha_names/data/given_names.json'
+    adding 'habesha_names/data/schema.md'
+    adding 'habesha_names/data/titles.json'
+    adding 'habesha_names/fidel/__init__.py'
+    adding 'habesha_names/fidel/normalize.py'
+    adding 'habesha_names/fidel/syllable.py'
+    adding 'habesha_names/fidel/tables.py'
+    adding 'habesha_names/match/__init__.py'
+    adding 'habesha_names/match/full.py'
+    adding 'habesha_names/match/phonetic.py'
+    adding 'habesha_names/match/token.py'
+    adding 'habesha_names/parse/__init__.py'
+    adding 'habesha_names/parse/compounds.py'
+    adding 'habesha_names/parse/parser.py'
+    adding 'habesha_names/parse/titles.py'
+    adding 'habesha_names/translit/__init__.py'
+    adding 'habesha_names/translit/schemes.py'
+    adding 'habesha_names/translit/to_latin.py'
+    adding 'habesha_names/translit/variants.py'
+    adding 'habesha_names-0.1.0.dist-info/licenses/LICENSE'
+    adding 'habesha_names-0.1.0.dist-info/METADATA'
+    adding 'habesha_names-0.1.0.dist-info/WHEEL'
+    adding 'habesha_names-0.1.0.dist-info/top_level.txt'
+    adding 'habesha_names-0.1.0.dist-info/RECORD'
+    removing build\bdist.win-amd64\wheel
+    Successfully built habesha_names-0.1.0.tar.gz and habesha_names-0.1.0-py3-none-any.whl
+    Checking dist\habesha_names-0.1.0-py3-none-any.whl: PASSED
+    Checking dist\habesha_names-0.1.0.tar.gz: PASSED
+    EXIT CODE: 0
+
+Built-wheel smoke test (fresh venv in the session scratchpad, run FROM the scratchpad so the source tree is not importable):
+
+    python -m venv smoke-venv
+    smoke-venv\Scripts\pip install --quiet D:\habesha-names\dist\habesha_names-0.1.0-py3-none-any.whl
+    smoke-venv\Scripts\python D:\habesha-names\scripts\smoke_wheel.py 0.1.0
+
+Output:
+
+    wheel smoke OK: version=0.1.0 given_names=56 match=1.00
+
+Full repo gate (`D:\habesha-names\check.bat` = pytest -q && ruff check . && mypy src --strict, inside .venv):
+
+    ........................................................................ [ 16%]
+    ........................................................................ [ 32%]
+    ........................................................................ [ 49%]
+    ........................................................................ [ 65%]
+    ........................................................................ [ 81%]
+    .............................................x.......................... [ 98%]
+    ........                                                                 [100%]
+    439 passed, 1 xfailed in 3.53s
+    All checks passed!
+    Success: no issues found in 19 source files
+    EXIT CODE: 0
+
+Files touched: `pyproject.toml` (package-data), `src/habesha_names/__init__.py` (0.1.0), `tests/test_smoke.py` + `tests/test_public_api.py` (version pins), `CHANGELOG.md` (0.1.0 section), `MANIFEST.in` (new), `scripts/smoke_wheel.py` (new), `.github/workflows/release.yml` (new), `PROGRESS.md`
+
+Deviations from plan (and why):
+- Plan's Verify is only `python -m build && twine check dist\*`; the built-wheel smoke test was added per the Session 10 handoff requirement ("verify the lexicon loads from the built artifact, not the source tree") — it is what actually catches the package-data class of bug.
+- `MANIFEST.in` and `scripts/smoke_wheel.py` are not named by the plan; both exist to make the shipped artifacts self-consistent (sdist test suite runnable; release verifiable). No engine or data changes.
+- `build`/`twine` NOT added to `[project.optional-dependencies] dev` — kickoff pins dev deps to exactly pytest/ruff/mypy; installed ad hoc locally, and the release workflow installs its own copies.
+- Version on `main` is now `0.1.0` (not a `.dev` marker) ahead of the actual PyPI release. Chosen so the prepared tag matches the package exactly and the workflow's tag==version gate holds; if Robel prefers dev-marking between releases, bump after tagging.
+
+Known issues / TODOs introduced:
+- The release workflow has never executed (it can only run on a tag push, which is Robel's). First real run is the integration test; the wheel-smoke gate runs before publish, so a failure cannot half-release.
+- PyPI Trusted Publishing must be configured once on pypi.org BEFORE the first tag push (steps in the review-queue release item) or the publish job fails with an OIDC error — safe to just re-run after configuring.
+- `PROGRESS.md` was added to `.gitignore` (commit 3a84596) but is still git-TRACKED, so the ignore entry has no effect and this file still shows in `git status`/commits. If the intent is to keep it out of the repo, it needs `git rm --cached PROGRESS.md`; flagging rather than second-guessing the intent.
+- Nothing was committed, per session protocol: tree left ready for Robel. Suggested commit message: `task-10: packaging + release prep (wheel data fix, sdist manifest, v0.1.0, trusted-publishing release workflow)`.
+
+Next session should start with: nothing — **v0.1 scope (Tasks 0–10) is complete.** The ball is in Robel's court: the Human review queue (linguistic decisions, data verification) and the release steps in the "Release tag push" item. v0.2 backlog is forbidden without explicit instruction.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -689,6 +860,10 @@ Next session should start with: Task 10 — Packaging + release prep (build sdis
 | 2026-07-13 | Public API = §5 surface minus v0.2 names (`to_fidel`, `guess_gender`); function exports shadow same-named subpackage attributes | Cannot export what doesn't exist; stubs violate scope discipline; shadowing is inherent to §5 naming and documented |
 | 2026-07-13 | Repo-wide `mypy --strict` gate (check.bat, CI) from Task 9 onward | Kickoff engineering rule + ARCHITECTURE §6 pin CI at --strict |
 | 2026-07-13 | README snippets are doctests, double-gated: plan's `python -m doctest README.md` + `test_readme_doctests` (explicit UTF-8) in pytest/CI | README claims stay executable; the pytest path is locale-independent and fails loudly when linguistic defaults change during review |
+| 2026-07-13 | `__version__` bumped to `0.1.0` on main; CHANGELOG 0.1.0 section cut | Release prep: the release workflow gates tag == package version; Robel triggers by pushing `v0.1.0` |
+| 2026-07-13 | `build`/`twine` installed ad hoc, never added to dev extras | Kickoff pins dev deps to pytest/ruff/mypy exactly; the release workflow installs its own build tools |
+| 2026-07-13 | Wheel data via `package-data` (`data/*.json` + `schema.md`); sdist completeness via `MANIFEST.in` (tests + golden corpus + scripts + CHANGELOG) | The two artifact types have different jobs: wheel = runtime (lexicons required), sdist = rebuildable + testable (`test_golden.py` needs `pairs.json` and `gen_golden_pairs.py`) |
+| 2026-07-13 | Release = tag-triggered workflow: build → twine check → install wheel in fresh venv → `scripts/smoke_wheel.py` (tag==version, lexicon loads, engine end-to-end) → PyPI Trusted Publishing (`id-token: write`, `environment: pypi`) | Plan pins human-triggered release + Trusted Publishing; the smoke gate makes the package-data bug class unshippable; no long-lived PyPI token exists anywhere |
 
 ## Known issues
 

@@ -4,7 +4,7 @@ import habesha_names
 
 
 def test_version() -> None:
-    assert habesha_names.__version__ == "0.1.0.dev0"
+    assert habesha_names.__version__ == "0.1.0"
 
 
 def test_subpackages_importable() -> None:
