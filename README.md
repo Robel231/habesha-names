@@ -4,9 +4,16 @@ Ethiopian/Eritrean name intelligence for Python: fidel script handling,
 transliteration, spelling-variant generation, name parsing, and
 patronymic-aware fuzzy matching.
 
-**Status: pre-alpha (v0.1 in development).** APIs are settling and the
-bundled linguistic data has not yet passed native-speaker review — see
-[Data verification](#data-verification) below.
+## Alpha status
+
+**Current release: 0.1.0a1 (alpha).** The practical transliteration
+defaults and the bundled name lexicon are agent-seeded and pending
+native-speaker verification — every linguistic default ships flagged
+`"verified": false` (see [Data verification](#data-verification)).
+Concretely, that means **match scores and variant outputs may change in
+0.1.0 final** as defaults are reviewed, and **the API is not yet
+frozen**. Suitable for evaluation and integration prototyping; pin the
+exact version if you depend on today's scores.
 
 - **Zero runtime dependencies** — stdlib only
 - **Deterministic and explainable** — no ML at runtime, no network calls;
@@ -32,11 +39,12 @@ Habesha names break global identity systems:
 ## Install
 
 ```
-pip install habesha-names
+pip install --pre habesha-names
 ```
 
-(Not yet on PyPI; v0.1.0 is the first planned release. Until then:
-`pip install -e .` from a checkout.)
+(Only alpha releases exist so far, so pip needs `--pre`; plain
+`pip install habesha-names` will work once 0.1.0 final is out.
+From a checkout: `pip install -e .`)
 
 ## Quick tour
 
@@ -154,7 +162,7 @@ All bundled linguistic data (lexicons, transliteration tables, variant
 rules, golden test pairs) was seeded programmatically or by a non-native
 speaker and ships flagged `"verified": false` until it passes
 native-speaker review. Match scores are deterministic and explainable,
-but treat linguistic defaults as provisional until v0.1.0.
+but treat linguistic defaults as provisional until 0.1.0 final.
 
 ## Development
 

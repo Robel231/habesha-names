@@ -17,6 +17,7 @@
 | 8 | Full matcher + golden corpus | ✔ VERIFIED (evidence below) | Session 9, 2026-07-13 |
 | 9 | API polish + README | ✔ VERIFIED (evidence below) | Session 10, 2026-07-13 |
 | 10 | Packaging + release prep | ✔ VERIFIED (evidence below) | Session 11, 2026-07-13 |
+| 11 | Alpha release prep (0.1.0a1) | ✔ VERIFIED (evidence below) | Session 12, 2026-07-13 |
 
 Status values: `☐ not started` · `◐ in progress` · `✕ blocked (reason)` · `✔ VERIFIED (evidence below)`
 
@@ -812,6 +813,97 @@ Known issues / TODOs introduced:
 
 Next session should start with: nothing — **v0.1 scope (Tasks 0–10) is complete.** The ball is in Robel's court: the Human review queue (linguistic decisions, data verification) and the release steps in the "Release tag push" item. v0.2 backlog is forbidden without explicit instruction.
 
+## Session 12 — 2026-07-13
+
+Task attempted: Task 11 — Alpha release prep (0.1.0a1)
+
+What was actually done (per Robel's decision to ship an installable ALPHA now, without the native-speaker review):
+- **No review-queue changes**: no `verified: false` flag flipped, no `needs_human` marker touched, queue shipped as-is. NOTE (not a queue edit): the "Release tag push" queue item's step 3 says `git tag v0.1.0` — superseded by Robel's alpha decision; the current tag is **`v0.1.0a1`** (exact commands in this session's report and below). Steps 1–2 (commit review, one-time PyPI Trusted Publisher registration) are unchanged and still pending.
+- Version `0.1.0` → `0.1.0a1` (PEP 440 alpha): `src/habesha_names/__init__.py` + the two pins in `tests/test_smoke.py` / `tests/test_public_api.py`. `pyproject.toml` already carried `Development Status :: 3 - Alpha` (set in Task 0) — confirmed, no change needed.
+- Honest labeling, three places: README gained an "**Alpha status**" section at the top (transliteration defaults + lexicon pending native-speaker verification; match scores and variant outputs may change in 0.1.0 final; API not frozen) and the install section now shows `pip install --pre habesha-names`; the package docstring gained a one-line version of the same disclaimer; CHANGELOG's never-published `[0.1.0]` section renamed to `[0.1.0a1] - 2026-07-13` and restructured into "Works (implemented, tested, shipped)" + "Unverified (pending native-speaker review; may change in 0.1.0 final)".
+- Release mechanics confirmed by inspection, no fixes needed: `release.yml` trigger is `tags: ["v*"]`, which matches `v0.1.0a1`; the smoke gate compares `__version__` to `${GITHUB_REF_NAME#v}` by string equality, and `0.1.0a1` is already PEP 440 canonical so the built artifacts and the tag agree; Trusted Publishing block has `environment: pypi` + `id-token: write` + project URL `pypi.org/p/habesha-names`, matching remote `https://github.com/Robel231/habesha-names.git`.
+- No feature, lexicon, table, or test changes beyond the version pins and labeling.
+
+Verification output (paste FULL command + output, unedited):
+
+Full repo gate (`D:\habesha-names\check.bat` = pytest -q && ruff check . && mypy src --strict, inside .venv):
+
+    ........................................................................ [ 16%]
+    ........................................................................ [ 32%]
+    ........................................................................ [ 49%]
+    ........................................................................ [ 65%]
+    ........................................................................ [ 81%]
+    .............................................x.......................... [ 98%]
+    ........                                                                 [100%]
+    439 passed, 1 xfailed in 4.33s
+    All checks passed!
+    Success: no issues found in 19 source files
+    EXIT CODE: 0
+
+Build + metadata check (cmd, inside .venv, dist/ removed first):
+
+    if exist dist rmdir /s /q dist
+    python -m build && twine check dist\* && echo EXIT CODE: %ERRORLEVEL%
+
+Output (the mechanical sdist/wheel copy listings are elided for length — identical shape to Session 11's, every path now versioned `0.1.0a1`; data JSONs confirmed present in both the sdist listing and the wheel `adding` manifest; head/tail unedited):
+
+    * Creating isolated environment: venv+pip...
+    * Installing packages in isolated environment:
+      - setuptools>=77
+    [... sdist build: copies CHANGELOG.md, LICENSE, MANIFEST.in, README.md, pyproject.toml,
+        scripts/*.py (4), src/habesha_names/** incl. data/*.json + schema.md,
+        tests/test_*.py (12), tests/golden/pairs.json ...]
+    * Building wheel from sdist
+    [... wheel build: adding 'habesha_names/data/compounds.json',
+        'habesha_names/data/given_names.json', 'habesha_names/data/schema.md',
+        'habesha_names/data/titles.json' + all 24 package files ...]
+    Successfully built habesha_names-0.1.0a1.tar.gz and habesha_names-0.1.0a1-py3-none-any.whl
+    Checking dist\habesha_names-0.1.0a1-py3-none-any.whl: PASSED
+    Checking dist\habesha_names-0.1.0a1.tar.gz: PASSED
+    EXIT CODE: 0
+
+Fresh-venv SDIST install + full test suite off the repo path (scratchpad dir `sdist-verify`, per Task 10 procedure; the sdist tarball itself installed, then unpacked and its bundled test suite run against the INSTALLED package):
+
+    python -m venv sdist-venv
+    sdist-venv\Scripts\pip install --quiet D:\habesha-names\dist\habesha_names-0.1.0a1.tar.gz pytest
+    tar -xzf D:\habesha-names\dist\habesha_names-0.1.0a1.tar.gz
+    sdist-venv\Scripts\python -c "import habesha_names; print('installed version:', habesha_names.__version__)"
+
+    installed version: 0.1.0a1
+
+    cd habesha_names-0.1.0a1
+    ..\sdist-venv\Scripts\python -m pytest -q
+
+    ........................................................................ [ 16%]
+    ........................................................................ [ 32%]
+    ........................................................................ [ 49%]
+    ........................................................................ [ 65%]
+    ........................................................................ [ 81%]
+    .............................................x.......................... [ 98%]
+    ........                                                                 [100%]
+    439 passed, 1 xfailed in 6.70s
+    EXIT CODE: 0
+
+Installed-artifact smoke (source-tree import guard + version==tag + lexicon + engine end-to-end, same fresh venv, run from outside the repo):
+
+    sdist-venv\Scripts\python D:\habesha-names\scripts\smoke_wheel.py 0.1.0a1
+
+    wheel smoke OK: version=0.1.0a1 given_names=56 match=1.00
+    EXIT CODE: 0
+
+Files touched: `src/habesha_names/__init__.py` (version + docstring disclaimer), `tests/test_smoke.py` + `tests/test_public_api.py` (version pins), `README.md` (Alpha status section, `--pre` install note, "until 0.1.0 final" wording), `CHANGELOG.md` ([0.1.0a1] entry: works/unverified), `PROGRESS.md`
+
+Deviations from plan (and why):
+- Task instruction 2 says "Set classifier `Development Status :: 3 - Alpha`" — it was already present in `pyproject.toml` since Task 0; verified rather than re-added, so `pyproject.toml` is untouched this session.
+- CHANGELOG's `[0.1.0] - 2026-07-13` section (cut in Session 11) was RENAMED to `[0.1.0a1]` rather than kept alongside a new entry: 0.1.0 final was never published, and a changelog entry for an unpublished version above a published alpha would be false history. 0.1.0 final gets its own entry when it actually ships.
+- Committed AND pushed this session (unlike Sessions 4–11's leave-tree-ready protocol) because Robel's Task 11 instruction explicitly says "Commit as 'task-11: alpha release prep (0.1.0a1)' and push."
+
+Known issues / TODOs introduced:
+- The entire human review queue remains open by design — 0.1.0a1 ships `verified: false` data, disclosed in README/docstring/CHANGELOG. When review flips defaults, README doctests fail loudly (Session 10 design) and 0.1.0 final gets fresh verification.
+- `PROGRESS.md` tracked-but-gitignored oddity from Session 11 still stands (needs `git rm --cached` if Robel wants it untracked; not second-guessed here).
+
+Next session should start with: nothing scheduled — after Robel completes the one-time PyPI Trusted Publisher registration and pushes `v0.1.0a1` (exact commands in the Session 12 report), the release workflow runs for the first time. If it fails, that debugging is the next session.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -864,6 +956,8 @@ Next session should start with: nothing — **v0.1 scope (Tasks 0–10) is compl
 | 2026-07-13 | `build`/`twine` installed ad hoc, never added to dev extras | Kickoff pins dev deps to pytest/ruff/mypy exactly; the release workflow installs its own build tools |
 | 2026-07-13 | Wheel data via `package-data` (`data/*.json` + `schema.md`); sdist completeness via `MANIFEST.in` (tests + golden corpus + scripts + CHANGELOG) | The two artifact types have different jobs: wheel = runtime (lexicons required), sdist = rebuildable + testable (`test_golden.py` needs `pairs.json` and `gen_golden_pairs.py`) |
 | 2026-07-13 | Release = tag-triggered workflow: build → twine check → install wheel in fresh venv → `scripts/smoke_wheel.py` (tag==version, lexicon loads, engine end-to-end) → PyPI Trusted Publishing (`id-token: write`, `environment: pypi`) | Plan pins human-triggered release + Trusted Publishing; the smoke gate makes the package-data bug class unshippable; no long-lived PyPI token exists anywhere |
+| 2026-07-13 | Ship v0.1.0a1 ALPHA with the review queue open; `verified: false` data ships as-is, disclosed in README ("Alpha status"), package docstring, and CHANGELOG | Robel's call (Task 11): installable alpha now, native-speaker review before 0.1.0 final; PEP 440 alpha + `--pre` gate keeps it away from default `pip install` |
+| 2026-07-13 | CHANGELOG `[0.1.0]` renamed to `[0.1.0a1]` (works/unverified split) instead of adding a parallel entry | 0.1.0 final never shipped; a changelog must not record an unpublished release above a published one |
 
 ## Known issues
 

@@ -9,13 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _(nothing yet)_
 
-## [0.1.0] - 2026-07-13
+## [0.1.0a1] - 2026-07-13
 
-Initial release. All linguistic data (lexicons, transliteration defaults,
-variant rules, golden corpus) is agent-seeded and flagged
-`"verified": false` pending native-speaker review.
+First installable release — an **alpha**. The engine, tests, and packaging
+below are complete and CI-gated; the linguistic defaults they encode are
+not yet verified, so match scores and variant outputs may change in 0.1.0
+final and the API is not yet frozen.
 
-### Added
+### Works (implemented, tested, shipped)
 
 - Fidel script core: generated Unicode Ethiopic tables (U+1200–U+137F,
   U+1380–U+139F), syllable decomposition/composition, `is_ethiopic`.
@@ -37,3 +38,15 @@ variant rules, golden corpus) is agent-seeded and flagged
   (201 pairs) plus a ≥50k matches/sec benchmark gate.
 - Public API (`habesha_names.__all__`): `parse`, `match`, `variants`,
   `transliterate`, `normalize`, `phonetic_key`, `is_ethiopic`.
+
+### Unverified (pending native-speaker review; may change in 0.1.0 final)
+
+- The practical transliteration scheme's defaults (ቀ→k, 6th-order
+  epenthesis, ጸ→ts, ኘ→gn, labialized/guttural/glide rules, …).
+- The seed lexicons: every `given_names.json`, `titles.json`, and
+  `compounds.json` entry ships `"verified": false`.
+- Variant-rule weights and matcher tuning constants (phonetic/variant
+  weights, key-mismatch damp, swap/missing penalties).
+- The golden corpus: all 201 pairs are agent-generated
+  (`needs_human: true`), including 6 documented `known_fail` engine
+  limits.
