@@ -904,6 +904,15 @@ Known issues / TODOs introduced:
 
 Next session should start with: nothing scheduled — after Robel completes the one-time PyPI Trusted Publisher registration and pushes `v0.1.0a1` (exact commands in the Session 12 report), the release workflow runs for the first time. If it fails, that debugging is the next session.
 
+**Post-release addendum (same day, 2026-07-13):** Robel registered the pending Trusted Publisher on pypi.org, made the repo public, and pushed `v0.1.0a1` (tag on `cf64644`). Release workflow run #1: **Success** — build 22s (incl. wheel smoke gate), publish 21s, digital attestations uploaded, no OIDC issues. Confirmed live via the PyPI JSON API (`info.version = 0.1.0a1`, `Development Status :: 3 - Alpha`, wheel 50 804 B + sdist 77 774 B) and by a real end-user install in a fresh scratchpad venv:
+
+    pip install --pre habesha-names
+    python D:\habesha-names\scripts\smoke_wheel.py 0.1.0a1
+
+    wheel smoke OK: version=0.1.0a1 given_names=56 match=1.00
+
+**habesha-names 0.1.0a1 is live on PyPI.** Non-blocking note for a future workflow touch-up: run #1 logged deprecation warnings that `actions/checkout@v4`, `setup-python@v5`, and the artifact actions target Node.js 20 (runners force Node 24) — bump to the @v5/@v6 majors whenever release.yml is next edited.
+
 ## Decisions log
 
 | Date | Decision | Why |
