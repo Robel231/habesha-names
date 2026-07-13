@@ -8,9 +8,9 @@ Mechanics tests that need none of those use non-name ASCII vectors --
 algorithm behavior pins, not linguistic claims.
 
 The ARCHITECTURE 6 property (every variant matches its source at >= 0.8)
-is wired against Task 6's ``sim`` directly, with one documented carve-out:
-slash/dot abbreviation forms ("G/Medhin") need the Task 8 full matcher's
-expansion step and are exempted here (PROGRESS.md review queue).
+is wired against ``sim`` directly. The original Task 7 carve-out for
+slash/dot abbreviation forms ("G/Medhin") was removed in Task 8: the
+variant-set overlap term wired into ``sim`` scores them 0.85.
 """
 
 from __future__ import annotations
@@ -161,13 +161,11 @@ def test_empty_and_letterless_input() -> None:
 
 
 def test_property_every_variant_matches_its_source() -> None:
-    # ARCHITECTURE 6 / plan Task 7 property, wired against Task 6's sim.
-    # Carve-out (review queue): slash/dot abbreviation forms lose letters
-    # and need the Task 8 full matcher's expansion step to score.
+    # ARCHITECTURE 6 / plan Task 7 property, wired against sim. No
+    # carve-outs: since Task 8 wired variant-set overlap into sim, even
+    # slash/dot abbreviation forms ("G/Medhin") score VARIANT_WEIGHT.
     for source in all_sources():
         for variant in variants(source):
-            if "/" in variant or "." in variant:
-                continue
             score = sim(source, variant)
             assert score >= 0.8, f"sim({source!r}, {variant!r}) = {score:.3f}"
 

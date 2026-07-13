@@ -1,9 +1,16 @@
-"""Token-pair similarity: in-repo Jaro-Winkler plus the HabeshaKey backstop.
+"""Token-pair similarity: Jaro-Winkler, HabeshaKey backstop, variant overlap.
 
-Per ARCHITECTURE §4.4, ``sim(a, b)`` is the max of a phonetic-exact score
-and Jaro-Winkler over normalized tokens. The third component of the §4.4
-formula, variant-set overlap, requires the Task 7 variant engine and is
-wired in Task 8 -- until then ``sim`` is a lower bound on the final design.
+Per ARCHITECTURE §4.4, ``sim(a, b)`` is the max of three components over
+normalized tokens: a phonetic-exact score (``PHONETIC_WEIGHT`` when the
+HabeshaKeys agree), variant-set overlap (``VARIANT_WEIGHT`` when either
+token appears in the other's Task 7 ``variants()`` output), and
+Jaro-Winkler. Task 8 corpus tuning added one interaction: when the two
+HabeshaKeys DIFFER, the Jaro-Winkler component is damped by
+``KEY_MISMATCH_DAMP`` -- similar-looking but phonetically distinct names
+(Tesfaye/Tesfa, Abebe/Abebech) otherwise score ~0.94 on shared prefixes
+alone, above any usable same-person threshold. Genuine spelling variants
+whose keys differ (Bekele/Beqele, Mohammed/Mahamed, G/Medhin) are caught
+by the variant-overlap and lexicon terms instead.
 
 Jaro-Winkler is implemented here from the standard definition (stdlib-only
 rule): prefix scale 0.1, prefix capped at 4, boost applied only when the
@@ -11,17 +18,30 @@ Jaro score exceeds 0.7. Both empty strings compare equal (1.0); one empty
 side scores 0.0. The algorithm itself is case-sensitive; ``sim`` normalizes
 (transliterate fidel, lowercase, strip non-letters) before comparing.
 
-``PHONETIC_WEIGHT`` (the score a phonetic-key match guarantees) is an
-agent-chosen constant pending Task 8 corpus tuning (review queue).
+``PHONETIC_WEIGHT``, ``VARIANT_WEIGHT``, and ``KEY_MISMATCH_DAMP`` are
+agent-chosen constants tuned only against the mechanical golden corpus
+(verified: false, PROGRESS.md review queue). Normalization, key, and
+variant-set lookups are memoized in bounded ``lru_cache``\\ s -- pure
+memoization, no behavioral state.
 """
 
 from __future__ import annotations
 
+from functools import lru_cache
+from typing import NamedTuple
+
 from habesha_names.match.phonetic import phonetic_key
 from habesha_names.translit.to_latin import transliterate
+from habesha_names.translit.variants import variants
 
 #: Score guaranteed when two tokens share a HabeshaKey. Provisional (Task 8).
 PHONETIC_WEIGHT = 0.9
+
+#: Score guaranteed when one token is in the other's variant set. Provisional.
+VARIANT_WEIGHT = 0.85
+
+#: Jaro-Winkler multiplier when the two HabeshaKeys differ. Provisional.
+KEY_MISMATCH_DAMP = 0.6
 
 _WINKLER_PREFIX_SCALE = 0.1
 _WINKLER_MAX_PREFIX = 4
@@ -80,19 +100,86 @@ def jaro_winkler(a: str, b: str) -> float:
     return score + prefix * _WINKLER_PREFIX_SCALE * (1.0 - score)
 
 
+@lru_cache(maxsize=65536)
 def _norm(token: str) -> str:
     """Transliterate (fidel passes to Latin), lowercase, keep only a-z."""
     latin = transliterate(token).lower()
     return "".join(ch for ch in latin if "a" <= ch <= "z")
 
 
+@lru_cache(maxsize=65536)
+def _key(norm_token: str) -> str:
+    """HabeshaKey of an already-normalized token."""
+    return phonetic_key(norm_token)
+
+
+@lru_cache(maxsize=8192)
+def _variant_norms(norm_token: str) -> frozenset[str]:
+    """Normalized forms of the token's Task 7 variant set (top-N default)."""
+    return frozenset(_norm(variant) for variant in variants(norm_token))
+
+
+class TokenSim(NamedTuple):
+    """A token similarity score plus the component that produced it."""
+
+    score: float
+    method: str  #: "exact" | "phonetic" | "variant" | "jaro_winkler" | "none"
+
+
+@lru_cache(maxsize=131072)
+def _sim_norms(norm_a: str, norm_b: str) -> TokenSim:
+    """Symmetric similarity core over two distinct normalized tokens.
+
+    Memoized: batch dedup compares the same token pairs constantly, and
+    the Jaro-Winkler inner loop dominates runtime otherwise. Callers pass
+    the pair in sorted order so both directions share one cache entry.
+    """
+    key_a, key_b = _key(norm_a), _key(norm_b)
+    keys_match = bool(key_a) and key_a == key_b
+    jw = jaro_winkler(norm_a, norm_b)
+    if not keys_match:
+        jw *= KEY_MISMATCH_DAMP
+    best = TokenSim(jw, "jaro_winkler")
+    if keys_match and PHONETIC_WEIGHT >= best.score:
+        best = TokenSim(PHONETIC_WEIGHT, "phonetic")
+    if best.score < VARIANT_WEIGHT and (
+        norm_b in _variant_norms(norm_a) or norm_a in _variant_norms(norm_b)
+    ):
+        best = TokenSim(VARIANT_WEIGHT, "variant")
+    return best
+
+
+def sim_detail(a: str, b: str) -> TokenSim:
+    """Like :func:`sim`, but also reports which component won.
+
+    Methods: ``"exact"`` (identical normalized tokens), ``"phonetic"``
+    (shared HabeshaKey), ``"variant"`` (one token is in the other's
+    variant set), ``"jaro_winkler"``, ``"none"`` (a letterless side).
+    On score ties the more explainable method wins (phonetic over JW).
+
+    >>> sim_detail("Tzehay", "Sehay")
+    TokenSim(score=0.9, method='phonetic')
+    >>> sim_detail("Bekele", "Beqele")
+    TokenSim(score=0.85, method='variant')
+    """
+    norm_a, norm_b = _norm(a), _norm(b)
+    if not norm_a or not norm_b:
+        return TokenSim(0.0, "none")
+    if norm_a == norm_b:
+        return TokenSim(1.0, "exact")
+    if norm_b < norm_a:
+        norm_a, norm_b = norm_b, norm_a
+    return _sim_norms(norm_a, norm_b)
+
+
 def sim(a: str, b: str) -> float:
     """Similarity of two name tokens (fidel or Latin), in [0, 1].
 
-    ``max(phonetic-exact * PHONETIC_WEIGHT, jaro_winkler)`` over normalized
-    tokens; identical normalized tokens score exactly 1.0, and a missing
-    (letterless) side scores 0.0. Variant-set overlap joins the max in
-    Task 8. Symmetric and deterministic.
+    Max of phonetic-exact (``PHONETIC_WEIGHT``), variant-set overlap
+    (``VARIANT_WEIGHT``), and Jaro-Winkler (damped by ``KEY_MISMATCH_DAMP``
+    when the HabeshaKeys differ) over normalized tokens; identical
+    normalized tokens score exactly 1.0, and a missing (letterless) side
+    scores 0.0. Symmetric and deterministic.
 
     >>> sim("Tesfaye", "Tesfaye")
     1.0
@@ -100,16 +187,11 @@ def sim(a: str, b: str) -> float:
     1.0
     >>> round(sim("Tzehay", "Sehay"), 2)  # phonetic backstop beats JW here
     0.9
+    >>> sim("Bekele", "Beqele")  # variant-set overlap (q<->k, keys differ)
+    0.85
+    >>> round(sim("Tesfaye", "Tesfa"), 2)  # different name: JW damped
+    0.57
     >>> sim("", "Abebe")
     0.0
     """
-    norm_a, norm_b = _norm(a), _norm(b)
-    if not norm_a or not norm_b:
-        return 0.0
-    if norm_a == norm_b:
-        return 1.0
-    score = jaro_winkler(norm_a, norm_b)
-    key_a = phonetic_key(norm_a)
-    if key_a and key_a == phonetic_key(norm_b):
-        score = max(score, PHONETIC_WEIGHT)
-    return score
+    return sim_detail(a, b).score

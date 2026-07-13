@@ -13,17 +13,24 @@ Pipeline (fidel input is transliterated first, so ፀሐይ keys like "Tsehay"):
    "Hailemariam").
 2. Digraph folding, left-to-right greedy: ts/tz -> s, sh -> x, ch -> c,
    kh/gh -> h, ph -> f, th -> t.
-3. Collapse runs of the same letter (Kebbede -> Kebede).
-4. Record the first vowel as a coarse class: a -> "a", e/i -> "e",
+3. Glide fold: every non-initial "y" becomes "i" -- in romanized Habesha
+   names a medial/final y writes the vowel or glide /i/, so ay/ai
+   spellings and y/i alternations key identically (Haymanot = Haimanot,
+   Maryam = Mariyam = Mariam, Hailemaryam = Hailemariam). Added by Task 8
+   corpus tuning; a string-initial "y" (Yohannes) still counts as a
+   consonant.
+4. Collapse runs of the same letter (Kebbede -> Kebede).
+5. Record the first vowel as a coarse class: a -> "a", e/i -> "e",
    o/u -> "o" (so Mohammed and Muhammed agree).
-5. Fold the terminal glide -aye / -ay / -ai into a terminal marker "A"
+6. Fold the terminal glide -aye / -ay / -ai into a terminal marker "A"
    (Tesfaye = Tesfay = Tesfai).
-6. Key = uppercase consonant skeleton (+ terminal marker) + ":" + vowel
+7. Key = uppercase consonant skeleton (+ terminal marker) + ":" + vowel
    class, e.g. "Tsehay" -> "SHA:e".
 
-Known, deliberate limits (review queue): q and k are NOT folded, medial
-ay/ai are NOT folded (Haymanot vs Haimanot key differently), and y/w count
-as consonants. Tuning happens in Task 8, not here.
+Known, deliberate limits (review queue): q and k are NOT folded, w counts
+as a consonant, and the single first-vowel-class slot lets skeleton
+collisions through (Bekele and Bikila share "BKL:e" -- recorded as a
+known_fail golden pair). Tuned against the mechanical golden corpus only.
 """
 
 from __future__ import annotations
@@ -48,7 +55,9 @@ _DIGRAPH_FOLD: dict[str, str] = {
 _VOWEL_CLASS: dict[str, str] = {"a": "a", "e": "e", "i": "e", "o": "o", "u": "o"}
 
 #: Terminal glide spellings folded into the "A" marker; longest first.
-_TERMINAL_SUFFIXES: tuple[str, ...] = ("aye", "ay", "ai")
+#: ("aie" is what the postvocalic y-fold turns "aye" into; "aye"/"ay" are
+#: kept for clarity even though the fold rewrites them before this step.)
+_TERMINAL_SUFFIXES: tuple[str, ...] = ("aye", "aie", "ay", "ai")
 
 
 def phonetic_key(name: str) -> str:
@@ -83,6 +92,10 @@ def phonetic_key(name: str) -> str:
         else:
             folded.append(letters[i])
             i += 1
+    for k in range(1, len(folded)):
+        # Glide fold (Task 8 tuning): a non-initial y writes the vowel /i/.
+        if folded[k] == "y":
+            folded[k] = "i"
     collapsed = [ch for k, ch in enumerate(folded) if k == 0 or ch != folded[k - 1]]
     if not collapsed:
         return ""
