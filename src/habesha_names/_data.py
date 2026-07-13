@@ -149,7 +149,9 @@ def _fidel_text(value: str, filename: str, where: str, *, allow_slash: bool = Fa
 
 def _optional_gender(entry: dict[str, Any], filename: str, where: str) -> str | None:
     value = entry["gender"]
-    if value is not None and value not in _GENDERS:
+    if value is None:
+        return None
+    if not isinstance(value, str) or value not in _GENDERS:
         _fail(filename, where, f"'gender' must be 'f', 'm', or null, got {value!r}")
     return value
 

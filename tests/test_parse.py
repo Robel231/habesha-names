@@ -226,15 +226,11 @@ def test_deterministic() -> None:
 def test_docstring_examples() -> None:
     import doctest
 
-    import habesha_names.parse.compounds
-    import habesha_names.parse.parser
-    import habesha_names.parse.titles
+    # `habesha_names.parse` the attribute is the parse() function since Task 9;
+    # the submodules remain importable via `from ... import`.
+    from habesha_names.parse import compounds, parser, titles
 
-    for mod in (
-        habesha_names.parse.titles,
-        habesha_names.parse.compounds,
-        habesha_names.parse.parser,
-    ):
+    for mod in (titles, compounds, parser):
         results = doctest.testmod(mod)
         assert results.attempted > 0
         assert results.failed == 0

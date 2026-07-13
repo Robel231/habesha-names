@@ -104,7 +104,9 @@ def test_deterministic() -> None:
 def test_docstring_examples() -> None:
     import doctest
 
-    import habesha_names.match.phonetic as mod
+    # `habesha_names.match` the attribute is the match() function since Task 9;
+    # the submodule remains importable via `from ... import`.
+    from habesha_names.match import phonetic as mod
 
     results = doctest.testmod(mod)
     assert results.attempted > 0

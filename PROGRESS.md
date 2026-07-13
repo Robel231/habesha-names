@@ -15,7 +15,7 @@
 | 6 | Phonetic key + token sim | ✔ VERIFIED (evidence below) | Session 7, 2026-07-12 |
 | 7 | Variant generator | ✔ VERIFIED (evidence below) | Session 8, 2026-07-12 |
 | 8 | Full matcher + golden corpus | ✔ VERIFIED (evidence below) | Session 9, 2026-07-13 |
-| 9 | API polish + README | ☐ not started | — |
+| 9 | API polish + README | ✔ VERIFIED (evidence below) | Session 10, 2026-07-13 |
 | 10 | Packaging + release prep | ☐ not started | — |
 
 Status values: `☐ not started` · `◐ in progress` · `✕ blocked (reason)` · `✔ VERIFIED (evidence below)`
@@ -86,6 +86,7 @@ Items the agent must NOT resolve itself:
   - መሐመድ ↔ Mohammed 0.53 — transliteration yields "Mehamed", not a listed variant, keys differ (same family as the open Task 4 fidel-vs-canonical mismatch item; fix = Robel adds the variant or corrects the fidel).
   - Gebremedhin ↔ "Gebrie Medhin" 0.42 and Hailemariam ↔ "Hailie Mariam" 0.43 — the variant engine emits e→ie rewrites INSIDE spaced compound forms, but the parser only joins lexicon-exact prefix spellings, so the tokens misalign. Decide: constrain the engine, or teach the matcher fuzzy compound joining.
   - The two sibling-style pairs and Bekele↔Bikila 0.90 (see matcher items above).
+- [ ] README quick-tour outputs (Task 9, Session 10) — every snippet is a doctest pinned to the CURRENT (unverified) engine and lexicon: variant lists, match scores (0.94 Tesfay Mohamed/Tesfaye Muhammed), the ወይዘሮ ጸሐይ ገብረመድህን ↔ "Tsehay G/Medhin" = 1.0 explainability example, and the "Why" section's linguistic claims. When any linguistic default is flipped during review, these doctests will fail loudly (by design) and the README must be re-read for accuracy before release.
 - [ ] All `given_names.json` entries with `"verified": false`
 - [ ] Golden corpus entries marked `"needs_human": true` (currently: all 201)
 - [ ] Final match-score thresholds (Task 8 tuning) — recorded in the decisions log (same ≥ 0.85, different ≤ 0.60 per §6; component weights above); revisit once the corpus contains human-curated pairs
@@ -572,6 +573,74 @@ Known issues / TODOs introduced:
 
 Next session should start with: Task 9 — Public API polish + README (`__init__.py` exports per ARCHITECTURE §5, docstrings with runnable examples on every public callable, README 6-snippet pitch, CHANGELOG.md; verify gate adds `mypy src --strict` and `python -m doctest README.md -v`). Check the review queue first — Task 8 added matcher/tuning items Robel may have decided.
 
+## Session 10 — 2026-07-13
+
+Task attempted: Task 9 — Public API polish + README
+
+What was actually done:
+- `src/habesha_names/__init__.py`: public re-exports per ARCHITECTURE §5 — `parse`, `match`, `variants`, `transliterate`, `normalize`, `phonetic_key`, `is_ethiopic` — plus `__version__`, with `__all__` pinned and a doctested package docstring. §5 also lists `to_fidel` and `guess_gender`, but both are v0.2 modules (ARCHITECTURE §4.2 / §3 mark them v0.2 and the files do not exist); exported only the seven that exist rather than shipping stubs — logged as a deviation below, README/CHANGELOG state they are planned for v0.2, and a test pins their absence.
+- `README.md`: full rewrite — pitch, "Why" (the §1 problem list), install, quick tour with the six required snippets (parse / variants / match / explainability / normalize / transliterate) plus a "Building blocks" snippet for `phonetic_key`/`is_ethiopic`, public-API block, data-verification caveat, development section. Every snippet is a doctest; every expected output was collected by running the engine first (scratchpad scripts), not typed from memory.
+- `CHANGELOG.md` (new): Keep-a-Changelog format, `[Unreleased]` section itemizing the v0.1 feature set.
+- `tests/test_public_api.py` (new, 6 tests): `__all__` = §5 surface exactly; every public callable has a docstring containing a doctest; v0.2 names not exported; version pin; package-docstring doctests; README doctests via `doctest.testfile(..., encoding="utf-8")` so they also run under pytest/CI regardless of locale.
+- Strict-mode fix in `_data.py` (`_optional_gender`: explicit `isinstance` narrow — the one `mypy src --strict` error in the whole repo).
+- Gate upgrade per kickoff engineering rule ("Task 9 onward: --strict") and ARCHITECTURE §6 ("CI matrix: … mypy --strict"): `check.bat` and `.github/workflows/ci.yml` now run `mypy src --strict`.
+- Fixed 4 pre-existing doctest-runner tests (`test_match_full/phonetic/token.py`, `test_parse.py`): the new function exports `match`/`parse` shadow the same-named subpackage ATTRIBUTES on the package, so `import habesha_names.match.full as mod` no longer resolves; switched to `from habesha_names.match import full as mod` (import-system path, unaffected). Commented in each test.
+- Probed the README-doctest encoding question empirically before writing (scratchpad `readme_probe.md`): fidel text in the file decodes correctly and doctest report output escapes safely on this machine's cmd; the pytest run reads it with explicit UTF-8 as a guard for stricter environments.
+
+Verification output (paste FULL command + output, unedited):
+
+Task 9 Verify block (cmd, after `call .venv\Scripts\activate.bat`):
+
+    pytest -q && mypy src --strict && ruff check . && python -m doctest README.md -v && echo EXIT CODE: %ERRORLEVEL%
+
+Output (the `-v` per-example listing of the 29 README doctests is elided here for length — every example printed `ok`, none failed; head and summary unedited):
+
+    ........................................................................ [ 16%]
+    ........................................................................ [ 32%]
+    ........................................................................ [ 49%]
+    ........................................................................ [ 65%]
+    ........................................................................ [ 81%]
+    .............................................x.......................... [ 98%]
+    ........                                                                 [100%]
+    439 passed, 1 xfailed in 3.67s
+    Success: no issues found in 19 source files
+    All checks passed!
+    [... 29 "Trying:/Expecting:/ok" blocks, all ok ...]
+    1 item passed all tests:
+      29 tests in README.md
+    29 tests in 1 item.
+    29 passed.
+    Test passed.
+    EXIT CODE: 0
+
+Full repo gate (`D:\habesha-names\check.bat`, now = pytest -q && ruff check . && mypy src --strict, inside .venv):
+
+    ........................................................................ [ 16%]
+    ........................................................................ [ 32%]
+    ........................................................................ [ 49%]
+    ........................................................................ [ 65%]
+    ........................................................................ [ 81%]
+    .............................................x.......................... [ 98%]
+    ........                                                                 [100%]
+    439 passed, 1 xfailed in 3.38s
+    All checks passed!
+    Success: no issues found in 19 source files
+
+Files touched: `src/habesha_names/__init__.py` (exports), `src/habesha_names/_data.py` (strict fix), `README.md` (rewrite), `CHANGELOG.md` (new), `tests/test_public_api.py` (new), `tests/test_match_full.py` / `tests/test_match_phonetic.py` / `tests/test_match_token.py` / `tests/test_parse.py` (doctest-runner import form), `check.bat` + `.github/workflows/ci.yml` (mypy --strict), `PROGRESS.md`
+
+Deviations from plan (and why):
+- ARCHITECTURE §5 lists `to_fidel` and `guess_gender` in the import block, but both are v0.2 features with no modules in the repo; Task 9 says "exports per ARCHITECTURE §5". Resolved by exporting the seven existing callables only: re-exporting nonexistent names is impossible, and stubbing v0.2 features is forbidden by scope discipline. Documented in the package docstring, README, CHANGELOG, and pinned by `test_v02_names_are_not_exported_yet`.
+- The verbose doctest listing is summarized (not pasted line-by-line) in the verification output above — it is ~200 lines of mechanical "Trying/ok" blocks; the unedited head, counts, and exit code are pasted, and the same 29 examples also run (and pass) inside the pytest figure via `test_readme_doctests`.
+- `tests/test_public_api.py` is not named by the plan's Verify block; added so the §5 surface and README stay gated in CI on all platforms (the plan's `python -m doctest README.md` invocation is locale-dependent on Windows).
+
+Known issues / TODOs introduced:
+- Attribute shadowing: `habesha_names.match` / `habesha_names.parse` as ATTRIBUTES now name the functions, not the subpackages (the §5 contract requires exactly this). `from habesha_names.match import full` and direct submodule imports work unchanged; only the `import habesha_names.match.full as x` attribute-binding form is affected. Inherent to §5 + §3 naming; flagged here so Robel is aware of the ergonomic trade.
+- `pyproject.toml` `[tool.setuptools.package-data]` only lists `py.typed` — the `data/*.json` lexicons will be MISSING from a built wheel (editable installs mask this). Must be fixed in Task 10 (its `python -m build && twine check` verify should also smoke-test `lexicon()` from the built wheel).
+- Fidel slash abbreviations (ገ/መድህን) are not expanded by the parser — abbreviation data is Latin-only ("G/"), so a fidel-abbreviated record scores low against its expansion (surfaced while collecting README examples; README examples avoid the form). Candidate for the review queue/v0.2 data extension.
+- Per session protocol, nothing was committed: tree left ready for Robel. Suggested commit message: `task-9: public API + README (§5 exports, doctested README tour, CHANGELOG, strict mypy gate)`.
+
+Next session should start with: Task 10 — Packaging + release prep (build sdist/wheel, `twine check`, release workflow with PyPI Trusted Publishing, tag prep — Robel pushes the tag). MUST fix the package-data gap (`data/*.json` into the wheel) and verify the lexicon loads from the built artifact, not the source tree. `build`/`twine` are not in the dev extras — decide whether to add them or install ad hoc. Check the review queue first.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -617,6 +686,9 @@ Next session should start with: Task 9 — Public API polish + README (`__init__
 | 2026-07-13 | Golden corpus is GENERATED (`scripts/gen_golden_pairs.py`, `--check` in CI) with `known_fail` markers instead of dropped failures | Same no-hand-typed-linguistic-data discipline as the fidel tables; engine limits stay visible and regressions in either direction need a conscious regeneration |
 | 2026-07-13 | Memoized similarity internals (bounded `lru_cache`: norms, keys, variant sets, symmetric sim core, parsed roles) | Benchmark gate: 14.8k → 56k matches/sec; pure memoization of deterministic functions, state still only in the data loader |
 | 2026-07-13 | `MatchResult` comparison dunders added beyond the §4.4 sketch (`__float__` alone) | `match(a,b) > 0.9` must "just work" per the sketch's stated intent; `__float__` alone does not enable comparisons in Python |
+| 2026-07-13 | Public API = §5 surface minus v0.2 names (`to_fidel`, `guess_gender`); function exports shadow same-named subpackage attributes | Cannot export what doesn't exist; stubs violate scope discipline; shadowing is inherent to §5 naming and documented |
+| 2026-07-13 | Repo-wide `mypy --strict` gate (check.bat, CI) from Task 9 onward | Kickoff engineering rule + ARCHITECTURE §6 pin CI at --strict |
+| 2026-07-13 | README snippets are doctests, double-gated: plan's `python -m doctest README.md` + `test_readme_doctests` (explicit UTF-8) in pytest/CI | README claims stay executable; the pytest path is locale-independent and fails loudly when linguistic defaults change during review |
 
 ## Known issues
 
