@@ -35,7 +35,11 @@ def _meets_expectation(entry: dict[str, object]) -> tuple[bool, float]:
     score = float(match(str(entry["a"]), str(entry["b"])))
     if entry["expected"] == "same":
         return score >= SAME_MIN, score
-    return score <= DIFFERENT_MAX, score
+    if entry["expected"] == "different":
+        return score <= DIFFERENT_MAX, score
+    # "review" (task-3b): sibling-style pairs belong strictly BETWEEN the
+    # gates -- the analyst review zone is intended behavior, not a failure.
+    return DIFFERENT_MAX < score < SAME_MIN, score
 
 
 def _pair_id(entry: dict[str, object]) -> str:
@@ -68,14 +72,14 @@ def test_schema_of_every_entry() -> None:
     for entry in _PAIRS:
         assert isinstance(entry["a"], str) and entry["a"]
         assert isinstance(entry["b"], str) and entry["b"]
-        assert entry["expected"] in ("same", "different")
+        assert entry["expected"] in ("same", "different", "review")
         assert isinstance(entry["source"], str) and entry["source"]
         assert isinstance(entry["score_at_generation"], float)
 
 
-def test_corpus_has_both_outcomes_and_scripts() -> None:
+def test_corpus_has_all_outcomes_and_scripts() -> None:
     expectations = {entry["expected"] for entry in _PAIRS}
-    assert expectations == {"same", "different"}
+    assert expectations == {"same", "different", "review"}
     assert any(not str(entry["a"]).isascii() for entry in _PAIRS)  # fidel present
 
 
@@ -97,7 +101,12 @@ def test_corpus_file_is_current() -> None:
 @pytest.mark.parametrize("entry", _ACTIVE, ids=_pair_id)
 def test_golden_pair(entry: dict[str, object]) -> None:
     ok, score = _meets_expectation(entry)
-    bound = f">= {SAME_MIN}" if entry["expected"] == "same" else f"<= {DIFFERENT_MAX}"
+    bounds = {
+        "same": f">= {SAME_MIN}",
+        "different": f"<= {DIFFERENT_MAX}",
+        "review": f"in ({DIFFERENT_MAX}, {SAME_MIN})",
+    }
+    bound = bounds[str(entry["expected"])]
     assert ok, f"match({entry['a']!r}, {entry['b']!r}) = {score:.4f}, expected {bound}"
 
 

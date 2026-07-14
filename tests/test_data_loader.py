@@ -43,10 +43,16 @@ def test_given_names_seed_size() -> None:
     assert len(lexicon().given_names) >= 50
 
 
-def test_every_given_name_ships_unverified() -> None:
-    # HARD REQUIREMENT (plan Task 4): ALL agent-seeded entries are
-    # "verified": false until Robel flips them.
-    assert all(name.verified is False for name in lexicon().given_names)
+def test_every_entry_is_verified() -> None:
+    # Native-speaker review completed (task-3b, 2026-07-14): Robel reviewed
+    # and flipped every current entry. New entries must start false again,
+    # so this pin makes an unreviewed addition a conscious test change.
+    lex = lexicon()
+    assert all(name.verified is True for name in lex.given_names)
+    assert all(title.verified is True for title in lex.titles)
+    assert all(prefix.verified is True for prefix in lex.compound_prefixes)
+    assert all(second.verified is True for second in lex.compound_seconds)
+    assert all(abbrev.verified is True for abbrev in lex.abbreviations)
 
 
 def test_architecture_contract_example_tsehay() -> None:
@@ -85,12 +91,14 @@ def test_plan_seed_names_are_present() -> None:
 
 
 def test_titles_cover_plan_list() -> None:
-    # IMPLEMENTATION_PLAN Task 4 pins this list.
+    # IMPLEMENTATION_PLAN Task 4 list; task-3b review made "Weizero"/
+    # "Weizerit" canonical (ወ order 1 = "we") with the plan's "Woizero"/
+    # "Woizerit" kept as recognized Latin forms (see next test).
     canonicals = {title.canonical for title in lexicon().titles}
     assert {
         "Ato",
-        "Woizero",
-        "Woizerit",
+        "Weizero",
+        "Weizerit",
         "Dr",
         "Prof",
         "Eng",
@@ -104,18 +112,22 @@ def test_titles_cover_plan_list() -> None:
     assert all(title.fidel for title in lexicon().titles)  # "+ fidel forms"
 
 
-def test_woizero_slash_abbreviations() -> None:
+def test_weizero_slash_abbreviations_and_woizero_form() -> None:
     titles = {title.canonical: title for title in lexicon().titles}
-    assert "W/ro" in titles["Woizero"].abbreviations
-    assert "W/rt" in titles["Woizerit"].abbreviations
+    assert "W/ro" in titles["Weizero"].abbreviations
+    assert "W/rt" in titles["Weizerit"].abbreviations
+    # task-3b: the conventional spellings stay recognized input forms.
+    assert "Woizero" in titles["Weizero"].abbreviations
+    assert "Woizerit" in titles["Weizerit"].abbreviations
 
 
 def test_compound_prefixes_match_architecture_list() -> None:
-    # ARCHITECTURE 4.3 prefix lexicon.
+    # ARCHITECTURE 4.3 prefix lexicon; task-3b made "Welde" the canonical
+    # (ወ order 1 = "we") with the architecture's "Wolde" kept as a variant.
     latins = {prefix.latin for prefix in lexicon().compound_prefixes}
     assert {
         "Gebre",
-        "Wolde",
+        "Welde",
         "Haile",
         "Tekle",
         "Kidane",
@@ -125,8 +137,9 @@ def test_compound_prefixes_match_architecture_list() -> None:
         "Berhane",
         "Welete",
     } <= latins
-    genders = {prefix.latin: prefix.gender for prefix in lexicon().compound_prefixes}
-    assert genders["Welete"] == "f"  # "Welete(f)" in ARCHITECTURE 4.3
+    prefixes = {prefix.latin: prefix for prefix in lexicon().compound_prefixes}
+    assert "Wolde" in prefixes["Welde"].variants
+    assert prefixes["Welete"].gender == "f"  # "Welete(f)" in ARCHITECTURE 4.3
 
 
 def test_compound_second_elements_match_architecture_list() -> None:
@@ -313,8 +326,12 @@ def test_malformed_titles_raise(label: str, payload: Any) -> None:
 def _compound_payload(abbrev_candidates: "list[dict[str, Any]]") -> dict[str, Any]:
     return {
         "schema": 1,
-        "prefixes": [{"latin": "Gebre", "fidel": "ገብረ", "gender": "m", "verified": False}],
-        "second_elements": [{"latin": "Medhin", "fidel": "መድህን", "verified": False}],
+        "prefixes": [
+            {"latin": "Gebre", "variants": [], "fidel": "ገብረ", "gender": "m", "verified": False}
+        ],
+        "second_elements": [
+            {"latin": "Medhin", "variants": [], "fidel": "መድህን", "verified": False}
+        ],
         "abbreviation_expansions": [
             {"abbrev": "G", "candidates": abbrev_candidates, "verified": False}
         ],
@@ -328,6 +345,13 @@ def test_valid_compound_payload_parses() -> None:
     assert prefixes[0].latin == "Gebre"
     assert seconds[0].latin == "Medhin"
     assert abbreviations[0].candidates == (("Gebre", 1.0),)
+
+
+def test_prefix_variant_repeating_latin_raises() -> None:
+    payload = _compound_payload([{"expansion": "Gebre", "weight": 1.0}])
+    payload["prefixes"][0]["variants"] = ["gebre"]
+    with pytest.raises(LexiconError, match="repeats the canonical"):
+        _parse_compounds(payload)
 
 
 @pytest.mark.parametrize(

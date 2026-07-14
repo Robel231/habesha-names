@@ -8,11 +8,12 @@ of the contracts below raises `LexiconError` at first load.
 
 - The coding agent may **seed** entries, but every agent-seeded entry ships
   `"verified": false`. Only Robel (native speaker) flips a flag to `true`, after
-  reviewing the entry. The flag is provenance, not a runtime switch: v0.1 code uses
-  unverified entries, but no entry may ever be *added* pre-verified.
+  reviewing the entry. The flag is provenance, not a runtime switch: unverified
+  entries are used at runtime, but no entry may ever be *added* pre-verified.
 - Agent-chosen values inside an entry (fidel spellings, variants, gender guesses,
-  origins, frequency tiers/weights) are ALL covered by the entry's flag and are listed
-  in `PROGRESS.md → Human review queue`.
+  origins, frequency tiers/weights) are ALL covered by the entry's flag.
+- Status: all entries in the three files were reviewed by Robel and flipped to
+  `"verified": true` in task-3b (2026-07-14). New entries start `false` again.
 
 ## General rules (enforced by the loader)
 
@@ -32,8 +33,8 @@ of the contracts below raises `LexiconError` at first load.
 
 | key | type | meaning |
 |---|---|---|
-| `canonical` | str | Canonical Latin form (`Ato`, `Woizero`, `Dr`) |
-| `abbreviations` | list[str] | Other written Latin forms (`W/ro`, `Dr.`, `Doctor`) |
+| `canonical` | str | Canonical Latin form (`Ato`, `Weizero`, `Dr`) |
+| `abbreviations` | list[str] | Other written Latin forms (`W/ro`, `Woizero`, `Dr.`, `Doctor`) |
 | `fidel` | list[str] | Fidel forms incl. slash abbreviations (`ወይዘሮ`, `ወ/ሮ`) |
 | `gender` | `"m"` \| `"f"` \| `null` | `null` = not gendered |
 | `category` | `"civil"` \| `"academic"` \| `"professional"` \| `"religious"` | |
@@ -44,8 +45,11 @@ of the contracts below raises `LexiconError` at first load.
 Compound given names = prefix + second element (Gebre + Medhin → Gebremedhin), per
 ARCHITECTURE §4.3.
 
-- **prefixes**: `latin` (str), `fidel` (str), `gender` (`"m"`/`"f"`/`null`), `verified` (bool).
-- **second_elements**: `latin` (str), `fidel` (str), `verified` (bool).
+- **prefixes**: `latin` (str), `variants` (list[str] — recognized alternate Latin
+  spellings, e.g. `Welde` → `["Wolde"]`; must not repeat `latin`), `fidel` (str),
+  `gender` (`"m"`/`"f"`/`null`), `verified` (bool).
+- **second_elements**: `latin` (str), `variants` (list[str] — e.g. `Selassie` →
+  `["Silase"]`), `fidel` (str), `verified` (bool).
 - **abbreviation_expansions**: `abbrev` (str, the letter before `/` or `.` — `"G"` for
   `G/Medhin`), `candidates` (list of `{"expansion": str, "weight": float}`, weights sum
   to 1.0 and are listed in non-increasing order), `verified` (bool). Every `expansion`

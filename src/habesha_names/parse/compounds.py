@@ -54,10 +54,13 @@ class Expansion:
 
 @cache
 def _prefix_keys() -> tuple[tuple[str, CompoundPrefix], ...]:
-    """(lookup key, prefix) pairs in file order: lowercased Latin + normalized fidel."""
+    """(lookup key, prefix) pairs in file order: lowercased Latin spellings
+    (canonical + recognized variants, e.g. Welde/Wolde) + normalized fidel."""
     pairs: list[tuple[str, CompoundPrefix]] = []
     for prefix in lexicon().compound_prefixes:
         pairs.append((prefix.latin.lower(), prefix))
+        for variant in prefix.variants:
+            pairs.append((variant.lower(), prefix))
         pairs.append((normalize(prefix.fidel), prefix))
     return tuple(pairs)
 
@@ -75,6 +78,8 @@ def _second_index() -> dict[str, CompoundSecond]:
     index: dict[str, CompoundSecond] = {}
     for second in lexicon().compound_seconds:
         index.setdefault(second.latin.lower(), second)
+        for variant in second.variants:
+            index.setdefault(variant.lower(), second)
         index.setdefault(normalize(second.fidel), second)
     return index
 

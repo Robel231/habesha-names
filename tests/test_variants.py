@@ -102,6 +102,27 @@ def test_arabic_origin_groups() -> None:
     assert "Fatuma" in variants("Fatima")
 
 
+def test_we_wo_alternation() -> None:
+    # task-3b MANDATORY rule: both spellings occur in the wild.
+    assert "Wolde" in variants("Welde")
+    assert "Welde" in variants("Wolde")
+    assert "Woizero" in variants("Weizero")
+
+
+def test_wa_ua_alternation() -> None:
+    # task-3b: labialized rendering is "ua" (ኋላ -> Huala), but "wa"
+    # spellings occur in the wild -- both directions rewrite.
+    assert "Hwala" in variants("ኋላ")
+    assert "Huala" in variants("Hwala")
+
+
+def test_gn_ny_alternation() -> None:
+    # task-3b: ኘ -> gn confirmed, with gn<->ny as a variant rule
+    # (Tigrigna/Tigrinya-style alternation).
+    assert "Agenyehu" in variants("Agegnehu")
+    assert "Agegnehu" in variants("Agenyehu")
+
+
 def test_bethlehem_pair() -> None:
     # ARCHITECTURE 4.2: é<->ie<->e family (Bethlehem/Betelhem).
     assert {"Betelhem", "Betlehem"} <= set(variants("Bethlehem"))

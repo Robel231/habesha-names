@@ -1,9 +1,9 @@
 """Transliteration scheme tables (fidel -> Latin).
 
-verified: false -- EVERY Latin value in this module is unreviewed linguistic
-data chosen by a non-native-speaker agent. Each non-obvious choice is listed
-in PROGRESS.md -> Human review queue with the alternatives considered; Robel
-decides the finals. Do not treat these defaults as authoritative.
+verified: true -- native-speaker review completed by Robel (task-3b,
+2026-07-14). Every consonant and vowel choice below is a recorded decision
+(PROGRESS.md -> Decisions log); changing any of them is a new linguistic
+decision, not a refactor.
 
 The ``PRACTICAL`` scheme is the workhorse (ARCHITECTURE 4.2): how Ethiopians
 actually romanize names -- ASCII only, no diacritics, lossy on purpose
@@ -28,7 +28,7 @@ from habesha_names.fidel.normalize import HOMOPHONE_SERIES
 from habesha_names.fidel.tables import SYLLABLES
 
 #: Latin onset per post-collapse consonant series label.
-#: verified: false -- agent defaults, see PROGRESS.md human review queue.
+#: verified: true -- decided by Robel, task-3b (2026-07-14).
 _CONSONANTS: dict[str, str] = {
     "h": "h",
     "l": "l",
@@ -36,42 +36,42 @@ _CONSONANTS: dict[str, str] = {
     "r": "r",
     "s": "s",
     "sh": "sh",
-    "q": "k",  # ቀ: practical usage favors k (Kenenisa); review queue: q vs k
-    "qw": "kw",  # follows the q->k default
-    "qh": "q",  # ቐ (Tigrinya): review queue
+    "q": "k",  # ቀ: practical usage merges ejective k' into k (Kenenisa)
+    "qw": "kw",  # follows the q->k decision
+    "qh": "q",  # ቐ: Tigrinya distinction preserved (ቀ stays k)
     "qhw": "qw",
     "b": "b",
     "v": "v",
     "t": "t",
-    "c": "ch",  # ቸ: collides with ጨ by design; review queue
-    "xw": "hw",  # ኈ (x collapses to h, xw is not collapsed); review queue
+    "c": "ch",  # ቸ: collides with ጨ by design (practical merge)
+    "xw": "hw",  # ኈ (x collapses to h, xw is not collapsed)
     "n": "n",
-    "ny": "gn",  # ኘ: review queue: gn vs ny
+    "ny": "gn",  # ኘ: gn (Agegnehu); gn<->ny is a variant rewrite rule
     "glottal": "",  # አ carries only its vowel
     "k": "k",
     "kw": "kw",
-    "kx": "h",  # ኸ: review queue: h vs kh
+    "kx": "h",  # ኸ: order-1 stays at this default (task-3b)
     "kxw": "hw",
-    "w": "w",
+    "w": "w",  # ወ order 1 -> "we" (Weizero, Welde); we<->wo is a variant rule
     "z": "z",
-    "zh": "zh",  # ዠ: review queue: zh vs j
+    "zh": "zh",
     "y": "y",
     "d": "d",
-    "dd": "dh",  # ዸ (rare, Oromo dh): review queue
+    "dd": "dh",  # ዸ (rare, Oromo dh)
     "j": "j",
     "g": "g",
     "gw": "gw",
-    "gg": "ng",  # ጘ (velar nasal, rare): review queue
+    "gg": "ng",  # ጘ (velar nasal, rare)
     "th": "t",  # ጠ ejective: practical drops the distinction (Taitu)
-    "ch": "ch",  # ጨ ejective: collides with ቸ by design; review queue
+    "ch": "ch",  # ጨ ejective: collides with ቸ by design
     "ph": "p",  # ጰ ejective: practical drops the distinction (Paulos)
-    "ts'": "ts",  # ጸ: review queue: ts vs s vs tz
+    "ts'": "ts",  # ጸ: ts (Tsehay); ts<->s<->tz are variant rewrite rules
     "f": "f",
     "p": "p",
-    "ry": "ry",  # ፘ ⁄ ፙ ⁄ ፚ: rare one-off syllables; review queue
+    "ry": "ry",  # ፘ ⁄ ፙ ⁄ ፚ: rare one-off syllables
     "my": "my",
     "fy": "fy",
-    "mw": "mw",  # Sebatbeit supplement series; review queue
+    "mw": "mw",  # Sebatbeit supplement series
     "bw": "bw",
     "fw": "fw",
     "pw": "pw",
@@ -79,22 +79,22 @@ _CONSONANTS: dict[str, str] = {
 
 #: Latin vowel per order. Order 6 (ə) is empty here: the bare consonant is
 #: the cell value and ``to_latin`` inserts the epenthetic vowel by context.
-#: verified: false -- agent defaults, see PROGRESS.md human review queue.
+#: verified: true -- decided by Robel, task-3b (2026-07-14).
 _VOWELS: dict[int, str] = {
     1: "e",  # ä; becomes "a" after gutturals, see _GUTTURAL_A
     2: "u",
     3: "i",
     4: "a",
-    5: "e",  # é rendered plain (Selassie's "ie" is NOT reproduced); review queue
+    5: "e",  # é rendered plain ("Selassie" handled via lexicon variants)
     6: "",
     7: "o",
-    8: "wa",  # labialized column (-WA/-OA forms); review queue
+    8: "ua",  # labialized column: "ua" not "wa" (ሏ -> lua, ሟ -> mua)
 }
 
 #: Series whose first-order vowel is pronounced (and romanized) "a", not "e":
 #: the gutturals block the ä vowel (ሀ = "ha", አ = "a" -- hence Tsehay, Abebe).
 #: Post-collapse gutturals only; hh/x/pharyngeal never reach the table.
-#: verified: false -- whether kx/xw belong here is a review-queue question.
+#: verified: true -- kx/xw stay OUT (order-1 "he"/"hwe"), decided task-3b.
 _GUTTURAL_A: frozenset[str] = frozenset({"h", "glottal"})
 
 
@@ -107,12 +107,18 @@ def _build_practical() -> dict[tuple[str, int], str]:
         vowel = _VOWELS[order]
         if order == 1 and consonant in _GUTTURAL_A:
             vowel = "a"
-        table[(consonant, order)] = _CONSONANTS[consonant] + vowel
+        onset = _CONSONANTS[consonant]
+        if order == 4 and len(consonant) > 1 and onset.endswith("w"):
+            # Labialized-velar a-forms render "ua", not "wa" (task-3b):
+            # ኋ -> hua, ኳ -> kua, ጓ -> gua, ቋ -> kua. Plain ዋ stays "wa".
+            table[(consonant, order)] = onset[:-1] + "ua"
+            continue
+        table[(consonant, order)] = onset + vowel
     return table
 
 
 #: (consonant label, vowel order) -> Latin, for every post-collapse syllable.
-#: verified: false -- see module docstring.
+#: verified: true -- see module docstring.
 PRACTICAL: dict[tuple[str, int], str] = _build_practical()
 
 #: Registered schemes. v0.1 ships only "practical"; bgn_pcgn/academic are v0.2.

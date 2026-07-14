@@ -66,10 +66,11 @@ def test_spaced_and_joined_compound_align() -> None:
     assert match("Hailemariam Desalegn", "Haile Mariam Desalegn").score == 1.0
 
 
-def test_selassie_bridged_by_phonetic_key() -> None:
-    # The Task 3 round-trip ኃይለ ሥላሴ -> "Haile Selassie" is xfail at the
-    # transliteration level (gemination + "ie" not table-derivable), but the
-    # HabeshaKey folds Silase/Selassie together, so MATCHING succeeds.
+def test_selassie_matcher_level_roundtrip() -> None:
+    # task-3b decision: the table keeps "Silase" (the old Task 3 xfail was
+    # retired) and the plan round-trip is asserted HERE instead. The
+    # HabeshaKey folds Silase/Selassie together, and the ሥላሴ compound
+    # entry carries Selassie/Silase as lexicon variants.
     assert match("ኃይለ ሥላሴ", "Haile Selassie") >= 0.85
 
 

@@ -7,23 +7,23 @@
       "fidel": ["አቶ"],
       "gender": "m",
       "category": "civil",
-      "verified": false
+      "verified": true
     },
     {
-      "canonical": "Woizero",
-      "abbreviations": ["W/ro"],
+      "canonical": "Weizero",
+      "abbreviations": ["W/ro", "Woizero"],
       "fidel": ["ወይዘሮ", "ወ/ሮ"],
       "gender": "f",
       "category": "civil",
-      "verified": false
+      "verified": true
     },
     {
-      "canonical": "Woizerit",
-      "abbreviations": ["W/rt"],
+      "canonical": "Weizerit",
+      "abbreviations": ["W/rt", "Woizerit"],
       "fidel": ["ወይዘሪት", "ወ/ሪት"],
       "gender": "f",
       "category": "civil",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Dr",
@@ -31,7 +31,7 @@
       "fidel": ["ዶክተር", "ዶ/ር"],
       "gender": null,
       "category": "academic",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Prof",
@@ -39,7 +39,7 @@
       "fidel": ["ፕሮፌሰር"],
       "gender": null,
       "category": "academic",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Eng",
@@ -47,7 +47,7 @@
       "fidel": ["ኢንጂነር"],
       "gender": null,
       "category": "professional",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Qes",
@@ -55,7 +55,7 @@
       "fidel": ["ቄስ"],
       "gender": "m",
       "category": "religious",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Abba",
@@ -63,7 +63,7 @@
       "fidel": ["አባ"],
       "gender": "m",
       "category": "religious",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Abune",
@@ -71,7 +71,7 @@
       "fidel": ["አቡነ"],
       "gender": "m",
       "category": "religious",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Memhir",
@@ -79,7 +79,7 @@
       "fidel": ["መምህር", "መ/ር"],
       "gender": null,
       "category": "professional",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Sheikh",
@@ -87,7 +87,7 @@
       "fidel": ["ሼህ"],
       "gender": "m",
       "category": "religious",
-      "verified": false
+      "verified": true
     },
     {
       "canonical": "Haji",
@@ -95,7 +95,7 @@
       "fidel": ["ሀጂ"],
       "gender": "m",
       "category": "religious",
-      "verified": false
+      "verified": true
     }
   ]
 }

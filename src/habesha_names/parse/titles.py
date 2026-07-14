@@ -35,9 +35,9 @@ def match_title(token: str) -> Title | None:
     >>> match_title("Ato").canonical
     'Ato'
     >>> match_title("w/ro").canonical
-    'Woizero'
+    'Weizero'
     >>> match_title("ወይዘሮ").canonical
-    'Woizero'
+    'Weizero'
     >>> match_title("Tesfaye") is None
     True
     """

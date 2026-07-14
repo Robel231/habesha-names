@@ -1,9 +1,10 @@
 """Latin spelling-variant generator (weighted rewrite engine, ARCHITECTURE 4.2).
 
-verified: false -- EVERY rule, weight, and constraint below is an
-agent-chosen default pending native-speaker review (PROGRESS.md review
-queue) and Task 8 corpus tuning. Nothing in this module is a confirmed
-linguistic fact.
+Review status (task-3b, 2026-07-14): the linguistic shape of the rules was
+reviewed by Robel -- the we<->wo rule (Welde/Wolde), wa<->ua (Huala/Hwala),
+and gn<->ny (Tigrigna/Tigrinya) were mandated additions. The numeric
+weights and engine constraints remain agent-chosen magnitudes, accepted
+as-is for 0.1.0 (revisit with a human-curated corpus).
 
 :func:`variants` takes a name in fidel or Latin and returns a ranked list
 of plausible Latin spellings: the name's own (transliterated, name-cased)
@@ -33,10 +34,9 @@ enumeration with total tie-breaking, final ordering by (weight desc,
 spelling asc). No lexicon entry is required for the rules to fire -- the
 lexicon only adds curated alternatives (ARCHITECTURE 4.5).
 
-Known gaps (review queue): plain s is never rewritten to ts ("Sehay" only
-reaches "Tsehay" via its lexicon group), a->e is not applied (only e->a),
-and slash/dot abbreviation outputs are not guaranteed >= 0.8 token
-similarity -- they need the Task 8 full matcher's expansion step.
+Known asymmetries (confirmed as-is for 0.1.0, task-3b): plain s is never
+rewritten to ts ("Sehay" only reaches "Tsehay" via its lexicon group),
+a->e is not applied (only e->a), and t->th is not applied (only th->t).
 """
 
 from __future__ import annotations
@@ -79,7 +79,9 @@ _GLIDE_ALTS: tuple[tuple[str, tuple[_Alt, ...]], ...] = (
 )
 
 #: Two-letter sequences and their alternates (left-to-right greedy scan).
-#: All fold to the same HabeshaKey symbol except ou->w (adds a consonant).
+#: Most fold to the same HabeshaKey symbol; the ones flagged key-breaking
+#: change the consonant skeleton (ou->w, wa<->ua, gn<->ny) or may change
+#: the first-vowel class (we<->wo), so they only ever apply alone.
 _DIGRAPH_ALTS: dict[str, tuple[_Alt, ...]] = {
     "ts": (("s", 0.6, False), ("tz", 0.4, False)),
     "tz": (("ts", 0.7, False), ("s", 0.5, False)),
@@ -87,6 +89,13 @@ _DIGRAPH_ALTS: dict[str, tuple[_Alt, ...]] = {
     "th": (("t", 0.6, False),),
     "ie": (("e", 0.6, False),),
     "ou": (("w", 0.3, True),),
+    # task-3b (Robel): both spellings occur in the wild for each pair.
+    "we": (("wo", 0.6, True),),  # Welde <-> Wolde, Weizero <-> Woizero
+    "wo": (("we", 0.6, True),),
+    "wa": (("ua", 0.5, True),),  # Hwala <-> Huala (labialized rendering)
+    "ua": (("wa", 0.5, True),),
+    "gn": (("ny", 0.5, True),),  # Agegnehu <-> Agenyehu
+    "ny": (("gn", 0.5, True),),
 }
 
 _W_UNDOUBLE = 0.6  #: collapse a doubled letter (Kebbede -> Kebede)
@@ -106,10 +115,24 @@ _ABBREVIATION_RE = re.compile(r"^([a-z])[/.](.+)$")
 
 @cache
 def _spelling_groups() -> dict[str, tuple[str, ...]]:
-    """Lowercased spelling -> its full lexicon group (canonical first)."""
+    """Lowercased spelling -> its full lexicon group (canonical first).
+
+    Given-name groups take priority; compound prefixes and second elements
+    contribute their canonical + recognized-variant spellings too (task-3b:
+    Welde/Wolde, Selassie/Silase), so those alternates surface at token level.
+    """
     groups: dict[str, tuple[str, ...]] = {}
-    for entry in lexicon().given_names:
-        group = (entry.canonical, *entry.variants)
+    lex = lexicon()
+    spelling_sets: list[tuple[str, ...]] = [
+        (entry.canonical, *entry.variants) for entry in lex.given_names
+    ]
+    spelling_sets.extend(
+        (prefix.latin, *prefix.variants) for prefix in lex.compound_prefixes if prefix.variants
+    )
+    spelling_sets.extend(
+        (second.latin, *second.variants) for second in lex.compound_seconds if second.variants
+    )
+    for group in spelling_sets:
         for spelling in group:
             groups.setdefault(spelling.lower(), group)
     return groups
@@ -127,7 +150,11 @@ def _prefix_latins() -> frozenset[str]:
 
 @cache
 def _second_latins() -> frozenset[str]:
-    return frozenset(second.latin.lower() for second in lexicon().compound_seconds)
+    return frozenset(
+        spelling.lower()
+        for second in lexicon().compound_seconds
+        for spelling in (second.latin, *second.variants)
+    )
 
 
 def _abbreviatable(prefix_latin: str) -> bool:

@@ -1,10 +1,10 @@
 """Tests for practical fidel -> Latin transliteration (Task 3).
 
 The Latin expectations for full names come from IMPLEMENTATION_PLAN Task 3
-(round-trip sanity seeds). Everything else is either a full-table property
-test or a behavior pin over an UNVERIFIED agent default (all defaults are in
-the PROGRESS.md human review queue; pins exist so a later table change is a
-conscious one, not to claim linguistic correctness).
+(round-trip sanity seeds) and the task-3b native-speaker review decisions
+(cluster epenthesis, "ua" labialized rendering, the Silase/Selassie split).
+Every pinned output below is a reviewed decision; changing one is a new
+linguistic decision, not a refactor.
 """
 
 import unicodedata
@@ -44,22 +44,35 @@ def test_plan_roundtrips(fidel: str, latin: str) -> None:
     assert transliterate(fidel) == latin
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Conventional 'Selassie' is not derivable from a general table: the "
-    "geminated 'ss' is unmarked in fidel and 'ie' for the order-5 vowel is a "
-    "per-name convention. Default table yields 'Haile Silase'. Logged in "
-    "PROGRESS.md (review queue + session 4 deviations); Robel decides.",
-)
-def test_plan_roundtrip_haile_selassie() -> None:
-    assert transliterate("ኃይለ ሥላሴ") == "Haile Selassie"
-
-
-def test_haile_selassie_current_behavior_pin() -> None:
-    # Behavior pin of the UNVERIFIED default (see xfail above), so any table
-    # change is deliberate. The 'Haile' half is the plan-expected form.
+def test_haile_selassie_table_output_pin() -> None:
+    # Decided in task-3b: the table keeps "Silase" (conventional "Selassie"
+    # needs unmarked gemination + a per-name "ie", not derivable from a
+    # general table). The ሥላሴ lexicon entry carries "Selassie"/"Silase" as
+    # variants and the round-trip is asserted at MATCHER level instead:
+    # tests/test_match_full.py pins match("ኃይለ ሥላሴ", "Haile Selassie") >= 0.85.
     assert transliterate("ኃይለ") == "Haile"
     assert transliterate("ኃይለ ሥላሴ") == "Haile Silase"
+
+
+def test_sixth_order_final_cluster_epenthesis() -> None:
+    # task-3b cluster rule: in a word-final cluster of 6th-order consonants
+    # the epenthetic "i" goes right before the coda; "st" is a permissible
+    # final cluster and stays together. All four outputs pinned by Robel.
+    assert transliterate("ፍቅር") == "Fikir"
+    assert transliterate("ትግስት") == "Tigist"
+    assert transliterate("ቅድስት") == "Kidist"
+    assert transliterate("ዮሐንስ") == "Yohanis"
+
+
+def test_labialized_ua_rendering() -> None:
+    # task-3b: labialized forms render "ua", not "wa" (ኋላ -> Huala pinned;
+    # order-8 column is consonant + "ua"). Plain ዋ stays "wa".
+    assert transliterate("ኋላ") == "Huala"
+    assert transliterate("ኳ") == "Kua"
+    assert transliterate("ጓ") == "Gua"
+    assert transliterate("ሏ") == "Lua"
+    assert transliterate("ሟ") == "Mua"
+    assert transliterate("ዋና") == "Wana"
 
 
 def test_transliterate_normalizes_first() -> None:
@@ -118,9 +131,9 @@ def test_latin_and_mixed_input_passes_through() -> None:
 
 
 def test_plan_full_string_with_title_and_punctuation() -> None:
-    # Plan-given string (Task 5 list). "Weizero" is an UNVERIFIED default
-    # (w-series order 1 -> "we"; "Woizero" is the conventional title form —
-    # review queue). Wordspace ፡ separates, ። is stripped, all by normalize().
+    # Plan-given string (Task 5 list). ወ order 1 -> "we" was CONFIRMED in
+    # task-3b ("Weizero" is now also the canonical title spelling; we<->wo
+    # is a variant rule). Wordspace ፡ separates, ። is stripped, by normalize().
     assert transliterate("ወይዘሮ፡ጸሐይ ገብረመድህን።") == "Weizero Tsehay Gebremedhin"
 
 

@@ -18,84 +18,32 @@
 | 9 | API polish + README | ✔ VERIFIED (evidence below) | Session 10, 2026-07-13 |
 | 10 | Packaging + release prep | ✔ VERIFIED (evidence below) | Session 11, 2026-07-13 |
 | 11 | Alpha release prep (0.1.0a1) | ✔ VERIFIED (evidence below) | Session 12, 2026-07-13 |
+| 3b | Native-speaker review decisions applied | ✔ VERIFIED (evidence below) | Session 13, 2026-07-14 |
 
 Status values: `☐ not started` · `◐ in progress` · `✕ blocked (reason)` · `✔ VERIFIED (evidence below)`
 
 ## Human review queue (Robel)
 
 Items the agent must NOT resolve itself:
-- [ ] PyPI name availability result (Task 0) — confirm final package name.
-  Agent finding 2026-07-10: PyPI JSON API returned 404 for all of `habesha-names`, `habeshanames`, `etnames` → all three available. Proceeding with `habesha-names` pending Robel's confirmation. (Note: the HTML page `pypi.org/project/habesha-names/` returned HTTP 200, but it was a "Client Challenge" anti-bot page, not a project page — the JSON API is the authoritative check.)
-- [ ] Consonant label override in `scripts/gen_fidel_tables.py` (Task 1): `TS → "ts'"` (ejective marking, pinned by the plan). All other labels are mechanical lowercased Unicode name fragments (e.g. ሐ→`hh`, ኀ→`x`, ጠ→`th`, ፀ→`tz`, አ→`glottal`, ዐ→`pharyngeal`) — internal series IDs, NOT romanizations; confirm they are acceptable as internal labels or extend the override map when Task 3 defines the PRACTICAL scheme.
-- [ ] Order-8 (labialized) homophone collapses in `fidel/normalize.py` (Task 2): the plan pins "preserve vowel order", and our tables treat the labialized column as order 8, so mechanically ሗ (HHWA)→ሇ (HOA), ኇ (XOA)→ሇ (HOA), ሧ (SZWA)→ሷ (SWA), ፇ (TZOA)→ጿ (TSWA). Orders 1–7 are uncontroversial; confirm these four order-8 mappings are linguistically right (ሇ is rare).
-- [ ] Labialized-velar series ኈ/ቘ/ዀ (xw/qhw/kxw) are NOT collapsed by `normalize` (Task 2) — the plan lists only ሀ/ሐ/ኀ, ሠ, ፀ, ዐ, and no "hw" target series exists in Unicode. Question for Robel: should ኋ (XWAA) collapse to anything (e.g. is ኋ/ሗ homophony worth handling), or is pass-through correct?
-- [ ] `translit/schemes.py` PRACTICAL table — native-speaker review. Every default below is agent-chosen (`verified: false`), Session 4, 2026-07-11. Robel decides each:
-  - [ ] **ቀ series → "k"** (as in Kenenisa, Kelemu — practical spelling merges ejective k' into k). Alternatives considered: "q" (preserves the distinction, common in Eritrean/Tigrinya contexts). Task 7's variant engine emits q↔k either way.
-  - [ ] **6th-order vowel (ə)**: bare consonant when word-final or after a vowel; epenthetic **"i"** appended when word-initial or after a consonant. This is the smallest rule reproducing the plan seeds: ተስፋዬ→Tesfaye (bare after vowel), ገብረመድህን→Gebremedhin ("i" after consonant), ጸሐይ→Tsehay (bare final), ስላሴ→Silase ("i" initial). Alternatives: always "i", always "e", always dropped, cluster-counting insertion. **Known imperfection**: word-final is always bare, so word-final clusters lose the vowel (e.g. ፍቅር would come out "Fikr", not "Fikir") — decide whether final clusters should epenthesize.
-  - [ ] **ጸ series → "ts" + vowel** across all orders (tse/tsu/tsi/tsa/tse/ts[+i]/tso/tswa). Alternatives: "s" (Sehay), "tz" (Tzehay). Picked "ts" because the plan's canonical form is Tsehay; variants engine covers ts↔s↔tz.
-  - [ ] **ቸ and ጨ both → "ch"** (deliberate lossy collision — practical spelling doesn't distinguish them). Alternatives: ጨ → "ch'" (violates no-apostrophe practical contract), "tch", "c".
-  - [ ] **ኘ → "gn"** (as in Agegnehu, "Tigrigna"). Alternative: "ny" (as in "Tigrinya"). Note: "gn" output is ambiguous with a genuine g+n letter sequence in Latin-side matching; "ny" would avoid that.
-  - [ ] **Labialized romanization**: order-8 column → consonant + "wa" (ሏ→lwa, ሟ→mwa; -OA forms like ሇ also →"wa"; ኧ→"wa"). Separate labialized-velar series: ቈ qw→"kw" (follows q→k), ኰ kw→"kw", ጐ gw→"gw" (ጓ→gwa), ኈ xw→"hw" (ኋ→hwa), ዀ kxw→"hw", ቘ qhw→"qw"; Sebatbeit ᎀᎄᎈᎌ → "mw/bw/fw/pw". Alternatives: "ua"/"we" renderings (ኋላ → Huala vs Hwala).
-  - [ ] **Guttural order-1 → "a"** for h and glottal series only (ሀ→"ha", አ→"a"; yields Tsehay, Haile, Abebe instead of *Tsehey, *Hey…). Question: should ኸ (kx→"h") and ኈ/ዀ (hw) also count as guttural for order 1 ("ha"/"hwa" vs current "he"/"hwe")?
-  - [ ] **6th-order የ glide**: after a vowel → "i" word-medially (ኃይለ→Haile, ወይዘሮ→Weizero) but "y" word-finally (ጸሐይ→Tsehay). Alternatives: always "y" (→Hayle), "i" finally too (→Tsehai). Variant engine covers -ay↔-ai↔-aye.
-  - [ ] **ወ order 1 → "we"** → ወይዘሮ comes out "Weizero", but the conventional title form is "Woizero" (Task 4 titles list). Alternative: w,1 → "wo" (fixes the title, changes every other ወ). Decide before Task 4 seeds titles.json.
-  - [ ] **Order-5 é → plain "e"** (ሴ→"se"). Conventional "Selassie" spells it "ie" — not derivable from a general table, and the "ss" gemination is unmarked in fidel, so the plan's ኃይለ ሥላሴ→"Haile Selassie" round-trip is **xfail** (table yields "Haile Silase"; no silent special-case added, per kickoff). Alternatives: é→"ie" or "ee" globally.
-  - [ ] **Remaining consonant defaults** (all flagged): ጠ th→"t" (Taitu), ጰ ph→"p" (Paulos), ቐ qh→"q", ኸ kx→"h" (alt "kh"), ዠ zh→"zh" (alt "j"), ዸ dd→"dh" (Oromo dh), ጘ gg→"ng", ፘ/ፙ/ፚ ry/my/fy→"rya/mya/fya", አ glottal→vowel only, ቨ v→"v", ፐ p→"p" (collides with ጰ).
-- [ ] `data/titles.json` (Task 4, Session 5) — all 12 entries agent-seeded (`verified: false`). The Latin canonicals are plan-pinned (Ato, Woizero, W/ro, …); everything else needs review: fidel spellings (esp. **Sheikh → ሼህ**, alternatives ሼክ/ሸይኽ; **Haji → ሀጂ**, often written ሐጂ — normalize collapses both), fidel slash abbreviations (ወ/ሮ, ወ/ሪት, ዶ/ር, መ/ር), the Latin abbreviation lists, category assignments (**Memhir → "professional"** — could be academic or religious), and gender flags (Qes/Abba/Abune/Sheikh/Haji marked `m`; Dr/Prof/Eng/Memhir `null`).
-- [ ] `data/compounds.json` (Task 4, Session 5) — prefixes and second elements are exactly the ARCHITECTURE §4.3 lists, but the fidel spellings are agent-typed (esp. Zera ዘርአ, Egziabher እግዚአብሔር, Hiwot ሕይወት, Tsadik ጻድቅ). Prefix genders: all `m` except Welete `f` — confirm. **ALL abbreviation-expansion weights are invented**: G/→Gebre 0.8 / Girma 0.2 (ratio from the ARCHITECTURE example, magnitude mine); W/→Wolde 0.6 / Welete 0.4; H/T/K/B/F/Z/A single-candidate 1.0 — are other expansions common (e.g. H/→Habte, T/→Tesfa)?
-- [ ] `data/given_names.json` (Task 4, Session 5) — 56 entries, **every field agent-guessed**: fidel spelling, canonical Latin, variants list, gender distribution (all 1.0 single-gender except Tsehay 0.97/0.03 from the ARCHITECTURE example and Selam 0.9/0.1), origin tags (amharic/tigrinya/geez/arabic/biblical/oromo), freq_tier 1–3. Mechanical cross-check `transliterate(fidel)` vs canonical ran in Session 5: **39 OK, 11 = a listed variant, 6 mismatches** for Robel to adjudicate (fidel typo vs. canonical spelling vs. engine rule):
-  - ኃይለማርያም → "Hailemaryam" vs canonical "Hailemariam" (ya-rendering; same for second element ማርያም → "Maryam" vs "Mariam")
-  - መሐመድ → "Mehamed" vs "Mohammed" (no plain fidel form yields "Mo-"; Task 7's Arabic-origin table covers the variants)
-  - ትግስት → "Tigsit", ቅድስት → "Kidsit" (6th-order epenthetic "i" lands after the wrong consonant in C₁C₂-final clusters — same family as the ፍቅር→"Fikr" issue from Session 4)
-  - ዮሐንስ → "Yohans" vs "Yohannes"; ዳንኤል → "Danel" vs "Daniel"
-  - Second elements not matching their Latin: ሚካኤል→"Mikael" (Michael), ጊዮርጊስ→"Giyorgis" (Giorgis), ክርስቶስ→"Kirsitos" (Kristos), እግዚአብሔር→"Igziabher" (Egziabher), ሕይወት→"Hiiwet" (Hiwot — the የ-glide-after-"i" rule doubles the i), ሃይማኖት→"Haimanot" (Haymanot), ጻድቅ→"Tsadk" (Tsadik), ሥላሴ→"Silase" (known xfail). Titles: ወይዘሮ→"Weizero" (known ወ we/wo item), ሼህ→"Sheh", and the Dr/Prof/Eng loanwords ዶክተር/ፕሮፌሰር/ኢንጂነር→"Dokter"/"Pirofeser"/"Injiner" (expected — titles are matched by lexicon lookup, not transliteration).
-- [ ] Parser heuristics (Task 5, Session 6) — all agent-chosen defaults, pinned by tests in `tests/test_parse.py`; Robel decides each:
-  - [ ] **Compound-confidence constants** in `parse/parser.py`: joined-in-input 1.0; spaced pair joined when NOT joining would overflow the 3 roles 0.9; spaced pair where both readings fit ("Haile Mariam Desalegn") 0.65; slash abbreviation = weight of the chosen lexicon candidate (G/→0.8). Magnitudes are invented, not measured.
-  - [ ] **Two-token spaced compound** ("Haile Mariam" as the whole input) is JOINED to a given-only parse (given "Hailemariam", patronym None, confidence 0.65). Alternative: prefer the given+patronym reading when nothing follows. Chose joining for consistency with the 3-token case and better token alignment in Task 8 matching.
-  - [ ] **Title recorded as canonical Latin** even for fidel input (ወይዘሮ → title "Woizero", name tokens stay fidel). Alternative: keep the matched fidel token.
-  - [ ] **Single leading token that is a title** ("Ato" alone) is treated as a given name with a note, not an error. Alternative: raise ValueError.
-  - [ ] **Comma inversion** ("Bikila, Abebe") reorders and notes, but `has_surname` stays "no" — only `assume_diaspora` flips it to "unknown". Alternative: comma format itself implies "unknown".
-  - [ ] **Initials never expanded** ("Abebe B." keeps patronym "B." + note; only letter+slash/dot+known-second-element forms like G/Medhin expand). v0.2 backlog has expansion confidence scores.
-  - [ ] **Compounds in patronym/avonym position** are noted but not flagged — `ParsedName` (ARCHITECTURE §4.3) only has `given_is_compound`; extending the dataclass is an architecture change I did not make.
-  - [ ] Hyphenated compound forms ("Gebre-Medhin") are NOT handled by the parser — ARCHITECTURE §4.2 lists them under the Task 7 variant engine; confirm that split is the right home.
-- [ ] HabeshaKey rules (Task 6, Session 7) in `match/phonetic.py` — the ARCHITECTURE §4.4 sketch says exact rules are tuned in Task 8, so all of these are provisional agent defaults; Robel reviews the linguistic ones now, tuning revisits the rest:
-  - [ ] **First-vowel classes a / e,i / o,u** in the key's single vowel slot. Required by the plan pin Mohammed=Muhammed (o vs u must merge). Alternatives: exact first vowel (breaks that pin), no vowel slot at all (coarser keys — more false merges).
-  - [ ] **Terminal glide marker covers only -aye/-ay/-ai** (Tesfaye=Tesfay=Tesfai). -ey/-ei endings (e.g. a "Tsehey" spelling) do NOT fold; decide whether they should.
-  - [ ] **Digraph fold set is exactly the §4.4 sketch** (ts/tz→s, sh, ch, kh/gh→h, ph→f, th→t). Consequences flagged: **q and k are NOT folded** (a "Qes"-style q-spelling keys differently from its k-spelling; §4.2 lists q↔k as a variant rule — Task 7 covers it, but key equality won't); **medial ay/ai are NOT folded** (Haymanot vs Haimanot key differently — same family as the Task 4 cross-check finding) *→ superseded in Session 9: Task 8 tuning folds every non-initial y to i, so these now key equally; see the Task 8 review item*; ch-vs-c and sh-vs-x internal symbols; y and w count as consonants *(y no longer, except string-initial — Session 9)*.
-  - [ ] **Gemination handled only as adjacent-double collapse** (Kebbede→Kebede); non-adjacent repeats stay (Abebe keeps a b-b skeleton, which is what keeps Abebe≠Abebech honest).
-  - [ ] **`PHONETIC_WEIGHT = 0.9`** in `match/token.py` — the score a shared key guarantees in `sim()`. Invented magnitude; Task 8 tunes against the golden corpus.
-  - [ ] **Jaro-Winkler parameters**: prefix scale 0.1, prefix cap 4, boost only when Jaro > 0.7 (the standard published parameterization, pinned by textbook vectors in tests). Also: both-empty compares 1.0 in `jaro_winkler` but `sim` returns 0.0 when either side has no letters.
-- [ ] Variant engine rules (Task 7, Session 8) in `translit/variants.py` — every rule, weight, and constraint is an agent default (`verified: false` module header); Task 8 tunes magnitudes against the golden corpus, but Robel decides the linguistic shape:
-  - [ ] **All rewrite weights are invented**: lexicon-group alternate 0.85; compound joined↔spaced 0.8, hyphenated 0.6, slash 0.5, dot 0.4; terminal -aye/-ay/-ai 0.6–0.8; ts↔tz↔s 0.4–0.7; kh→h 0.7; th→t 0.6; ie→e 0.6; ou→w 0.3; q→k 0.7 vs k→q 0.3 (asymmetric on purpose: k is the practical default per the open Task 3 ቀ item); h→kh 0.15; final w→ou 0.3; final e→ie 0.2; e→a 0.15; double-collapse 0.6; intervocalic doubling 0.12.
-  - [ ] **Engine constraints** (all invented): cumulative-likelihood floor 0.02; at most 3 simultaneous key-preserving rewrites; a HabeshaKey-breaking rewrite (q↔k, first-vowel e→a, w↔ou, lexicon alternate, slash/dot form) is only ever applied ALONE — this is what keeps every emitted variant ≥ 0.8 token similarity; exploration caps 64 combinations/stage, 4096 heap pops.
-  - [ ] **Asymmetries to confirm**: plain `s` is never rewritten to `ts` ("Sehay" only reaches "Tsehay" via its lexicon group — a non-lexicon s-spelling won't); `a→e` is not applied (only e→a); `t→th` is not applied (only th→t). Are the reverse directions common enough to need rules?
-  - [ ] **First-vowel e→a gated to tokens with ≤ 2 e's**: on e-heavier names (Bekele→Bakele = 0.78, Kebede→Kabede) greedy Jaro-Winkler scrambles below the 0.8 property and there is no phonetic backstop. Consequence: no "Bakele"/"Kabede" variants. Alternative: fold vowel-class a/e in HabeshaKey instead (Task 8 tuning decision).
-  - [ ] **h→kh only word-initial or after a vowel** (avoids "getackhew"-style junk after consonants); **w→ou only word-final** (Getachew→Getachou but never Wolde→Oulde).
-  - [ ] **Slash/dot abbreviation outputs are exempt from the ≥ 0.8 property** ("G/Medhin" loses letters; token `sim` can't score it — the Task 8 full matcher expands abbreviations before scoring, per ARCHITECTURE §4.4 step 1). Test carve-out documented in `tests/test_variants.py`. *→ resolved in Session 9: variant-set overlap wired into `sim` scores these 0.85; the carve-out was removed and the property now holds with no exemptions.*
-  - [ ] **Arabic-origin name table** (ARCHITECTURE §4.2) is NOT a separate table: it lives in `given_names.json` as the `origin: "arabic"` entries, and ALL lexicon spelling groups (canonical + variants) act as whole-token alternates at 0.85. Confirm this home, or split a dedicated table.
-  - [ ] **Hyphens are token separators**: "Gebre-Medhin" → base "Gebre Medhin"; a non-compound hyphenated name loses its hyphen in the base spelling.
-  - [ ] **Compound slash/dot forms emitted only when the prefix round-trips** through an `abbreviation_expansions` entry (G/→Gebre yes; a prefix with no abbreviation entry gets no G/-form).
-- [ ] Full matcher + Task 8 tuning (Session 9) — every constant is an agent default tuned ONLY against the mechanical golden corpus; Robel decides the linguistic/policy items:
-  - [ ] **HabeshaKey glide fold (change to Task 6 behavior)**: every non-initial `y` now folds to `i` in the key (string-initial ኃ y as in Yohannes stays a consonant). This makes Haymanot=Haimanot, Maryam=Mariyam=Mariam, Hailemaryam=Hailemariam key-equal (fixes the ኃይለማርያም↔Hailemariam corpus pair and the old "medial ay/ai not folded" review item). Side effect: `_TERMINAL_SUFFIXES` gained "aie" (what the fold turns "aye" into). Confirm y-as-vowel is right for names where y is a true consonant sound mid-word.
-  - [ ] **Known key collision kept**: Bekele and Bikila both key `BKL:e` (single first-vowel-class slot; e and i share a class) → match("Bekele","Bikila") = 0.90, recorded as a `known_fail` different-pair. Fix would need a richer vowel slot — decide in v0.2 or accept.
-  - [ ] **`KEY_MISMATCH_DAMP = 0.6`** in `match/token.py`: Jaro-Winkler is multiplied by 0.6 when the two HabeshaKeys differ. This is what pushes Tesfaye/Tesfa (raw JW 0.94!), Abebe/Abebech, Tesfaye/Tesfahun under the 0.6 different-person gate. Consequence: a same-person misspelling that is NOT key-equal, NOT a lexicon alternate, and NOT rule-derivable scores low (e.g. an unlisted "Mehamed"-style spelling). Magnitude invented.
-  - [ ] **`VARIANT_WEIGHT = 0.85`**: score granted when one token appears in the other's `variants()` output (the §4.4 variant-set-overlap term, now wired). Also removed the Task 7 test carve-out — slash/dot forms ("G/Medhin") now score 0.85 against their expansion at token level too.
-  - [ ] **`MatchWeights` defaults**: positional weights 0.45/0.35/0.20 are architecture-pinned; `swap_penalty = 0.98` (swapped-order records, e.g. "Abebe Bikila" vs "Bikila Abebe" → 0.98 — policy: field-swapped same person, NOT father-vs-son) and `missing_scale = 0.5` (each unmatched role costs factor `1 − weight·0.5`; a missing avonym → ×0.9, a missing patronym → ×0.825, i.e. one-token vs two-token names do NOT reach the 0.85 same-person gate) are invented. A cross-role pair weighs the mean of the two role weights.
-  - [ ] **Sibling-style records land in the review zone, above the different-gate**: "Tesfaye Girma" vs "Tesfahun Girma" = 0.73, "Abebe Bikila Wolde" vs "Abebech Bikila Wolde" = 0.80 — kept as `known_fail` different-pairs. Decide: is >0.6 for shared-patronym siblings a bug or correct AML behavior (analyst review zone)?
-  - [ ] **Initials are not prefix-matched**: "Abebe B." vs "Abebe Bikila" = 0.76 (B↔Bikila scores via damped JW only). v0.2 backlog has abbreviation-expansion confidence; decide if v0.1 needs an initial-matches-first-letter rule.
-- [ ] Golden corpus `tests/golden/pairs.json` (Session 9) — 201 pairs, ALL agent-generated (`needs_human: true` on every pair) by `scripts/gen_golden_pairs.py` from the unverified lexicon + plan names; Robel extends with real-world confusables and prunes bad mechanical pairs. Thresholds per ARCHITECTURE §6: same ≥ 0.85, different ≤ 0.60. Six `known_fail` pairs ship as honest engine-limit records (the golden test asserts they KEEP failing so improvements force conscious regeneration):
-  - መሐመድ ↔ Mohammed 0.53 — transliteration yields "Mehamed", not a listed variant, keys differ (same family as the open Task 4 fidel-vs-canonical mismatch item; fix = Robel adds the variant or corrects the fidel).
-  - Gebremedhin ↔ "Gebrie Medhin" 0.42 and Hailemariam ↔ "Hailie Mariam" 0.43 — the variant engine emits e→ie rewrites INSIDE spaced compound forms, but the parser only joins lexicon-exact prefix spellings, so the tokens misalign. Decide: constrain the engine, or teach the matcher fuzzy compound joining.
-  - The two sibling-style pairs and Bekele↔Bikila 0.90 (see matcher items above).
-- [ ] README quick-tour outputs (Task 9, Session 10) — every snippet is a doctest pinned to the CURRENT (unverified) engine and lexicon: variant lists, match scores (0.94 Tesfay Mohamed/Tesfaye Muhammed), the ወይዘሮ ጸሐይ ገብረመድህን ↔ "Tsehay G/Medhin" = 1.0 explainability example, and the "Why" section's linguistic claims. When any linguistic default is flipped during review, these doctests will fail loudly (by design) and the README must be re-read for accuracy before release.
-- [ ] All `given_names.json` entries with `"verified": false`
-- [ ] Golden corpus entries marked `"needs_human": true` (currently: all 201)
-- [ ] Final match-score thresholds (Task 8 tuning) — recorded in the decisions log (same ≥ 0.85, different ≤ 0.60 per §6; component weights above); revisit once the corpus contains human-curated pairs
-- [ ] Release tag push (Task 10) — everything is prepared (Session 11); release is human-triggered, always. Robel's steps, in order:
-  1. Review/commit the Session 11 tree (suggested message in the session log).
-  2. One-time PyPI setup: on pypi.org → account → Publishing → add a **pending Trusted Publisher** for project `habesha-names`: owner `Robel231`, repository `habesha-names`, workflow `release.yml`, environment `pypi`. (No API token anywhere.) Optionally create the `pypi` environment in the GitHub repo settings with required reviewers for an extra approval gate.
-  3. `git tag v0.1.0 && git push origin main v0.1.0` — the tag triggers `.github/workflows/release.yml`: build → `twine check` → wheel smoke test (fails the run if the tag ≠ `__version__`, data files missing, or the engine misbehaves from the installed artifact) → publish.
-  4. NOTE the linguistic review queue above is still open — decide whether v0.1.0 ships with `verified: false` data (README/CHANGELOG already disclose this) or the tag waits for review.
+- [ ] PyPI name availability result (Task 0) — confirm final package name (formality: `habesha-names` is already live on PyPI as 0.1.0a1, so this is a rubber stamp).
+  Agent finding 2026-07-10: PyPI JSON API returned 404 for all of `habesha-names`, `habeshanames`, `etnames` → all three available. Proceeding with `habesha-names` pending Robel's confirmation.
+- [ ] Golden corpus entries marked `"needs_human": true` (currently: all 204) — the corpus is still mechanically generated from the (now verified) lexicon; Robel extends it with real-world confusables and prunes bad mechanical pairs, always THROUGH `scripts/gen_golden_pairs.py`. The three remaining `known_fail` records (Bekele↔Bikila 0.90 — deferred to v0.2 per task-3b; Gebremedhin↔"Gebrie Medhin" 0.42 and Hailemariam↔"Hailie Mariam" 0.43 — spaced-compound rewrite misalignment, an engine limit, not a linguistic decision) stay visible there and in the README "Known limitations" section.
+- [ ] Release tag push (Task 10/11) — release is human-triggered, always. 0.1.0a1 is live; when Robel wants 0.1.0 final: bump `__version__`, cut the CHANGELOG section, `git tag v0.1.0 && git push origin main v0.1.0`. The linguistic review gate for 0.1.0 final is now CLEARED (task-3b below); remaining discretionary: golden-corpus human curation.
+
+### Resolved 2026-07-14 — task-3b native-speaker review (Robel)
+
+Every linguistic review item opened by Tasks 1–9 was decided by Robel and implemented in session 13 (task-3b). One-line dispositions; full detail in the Decisions log and the Session 13 entry:
+
+- **Task 1 consonant labels** (incl. `TS → "ts'"`): confirmed as internal series IDs; PRACTICAL romanizations reviewed separately below.
+- **Task 2 order-8 homophone collapses** (ሗ→ሇ, ኇ→ሇ, ሧ→ሷ, ፇ→ጿ): CONFIRMED.
+- **Task 2 ኈ/ቘ/ዀ pass-through**: CONFIRMED (no collapse; ኋ homophony handled by the wa↔ua variant rule instead).
+- **PRACTICAL table** — CONFIRMED as-is: ቀ→k, ጸ→ts, ቸ/ጨ→ch merge, ኘ→gn (with gn↔ny variant rule added), ቐ→q (Tigrinya distinction preserved), ኸ order-1 at current default, የ glide rule, guttural order-1 "a" as scoped (kx/xw excluded), order-5 é→e, and all remaining consonant defaults. CHANGED: (1) 6th-order word-final clusters epenthesize — "i" goes immediately before the final coda, "st" is a permissible coda (ፍቅር→Fikir, ትግስት→Tigist, ቅድስት→Kidist, ዮሐንስ→Yohanis; Tesfaye/Gebremedhin/Tsehay/Silase seeds unchanged); (2) labialized rendering "ua" not "wa" (ኋ→hua pinned via ኋላ→Huala, ኳ→kua, ጓ→gua, order-8 column C+"ua"); (3) ወ order-1 "we" CONFIRMED with canonical consequences: titles.json canonical Weizero/Weizerit (Woizero/Woizerit kept as recognized Latin forms), compounds.json prefix canonical Welde (Wolde kept as recognized variant), plus a MANDATORY we↔wo variant rule (Welde↔Wolde ≥ 0.85 pinned in tests).
+- **ኃይለ ሥላሴ→"Haile Selassie" xfail**: retired via lexicon — table keeps "Silase", the ሥላሴ second-element entry carries Selassie/Silase variants, and the round-trip is asserted at matcher level (`match ≥ 0.85`, tests/test_match_full.py).
+- **titles.json / compounds.json / given_names.json**: all entries reviewed → `"verified": true` (via review_report.txt). Conventional canonicals kept (Mohammed, Daniel, Yohannes, Mariam, Michael, Giorgis, Kristos, Egziabher, Hiwot, Haymanot, Tsadik); the raw post-cluster-rule table outputs were added as variants where they differed (Mehamed, Danel, Yohanis; Maryam, Mikael, Giyorgis, Silase, Kirsitos, Igziabher, Hiiwet, Haimanot — prefixes/second elements gained a `variants` schema field for this). ኃይለማርያም→Hailemaryam and ብርሃነ→Birhane remain raw-output-only spellings, bridged by the phonetic key (match 0.96 / token sim 0.91).
+- **Parser heuristics, HabeshaKey rules, variant-engine weights/constraints, matcher constants (PHONETIC_WEIGHT, VARIANT_WEIGHT, KEY_MISMATCH_DAMP, JW params, MatchWeights), thresholds**: linguistic shape confirmed; ALL numeric tuning constants accepted for 0.1.0 as-is — revisit with a human-curated corpus.
+- **Sibling-style pairs scoring 0.60–0.85**: INTENDED analyst-review-zone behavior — corpus gained an expected `"review"` category (the two sibling pairs moved out of known_fail) and the README gained a "Score interpretation" section.
+- **Bekele↔Bikila 0.90 collision**: deferred to v0.2 — stays `known_fail` AND documented in the README "Known limitations" section.
+- **README doctests/claims**: updated to the post-review outputs (Weizero, score-interpretation and known-limitations sections); "Alpha status" section retained pending release session.
 
 ## Session log
 
@@ -913,6 +861,84 @@ Next session should start with: nothing scheduled — after Robel completes the 
 
 **habesha-names 0.1.0a1 is live on PyPI.** Non-blocking note for a future workflow touch-up: run #1 logged deprecation warnings that `actions/checkout@v4`, `setup-python@v5`, and the artifact actions target Node.js 20 (runners force Node 24) — bump to the @v5/@v6 majors whenever release.yml is next edited.
 
+## Session 13 — 2026-07-14
+
+Task attempted: task-3b — apply Robel's native-speaker review decisions (final; per-item dispositions recorded in the "Resolved 2026-07-14" block above and the Decisions log).
+
+What was actually done:
+- `translit/schemes.py`: order-8 vowel "wa"→"ua" (ሏ→lua, ሟ→mua); labialized-velar a-forms render C+"ua" (ኋ→hua, ኳ→kua, ጓ→gua, ቋ→kua; plain ዋ stays "wa"); all `verified: false` markers flipped to decided with task-3b provenance. All other consonant/vowel defaults confirmed unchanged.
+- `translit/to_latin.py`: NEW word-final cluster-epenthesis rule for 6th-order runs — the epenthetic "i" goes immediately before the final coda; the coda is the last consonant, or the last two when they form the permissible cluster "st" (`_FINAL_CODAS`). Pinned: ፍቅር→Fikir, ትግስት→Tigist, ቅድስት→Kidist, ዮሐንስ→Yohanis; seeds ተስፋዬ→Tesfaye, ገብረመድህን→Gebremedhin, ጸሐይ→Tsehay, ስላሴ→Silase still hold (ገብረመድህን exercises the non-"st" coda path: d-h-i-n).
+- `translit/variants.py`: added mandated rewrite rules we↔wo (0.6, Welde/Wolde/Weizero/Woizero), wa↔ua (0.5, Huala/Hwala), gn↔ny (0.5) — all key-breaking, so apply-alone; `_spelling_groups` now also serves compound prefix/second-element groups (Welde/Wolde, Selassie/Silase surface as 0.85 lexicon alternates at token level).
+- Data: `titles.json` canonical Weizero/Weizerit (Woizero/Woizerit kept in abbreviation lists, W/ro etc. unchanged); `compounds.json` prefix canonical Welde (+`variants: ["Wolde"]`), W/ expansion follows (Welde 0.6/Welete 0.4), second elements gained `variants` (Maryam, Mikael, Giyorgis, Silase, Kirsitos, Igziabher, Hiiwet, Haimanot); `given_names.json` gained Mehamed/Yohanis/Danel variants; `"verified": true` on ALL entries in all three files.
+- `_data.py`: `variants` field (validated: ASCII, no canonical repeats, no dups) on `CompoundPrefix`/`CompoundSecond`; shared `_latin_variants` validator; `parse/compounds.py` indexes the variant spellings (Woldemariam still splits, "Silase" recognized as second element); `data/schema.md` updated (schema keys + verified-workflow status).
+- Tests: translit xfail RETIRED (round-trip now asserted at matcher level, `test_match_full.py::test_selassie_matcher_level_roundtrip`); new pins for cluster epenthesis, "ua" rendering, Welde↔Wolde ≥ 0.85 token sim, Silase↔Selassie, we↔wo/wa↔ua/gn↔ny rules, Weizero title parsing, all-entries-verified; loader fixtures updated for the new `variants` keys.
+- Golden corpus: generator gained the expected `"review"` category (score strictly between the gates); the two sibling pairs moved from known_fail different-pairs to passing review-zone records; corpus regenerated.
+- README: parse doctest → 'Weizero'; new "Score interpretation" (≥0.85 same / 0.60–0.85 review zone / ≤0.60 different) and "Known limitations" (Bekele↔Bikila deferred to v0.2, spaced-compound rewrite misalignment) sections; "Alpha status" and "Data verification" updated to reflect completed native-speaker review (golden corpus still needs_human).
+
+Golden corpus before/after (regeneration required by the rule changes):
+
+    BEFORE: total 201 | passing 195 | known_fail 6
+      known_fail: same | መሐመድ <-> Mohammed | 0.5293
+      known_fail: same | Gebremedhin <-> Gebrie Medhin | 0.4245
+      known_fail: same | Hailemariam <-> Hailie Mariam | 0.4335
+      known_fail: different | Tesfaye Girma <-> Tesfahun Girma | 0.7304
+      known_fail: different | Abebe Bikila Wolde <-> Abebech Bikila Wolde | 0.8046
+      known_fail: different | Bekele <-> Bikila | 0.9
+    AFTER: total 204 | passing 201 | known_fail 3
+      expected breakdown: same 173, different 29, review 2
+      known_fail: same | Gebremedhin <-> Gebrie Medhin | 0.4245  (engine limit, README-documented)
+      known_fail: same | Hailemariam <-> Hailie Mariam | 0.4335  (engine limit, README-documented)
+      known_fail: different | Bekele <-> Bikila | 0.9            (deferred to v0.2 per task-3b)
+      review (passing): Tesfaye Girma <-> Tesfahun Girma | 0.7304
+      review (passing): Abebe Bikila Wolde <-> Abebech Bikila Wolde | 0.8046
+
+    (መሐመድ↔Mohammed resolved by the "Mehamed" lexicon variant: now 0.85.)
+
+D2 mechanical cross-check re-run (transliterate(fidel) vs canonical, post-cluster-rule):
+
+    given_names: 41 OK, 14 = listed variant, 1 mismatches
+      MISMATCH ኃይለማርያም Hailemaryam Hailemariam   (phonetic-key-equal; match = 0.96)
+    compound seconds: 4 OK, 8 = listed variant, 0 mismatches
+    compound prefixes: 9 OK, 0 = listed variant, 1 mismatches
+      PREFIX MISMATCH ብርሃነ Birhane Berhane        (phonetic-key-equal; token sim = 0.91)
+
+Verification output (paste FULL command + output, unedited):
+
+Command: `cmd /c D:\habesha-names\check.bat` (pytest -q && ruff check . && mypy src --strict, inside .venv)
+
+    ........................................................................ [ 16%]
+    ........................................................................ [ 32%]
+    ........................................................................ [ 48%]
+    ........................................................................ [ 64%]
+    ........................................................................ [ 80%]
+    ........................................................................ [ 96%]
+    ..................                                                       [100%]
+    450 passed in 1.90s
+    All checks passed!
+    Success: no issues found in 19 source files
+    GATE EXIT: 0
+
+Pinned-output spot check (all decisions):
+
+    OK  ፍቅር -> Fikir · ትግስት -> Tigist · ቅድስት -> Kidist · ዮሐንስ -> Yohanis
+    OK  ተስፋዬ -> Tesfaye · ገብረመድህን -> Gebremedhin · ጸሐይ -> Tsehay · ስላሴ -> Silase
+    OK  ኋላ -> Huala · ኳ/ጓ/ሏ/ሟ/ቋ -> Kua/Gua/Lua/Mua/Kua
+    OK  sim(Welde, Wolde) = 0.85 · match(ኃይለ ሥላሴ, "Haile Selassie") = 0.91
+    OK  match(መሐመድ, Mohammed) = 0.85 · parse(ወይዘሮ …).title = 'Weizero'
+
+Files touched: `src/habesha_names/translit/schemes.py`, `src/habesha_names/translit/to_latin.py`, `src/habesha_names/translit/variants.py`, `src/habesha_names/_data.py`, `src/habesha_names/parse/compounds.py`, `src/habesha_names/parse/titles.py` (doctest), `src/habesha_names/parse/parser.py` (doctest), `src/habesha_names/data/titles.json`, `src/habesha_names/data/compounds.json`, `src/habesha_names/data/given_names.json`, `src/habesha_names/data/schema.md`, `scripts/gen_golden_pairs.py`, `tests/golden/pairs.json` (regenerated), `tests/test_translit_latin.py`, `tests/test_parse.py`, `tests/test_data_loader.py`, `tests/test_variants.py`, `tests/test_match_token.py`, `tests/test_match_full.py`, `tests/test_golden.py`, `README.md`, `review.py` (ruff fixes only), `PROGRESS.md`
+
+Deviations from plan (and why):
+- ኃይለማርያም→"Hailemaryam" and ብርሃነ→"Birhane" raw outputs were NOT added as variants: they are outside the D2 conventional-mismatch list, and both are phonetic-key-equal to their canonicals (0.96 / 0.91), so the ≥ 0.85 requirement already holds. Recorded here instead of silently extending the decided variant set.
+- The compound `variants` schema field is the mechanism chosen for "keep Wolde as a recognized variant spelling" / "ሥላሴ carries Selassie and Silase": the prefix/second schemas had no variant slot, and a schema field keeps the spellings reviewable data rather than code.
+- `review.py` (Robel's untracked review helper) had two ruff findings (import sort, unused import) that failed the repo gate; fixed mechanically, no behavior change.
+
+Known issues / TODOs introduced:
+- Two engine-limit known_fails remain in the corpus (spaced-compound rewrite misalignment: "Gebrie Medhin"/"Hailie Mariam") — an alignment/engine question for v0.2, not a linguistic one.
+- Bekele↔Bikila 0.90 deferred to v0.2 by decision (known_fail + README "Known limitations").
+
+Next session should start with: nothing linguistic remains open. Remaining queue: golden-corpus human curation (needs_human × 204), PyPI-name confirmation formality, and the (human-triggered) 0.1.0 final release when Robel decides.
+
 ## Decisions log
 
 | Date | Decision | Why |
@@ -967,6 +993,15 @@ Next session should start with: nothing scheduled — after Robel completes the 
 | 2026-07-13 | Release = tag-triggered workflow: build → twine check → install wheel in fresh venv → `scripts/smoke_wheel.py` (tag==version, lexicon loads, engine end-to-end) → PyPI Trusted Publishing (`id-token: write`, `environment: pypi`) | Plan pins human-triggered release + Trusted Publishing; the smoke gate makes the package-data bug class unshippable; no long-lived PyPI token exists anywhere |
 | 2026-07-13 | Ship v0.1.0a1 ALPHA with the review queue open; `verified: false` data ships as-is, disclosed in README ("Alpha status"), package docstring, and CHANGELOG | Robel's call (Task 11): installable alpha now, native-speaker review before 0.1.0 final; PEP 440 alpha + `--pre` gate keeps it away from default `pip install` |
 | 2026-07-13 | CHANGELOG `[0.1.0]` renamed to `[0.1.0a1]` (works/unverified split) instead of adding a parallel entry | 0.1.0 final never shipped; a changelog must not record an unpublished release above a published one |
+| 2026-07-14 | 6th-order word-final cluster epenthesis: "i" immediately before the final coda; coda = last consonant, or last two when they form the permissible cluster "st" | Robel (task-3b): pins ፍቅር→Fikir, ትግስት→Tigist, ቅድስት→Kidist, ዮሐንስ→Yohanis without disturbing Tesfaye/Gebremedhin/Tsehay/Silase |
+| 2026-07-14 | Labialized rendering "ua" not "wa": order-8 column C+"ua" (ሏ→lua), labialized-velar a-forms hua/kua/gua (ኋላ→Huala); wa↔ua added as a variant rewrite rule | Robel (task-3b): both spellings occur in the wild |
+| 2026-07-14 | ወ order-1 "we" CONFIRMED → canonical Weizero/Weizerit (titles) and Welde (compound prefix); Woizero/Woizerit/Wolde kept as recognized input forms; MANDATORY we↔wo variant rule with Welde↔Wolde ≥ 0.85 pinned at token level | Robel (task-3b): Wolde/Woldemariam spellings are ubiquitous |
+| 2026-07-14 | CONFIRMED as-is: ቀ→k, ቐ→q, ጸ→ts, ቸ/ጨ→ch merge, ኘ→gn (+ gn↔ny variant rule), ኸ order-1 default, የ glide, guttural order-1 "a" (kx/xw excluded), order-5 é→e, all remaining consonants, Task 1 ts' label, Task 2 order-8 collapses, ኈ/ቘ/ዀ pass-through | Robel (task-3b) native-speaker review |
+| 2026-07-14 | Selassie xfail retired via lexicon: table keeps "Silase"; ሥላሴ carries Selassie/Silase variants; round-trip asserted at matcher level (match ≥ 0.85) | No silent special-casing (kickoff rule); matching is the product surface |
+| 2026-07-14 | All lexicon entries (titles/compounds/given names) → "verified": true; conventional canonicals kept with raw table outputs added as variants; prefixes/second elements gained a "variants" schema field | Robel reviewed via review_report.txt; fidel↔canonical must match ≥ 0.85 |
+| 2026-07-14 | Sibling-style pairs in 0.60–0.85 = INTENDED analyst-review-zone behavior: corpus "review" expectation category + README "Score interpretation" section | Robel (task-3b, E1): AML analysts should see shared-patronym near-matches |
+| 2026-07-14 | Bekele↔Bikila 0.90 deferred to v0.2: stays known_fail + README "Known limitations" | Fix needs a richer phonetic-key vowel slot (task-3b, E2) |
+| 2026-07-14 | ALL tuning constants (parser confidences, rewrite weights, damp, JW params, match weights) accepted for 0.1.0 as-is | Robel (task-3b, E3): revisit with a human-curated corpus |
 
 ## Known issues
 

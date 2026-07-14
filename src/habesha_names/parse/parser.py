@@ -197,7 +197,7 @@ def parse(raw: str, *, assume_diaspora: bool = False) -> ParsedName:
     >>> parse("Bikila, Abebe").given
     'Abebe'
     >>> parse("ወይዘሮ ጸሐይ ገብረመድህን").title
-    'Woizero'
+    'Weizero'
     >>> parse("Abebe Bikila", assume_diaspora=True).has_surname
     'unknown'
     """

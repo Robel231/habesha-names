@@ -7,13 +7,11 @@ patronymic-aware fuzzy matching.
 ## Alpha status
 
 **Current release: 0.1.0a1 (alpha).** The practical transliteration
-defaults and the bundled name lexicon are agent-seeded and pending
-native-speaker verification — every linguistic default ships flagged
-`"verified": false` (see [Data verification](#data-verification)).
-Concretely, that means **match scores and variant outputs may change in
-0.1.0 final** as defaults are reviewed, and **the API is not yet
-frozen**. Suitable for evaluation and integration prototyping; pin the
-exact version if you depend on today's scores.
+rules and the bundled name lexicon have now passed native-speaker
+review (see [Data verification](#data-verification)); the golden test
+corpus is still mechanically generated and pending human curation, and
+**the API is not yet frozen**. Suitable for evaluation and integration
+prototyping; pin the exact version if you depend on today's scores.
 
 - **Zero runtime dependencies** — stdlib only
 - **Deterministic and explainable** — no ML at runtime, no network calls;
@@ -56,7 +54,7 @@ Every snippet below is a doctest and runs in CI.
 >>> from habesha_names import parse
 >>> p = parse("ወይዘሮ ጸሐይ ገብረመድህን")
 >>> (p.title, p.given, p.patronym)
-('Woizero', 'ጸሀይ', 'ገብረመድህን')
+('Weizero', 'ጸሀይ', 'ገብረመድህን')
 >>> p.script
 'ethiopic'
 >>> parse("Hailemariam Desalegn").given_is_compound
@@ -93,6 +91,21 @@ True
 True
 
 ```
+
+### Score interpretation
+
+Match scores are calibrated to three bands:
+
+| score | reading |
+|---|---|
+| ≥ 0.85 | likely the same person |
+| 0.60 – 0.85 | review zone — route to an analyst |
+| ≤ 0.60 | likely different people |
+
+The middle band is intentional, not indecision: records like
+"Tesfaye Girma" vs "Tesfahun Girma" (siblings — different given name,
+shared patronym) score there by design, because in KYC/AML pipelines a
+shared patronym is exactly the kind of near-match a human should see.
 
 ### Explainability — every score can be justified
 
@@ -156,13 +169,25 @@ from habesha_names import (
 Everything else is internal. Reverse transliteration (`to_fidel`) and
 gender inference (`guess_gender`) are planned for v0.2.
 
+## Known limitations
+
+- **Bekele ↔ Bikila score 0.90** — the phonetic key's single first-vowel
+  class slot folds these two distinct names together. A richer vowel
+  representation is planned for v0.2; until then this pair is a recorded
+  `known_fail` in the golden corpus.
+- Spelling rewrites inside *spaced* compound forms can misalign against
+  the joined form (e.g. "Gebrie Medhin" vs "Gebremedhin"), also recorded
+  as `known_fail` corpus entries.
+
 ## Data verification
 
-All bundled linguistic data (lexicons, transliteration tables, variant
-rules, golden test pairs) was seeded programmatically or by a non-native
-speaker and ships flagged `"verified": false` until it passes
-native-speaker review. Match scores are deterministic and explainable,
-but treat linguistic defaults as provisional until 0.1.0 final.
+The bundled lexicons (given names, titles, compound elements) and the
+practical transliteration rules passed native-speaker review in July
+2026 and are flagged `"verified": true`; any newly added entry starts
+`false` again until reviewed. The golden test corpus remains
+mechanically generated (`needs_human` markers) pending human curation,
+and tuning constants are accepted for 0.1.0 as-is — to be revisited
+against a human-curated corpus.
 
 ## Development
 

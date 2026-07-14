@@ -83,7 +83,7 @@ def test_initial_kept_and_noted() -> None:
 
 def test_fidel_full_name_with_title() -> None:
     parsed = parse("ወይዘሮ ጸሐይ ገብረመድህን")
-    assert parsed.title == "Woizero"
+    assert parsed.title == "Weizero"  # canonical decided in task-3b (ወ order 1 = "we")
     assert parsed.given == normalize("ጸሐይ")
     assert parsed.patronym == normalize("ገብረመድህን")
     assert parsed.avonym is None
@@ -112,7 +112,9 @@ def test_two_token_name_has_no_avonym() -> None:
 
 def test_title_matching_case_insensitive_and_abbreviated() -> None:
     assert parse("ato Abebe Bikila").title == "Ato"
-    assert parse("W/ro Tsehay Tesfaye").title == "Woizero"
+    assert parse("W/ro Tsehay Tesfaye").title == "Weizero"
+    # the pre-task-3b conventional spelling stays recognized as an input form
+    assert parse("Woizero Tsehay Tesfaye").title == "Weizero"
     assert parse("Dr. Tsehay Tesfaye").title == "Dr"
 
 

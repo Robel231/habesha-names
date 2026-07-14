@@ -115,6 +115,21 @@ def test_sim_phonetic_backstop_beats_jw() -> None:
     assert sim("Tzehay", "Sehay") == pytest.approx(PHONETIC_WEIGHT)
 
 
+def test_sim_welde_wolde_at_token_level() -> None:
+    # task-3b MANDATORY pin: Wolde/Woldemariam spellings are ubiquitous, so
+    # Welde <-> Wolde must match >= 0.85 at token level (we<->wo variant
+    # rule + the Welde/Wolde lexicon groups).
+    assert sim("Welde", "Wolde") >= 0.85
+    assert sim("Weldemariam", "Woldemariam") >= 0.85
+
+
+def test_sim_selassie_silase_at_token_level() -> None:
+    # task-3b: the ሥላሴ compound entry carries Selassie/Silase as variants;
+    # the table keeps "Silase" and matching bridges the conventional form.
+    assert sim("Silase", "Selassie") >= 0.85
+    assert sim("ሥላሴ", "Selassie") >= 0.85
+
+
 def test_sim_alemu_almaz_stays_below_phonetic_weight() -> None:
     # Task 6 inequality pin pair: different people must not reach the
     # phonetic-match score via JW either.

@@ -56,6 +56,7 @@ class CompoundPrefix:
     """First element of a compound given name (Gebre-, Haile-, ...)."""
 
     latin: str
+    variants: tuple[str, ...]  # recognized alternate Latin spellings (Welde/Wolde)
     fidel: str
     gender: str | None
     verified: bool
@@ -66,6 +67,7 @@ class CompoundSecond:
     """Second element of a compound given name (-Mariam, -Medhin, ...)."""
 
     latin: str
+    variants: tuple[str, ...]  # recognized alternate Latin spellings (Selassie/Silase)
     fidel: str
     verified: bool
 
@@ -224,8 +226,8 @@ def _parse_titles(data: Any, filename: str = "titles.json") -> tuple[Title, ...]
     return tuple(titles)
 
 
-_PREFIX_KEYS = frozenset({"latin", "fidel", "gender", "verified"})
-_SECOND_KEYS = frozenset({"latin", "fidel", "verified"})
+_PREFIX_KEYS = frozenset({"latin", "variants", "fidel", "gender", "verified"})
+_SECOND_KEYS = frozenset({"latin", "variants", "fidel", "verified"})
 _ABBREV_KEYS = frozenset({"abbrev", "candidates", "verified"})
 _CANDIDATE_KEYS = frozenset({"expansion", "weight"})
 
@@ -260,6 +262,18 @@ def _parse_candidates(
     return tuple(candidates)
 
 
+def _latin_variants(
+    entry: dict[str, Any], canonical: str, filename: str, where: str
+) -> tuple[str, ...]:
+    """Validated alternate Latin spellings (must not repeat the canonical)."""
+    variants = _string_list(entry, "variants", filename, where)
+    for variant in variants:
+        _latin_name(variant, filename, where)
+        if variant.lower() == canonical.lower():
+            _fail(filename, where, f"variant {variant!r} repeats the canonical form")
+    return variants
+
+
 def _parse_compounds(data: Any, filename: str = "compounds.json") -> _Compounds:
     root = _root(
         data, frozenset({"prefixes", "second_elements", "abbreviation_expansions"}), filename
@@ -272,6 +286,7 @@ def _parse_compounds(data: Any, filename: str = "compounds.json") -> _Compounds:
         prefixes.append(
             CompoundPrefix(
                 latin=_latin_name(latin, filename, where),
+                variants=_latin_variants(entry, latin, filename, where),
                 fidel=_fidel_text(_string(entry, "fidel", filename, where), filename, where),
                 gender=_optional_gender(entry, filename, where),
                 verified=_bool(entry, "verified", filename, where),
@@ -285,6 +300,7 @@ def _parse_compounds(data: Any, filename: str = "compounds.json") -> _Compounds:
         seconds.append(
             CompoundSecond(
                 latin=_latin_name(latin, filename, where),
+                variants=_latin_variants(entry, latin, filename, where),
                 fidel=_fidel_text(_string(entry, "fidel", filename, where), filename, where),
                 verified=_bool(entry, "verified", filename, where),
             )
@@ -340,11 +356,7 @@ def _parse_given_names(data: Any, filename: str = "given_names.json") -> tuple[G
         canonical = _string(entry, "canonical", filename, "given-name entry")
         where = f"given name {canonical!r}"
         _latin_name(canonical, filename, where)
-        variants = _string_list(entry, "variants", filename, where)
-        for variant in variants:
-            _latin_name(variant, filename, where)
-            if variant.lower() == canonical.lower():
-                _fail(filename, where, f"variant {variant!r} repeats the canonical form")
+        variants = _latin_variants(entry, canonical, filename, where)
         origin = _string(entry, "origin", filename, where)
         if origin not in _ORIGINS:
             _fail(filename, where, f"unknown origin {origin!r}")
