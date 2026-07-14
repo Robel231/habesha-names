@@ -36,7 +36,7 @@ def test_v02_names_are_not_exported_yet() -> None:
 
 
 def test_version() -> None:
-    assert habesha_names.__version__ == "0.1.0a1"
+    assert habesha_names.__version__ == "0.1.0"
 
 
 def test_package_docstring_examples() -> None:

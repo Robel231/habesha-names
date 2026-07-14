@@ -4,14 +4,13 @@ Ethiopian/Eritrean name intelligence for Python: fidel script handling,
 transliteration, spelling-variant generation, name parsing, and
 patronymic-aware fuzzy matching.
 
-## Alpha status
+## Status
 
-**Current release: 0.1.0a1 (alpha).** The practical transliteration
-rules and the bundled name lexicon have now passed native-speaker
-review (see [Data verification](#data-verification)); the golden test
-corpus is still mechanically generated and pending human curation, and
-**the API is not yet frozen**. Suitable for evaluation and integration
-prototyping; pin the exact version if you depend on today's scores.
+**Current release: 0.1.0.** The linguistic defaults (practical
+transliteration rules) and the bundled name lexicon are native-speaker
+verified (see [Data verification](#data-verification)). The golden test
+corpus is mechanically generated and partially curated. The public API
+is stable within the 0.1.x series.
 
 - **Zero runtime dependencies** — stdlib only
 - **Deterministic and explainable** — no ML at runtime, no network calls;
@@ -37,12 +36,10 @@ Habesha names break global identity systems:
 ## Install
 
 ```
-pip install --pre habesha-names
+pip install habesha-names
 ```
 
-(Only alpha releases exist so far, so pip needs `--pre`; plain
-`pip install habesha-names` will work once 0.1.0 final is out.
-From a checkout: `pip install -e .`)
+(From a checkout: `pip install -e .`)
 
 ## Quick tour
 

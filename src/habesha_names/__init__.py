@@ -6,10 +6,6 @@ there is no family name — and the same name is romanized many ways
 normalizes fidel spelling, transliterates, generates plausible Latin spelling
 variants, and fuzzy-matches full names with an explanation for every score.
 
-Alpha release: the practical transliteration defaults and bundled name lexicon
-are pending native-speaker verification — match scores and variant outputs may
-change in 0.1.0 final, and the API is not yet frozen.
-
 >>> from habesha_names import match, parse, variants
 >>> parse("Ato Abebe Bikila").given
 'Abebe'
@@ -30,7 +26,7 @@ from habesha_names.parse.parser import parse
 from habesha_names.translit.to_latin import transliterate
 from habesha_names.translit.variants import variants
 
-__version__ = "0.1.0a1"
+__version__ = "0.1.0"
 
 __all__ = [
     "__version__",

@@ -9,6 +9,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _(nothing yet)_
 
+## [0.1.0] - 2026-07-14
+
+First stable release. The linguistic defaults shipped in 0.1.0a1 have now
+passed native-speaker review; the public API is stable within 0.1.x.
+
+### Verified
+
+- Native-speaker review (July 2026) of the practical transliteration
+  scheme and the full bundled lexicon (given names, titles, compound
+  elements); every lexicon entry now ships `"verified": true`. Newly
+  added entries start `"verified": false` until reviewed.
+
+### Changed
+
+- Transliteration: 6th-order word-final **cluster epenthesis** — an
+  epenthetic vowel breaks up impermissible final consonant clusters
+  (Fikir, Tigist, Kidist, Yohanis), with `st` kept as a permissible coda.
+- Transliteration: labialized syllables render as **`ua`, not `wa`**
+  (Huala, Guadegnu).
+- Canonical forms: **Weizero/Weizerit** (titles) and **Welde** (compound
+  prefix) are now the canonical romanizations; Woizero/Wolde remain
+  recognized via a new `variants` field in the lexicon schema. Rewrite
+  rules we↔wo (mandatory), wa↔ua, and gn↔ny added to the variant engine.
+- Conventional canonicals (e.g. Mohammed, Yohannes, Daniel, Mariam) come
+  from the lexicon; the raw table outputs (Mehamed, Yohanis, Danel,
+  Maryam, …) are kept as recognized variants.
+- Golden corpus: sibling-style pairs (shared patronym, different given
+  name) now carry an explicit **`review` expectation band** rather than a
+  match/no-match verdict; corpus regenerated 201 → 204 pairs, `known_fail`
+  reduced 6 → 3 (Mohammed pair resolved). The Selassie xfail was retired
+  via the lexicon plus a matcher-level round-trip test.
+
+### Added
+
+- **Score-interpretation policy** (README): ≥ 0.85 likely same person,
+  0.60–0.85 review zone routed to an analyst, ≤ 0.60 likely different
+  people. The review band is deliberate: sibling-style records score
+  there by design.
+- Development Status classifier raised to `4 - Beta`; alpha disclaimers
+  removed from the README and package docstring.
+
+### Known limitations (carried into 0.1.0)
+
+- **Bekele ↔ Bikila score 0.90**: the phonetic key's single first-vowel
+  class slot folds these distinct names together; a richer vowel
+  representation is planned for v0.2 (recorded `known_fail`).
+- Spelling rewrites inside *spaced* compound forms can misalign against
+  the joined form (e.g. "Gebrie Medhin" vs "Gebremedhin"); recorded as
+  `known_fail` corpus entries.
+- The golden corpus remains mechanically generated and only partially
+  human-curated; matcher tuning constants are accepted as-is, to be
+  revisited against a fully curated corpus.
+
 ## [0.1.0a1] - 2026-07-13
 
 First installable release — an **alpha**. The engine, tests, and packaging
