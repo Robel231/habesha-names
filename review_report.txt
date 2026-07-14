@@ -1,0 +1,108 @@
+============================================================
+1. TRANSLITERATION — is this how people spell it?
+============================================================
+  ተስፋዬ           -> Tesfaye
+  ገብረመድህን        -> Gebremedhin
+  ፀሐይ            -> Tsehay
+  ኃይለ ሥላሴ        -> Haile Silase
+  ፍቅር            -> Fikir
+  ትግስት           -> Tigist
+  ቅድስት           -> Kidist
+  ዮሐንስ           -> Yohanis
+  ወይዘሮ           -> Weizero
+  ወልደማርያም        -> Weldemaryam
+  ወርቁ            -> Werku
+  ወንድሙ           -> Wendimu
+  ቀለሙ            -> Kelemu
+  ቅዱስ            -> Kidus
+  መኮንን           -> Mekonin
+  አገኘሁ           -> Agegnehu
+  ጓደኙ            -> Guadegnu
+  ኋላ             -> Huala
+  ሟሟ             -> Muamua
+  ብርሃኑ           -> Birhanu
+  ምስራቅ           -> Misrak
+  ግርማ            -> Girma
+  ኃይለማርያም        -> Hailemaryam
+  ዳንኤል           -> Danel
+  መሐመድ           -> Mehamed
+
+============================================================
+2. VARIANTS — real-world spellings? junk?
+============================================================
+  Tesfaye: Tesfaye, Tesfai, Tesfay, Tasfaye
+  Tsehay: Tsehay, Sehay, Tsehai, Tzehay, Tsehaye, Sehai, Sehaye, Tzehai, Tzehaye, Tsahay, Tsekhay, Tsehhay
+  Gebremedhin: Gebremedhin, Gebre Medhin, Gebre-Medhin, G/Medhin, G.Medhin, Gebrie Medhin, Gebramedhin, Gebremadhin, Gebremedkhin, Gebra Medhin, Gebre Medkhin, Gebremmedhin
+  Mohammed: Mohammed, Mahamed, Mehamed, Mohamed, Mohammad, Muhammed, Mokhammed, Mohhammed, Mohamad, Mokhamed, Mohhamed, Mokhammad
+  Woizero: Woizero, Weizero, Woizaro, Woizerro, Woizzero
+
+============================================================
+3. MATCH SCORES — same>=0.85, different<=0.60, review-zone between
+============================================================
+  1.00  ፀሐይ ገብረመድህን  <->  Tsehay G/Medhin
+  0.80  Tesfaye Girma  <->  Tesfay Ghirma
+  0.91  Mohammed Hussein  <->  Muhamed Husen
+  0.98  Abebe Bikila  <->  Bikila Abebe
+  0.73  Tesfaye Girma  <->  Tesfahun Girma
+  0.94  Bekele Gerba  <->  Bikila Gerba
+  0.70  Alemu Kebede  <->  Almaz Kebede
+
+============================================================
+4. LEXICON — check fidel spelling, canonical, variants, gender
+============================================================
+  አበበ          Abebe            variants=[] gender={'m': 1.0} origin=amharic
+  አበበች         Abebech          variants=['Abebetch'] gender={'f': 1.0} origin=amharic
+  አለሙ          Alemu            variants=['Allemu'] gender={'m': 1.0} origin=amharic
+  አልማዝ         Almaz            variants=['Almas'] gender={'f': 1.0} origin=amharic
+  ተስፋዬ         Tesfaye          variants=['Tesfay', 'Tesfai'] gender={'m': 1.0} origin=amharic
+  ተስፋሁን        Tesfahun         variants=[] gender={'m': 1.0} origin=amharic
+  ከበደ          Kebede           variants=['Kebbede'] gender={'m': 1.0} origin=amharic
+  በቀለ          Bekele           variants=['Beqele', 'Bekelle'] gender={'m': 1.0} origin=amharic
+  ግርማ          Girma            variants=[] gender={'m': 1.0} origin=amharic
+  ኃይለ          Haile            variants=['Hayle'] gender={'m': 1.0} origin=geez
+  ጌታቸው         Getachew         variants=[] gender={'m': 1.0} origin=amharic
+  ሙሉጌታ         Mulugeta         variants=[] gender={'m': 1.0} origin=amharic
+  ደሳለኝ         Desalegn         variants=['Dessalegn', 'Desalegne'] gender={'m': 1.0} origin=amharic
+  ኃይለማርያም      Hailemariam      variants=['Hailemariyam'] gender={'m': 1.0} origin=geez
+  ገብረመድህን      Gebremedhin      variants=[] gender={'m': 1.0} origin=geez
+  ቢቂላ          Bikila           variants=[] gender={'m': 1.0} origin=oromo
+  ወልደ          Wolde            variants=['Welde'] gender={'m': 1.0} origin=geez
+  መሐመድ         Mohammed         variants=['Mohamed', 'Muhammed', 'Mohammad', 'Mahamed', 'Mehamed'] gender={'m': 1.0} origin=arabic
+  አህመድ         Ahmed            variants=['Ahmad'] gender={'m': 1.0} origin=arabic
+  ሁሴን          Hussein          variants=['Husen', 'Hussen'] gender={'m': 1.0} origin=arabic
+  ፋጡማ          Fatuma           variants=['Fatima'] gender={'f': 1.0} origin=arabic
+  አሚና          Amina            variants=['Amena'] gender={'f': 1.0} origin=arabic
+  ፀሐይ          Tsehay           variants=['Tsehai', 'Sehay', 'Tzehay'] gender={'f': 0.97, 'm': 0.03} origin=amharic
+  አስቴር         Aster            variants=[] gender={'f': 1.0} origin=biblical
+  ገነት          Genet            variants=['Gennet'] gender={'f': 1.0} origin=amharic
+  ትግስት         Tigist           variants=['Tigest'] gender={'f': 1.0} origin=amharic
+  ሂሩት          Hirut            variants=[] gender={'f': 1.0} origin=amharic
+  ሜሮን          Meron            variants=[] gender={'f': 1.0} origin=amharic
+  ሳራ           Sara             variants=['Sarah'] gender={'f': 1.0} origin=biblical
+  ራሔል          Rahel            variants=[] gender={'f': 1.0} origin=biblical
+  ሰላም          Selam            variants=[] gender={'f': 0.9, 'm': 0.1} origin=amharic
+  ሰላማዊት        Selamawit        variants=[] gender={'f': 1.0} origin=amharic
+  ማህሌት         Mahlet           variants=['Mahelet', 'Mahilet'] gender={'f': 1.0} origin=amharic
+  ቅድስት         Kidist           variants=['Kidest', 'Qidist'] gender={'f': 1.0} origin=amharic
+  ሐና           Hana             variants=['Hanna'] gender={'f': 1.0} origin=biblical
+  ሰናይት         Senait           variants=['Senayit'] gender={'f': 1.0} origin=tigrinya
+  ቤተልሔም        Bethlehem        variants=['Betelhem', 'Betlehem'] gender={'f': 1.0} origin=biblical
+  ሰሎሞን         Solomon          variants=['Selomon', 'Soloman'] gender={'m': 1.0} origin=biblical
+  ዳዊት          Dawit            variants=[] gender={'m': 1.0} origin=biblical
+  ዮሐንስ         Yohannes         variants=['Yohanes', 'Yohanis'] gender={'m': 1.0} origin=biblical
+  ዳንኤል         Daniel           variants=['Daniyel', 'Danel'] gender={'m': 1.0} origin=biblical
+  ሳሙኤል         Samuel           variants=[] gender={'m': 1.0} origin=biblical
+  ኤልያስ         Elias            variants=['Elyas', 'Eliyas'] gender={'m': 1.0} origin=biblical
+  ኤርሚያስ        Ermias           variants=['Ermiyas'] gender={'m': 1.0} origin=biblical
+  ሄኖክ          Henok            variants=['Henock'] gender={'m': 1.0} origin=biblical
+  እዮብ          Eyob             variants=['Iyob'] gender={'m': 1.0} origin=biblical
+  ዮናስ          Yonas            variants=['Jonas'] gender={'m': 1.0} origin=biblical
+  ቴዎድሮስ        Tewodros         variants=['Theodros', 'Tedros'] gender={'m': 1.0} origin=biblical
+  ታደሰ          Tadesse          variants=['Tadese'] gender={'m': 1.0} origin=amharic
+  አሰፋ          Assefa           variants=['Asefa'] gender={'m': 1.0} origin=amharic
+  መስፍን         Mesfin           variants=[] gender={'m': 1.0} origin=amharic
+  መሰረት         Meseret          variants=[] gender={'f': 1.0} origin=amharic
+  መቅደስ         Mekdes           variants=['Meqdes'] gender={'f': 1.0} origin=amharic
+  ጸጋዬ          Tsegaye          variants=['Tsegay', 'Segaye'] gender={'m': 1.0} origin=amharic
+  ብርሃኑ         Berhanu          variants=['Birhanu'] gender={'m': 1.0} origin=amharic
+  ለማ           Lemma            variants=['Lema'] gender={'m': 1.0} origin=amharic
