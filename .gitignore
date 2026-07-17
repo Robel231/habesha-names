@@ -17,3 +17,7 @@ dist/
 PROGRESS.md
 IMPLEMENTATION_PLAN.md
 AGENT_KICKOFF.md
+
+# Third-party evaluation corpora and mining output (local only, never
+# shipped or committed -- see DATA_PROVENANCE.md "External corpora")
+data-lab/
