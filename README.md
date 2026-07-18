@@ -209,12 +209,18 @@ series; everything else is internal. Transliteration outputs are part of
 the contract: changing any transliteration table cell changes outputs and
 therefore bumps the minor version, never a patch release.
 
-Known limitation (recorded as `known_fail` entries in the golden test
-corpus): spelling rewrites inside *spaced* compound forms can misalign
-against the joined form ("Gebrie Medhin" vs "Gebremedhin"); a
-variant-aware compound fix is planned for v0.2. The 0.1.0 Bekele ↔ Bikila
-0.90 collision is fixed in the v0.2 development line — the phonetic key
-now tracks first and last stem-vowel classes, so the pair scores 0.40.
+Known limitations: the golden test corpus currently has **zero**
+`known_fail` records — the 0.1.0 engine limits are fixed in the v0.2
+development line (Bekele ↔ Bikila 0.90 → 0.40 via the richer phonetic key;
+spaced-compound spelling rewrites like "Gebrie Medhin" vs "Gebremedhin"
+now align via a phonetic-key compound fallback in the parser). What is
+still imperfect: the bundled lexicon is small (56 given-name entries, so
+most real-world names get rule-based handling only — a large lexicon
+expansion is in progress for 0.2.0); same-name spelling pairs that differ
+in final-vowel class and have no lexicon entry rest on damped edit
+similarity alone; and the compound fallback's confidence values, like all
+tuning constants, are heuristics pending calibration against a
+human-curated corpus.
 
 ## Contributing
 

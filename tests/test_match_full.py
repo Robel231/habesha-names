@@ -66,6 +66,21 @@ def test_spaced_and_joined_compound_align() -> None:
     assert match("Hailemariam Desalegn", "Haile Mariam Desalegn").score == 1.0
 
 
+def test_rewritten_spaced_compound_aligns() -> None:
+    # Task 15: the two remaining 0.1.0 known_fails, retired by the
+    # phonetic-key compound fallback in parse.compounds. The spaced side
+    # joins input-preserving ("Gebriemedhin"), so the score rests on the
+    # shared HabeshaKey, not on a claimed canonical spelling.
+    assert match("Gebremedhin", "Gebrie Medhin") >= 0.85
+    assert match("Hailemariam", "Hailie Mariam") >= 0.85
+
+
+def test_sibling_spaced_pair_stays_low() -> None:
+    # Hailu is a distinct sibling name (plan trap case): it must NOT
+    # fuzzy-join into Hailemariam's shape.
+    assert match("Hailu Mariam", "Hailemariam") <= 0.6
+
+
 def test_selassie_matcher_level_roundtrip() -> None:
     # task-3b decision: the table keeps "Silase" (the old Task 3 xfail was
     # retired) and the plan round-trip is asserted HERE instead. The

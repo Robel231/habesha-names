@@ -1140,8 +1140,7 @@
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.4245,
-      "known_fail": true
+      "score_at_generation": 0.9288
     },
     {
       "a": "Gebremedhin",
@@ -1189,8 +1188,7 @@
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.4335,
-      "known_fail": true
+      "score_at_generation": 0.947
     },
     {
       "a": "Mohammed",

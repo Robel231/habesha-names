@@ -165,6 +165,59 @@ def test_fidel_spaced_compound_joins() -> None:
     assert 0.0 < parsed.compound_confidence < 1.0
 
 
+# --- Task 15: phonetic-key compound fallback ---------------------------------
+# "Gebrie" / "Hailie" are the rewritten element spellings named by the v0.2
+# plan (Gebrie corpus-attested per the mining report); "Hailu" is the plan's
+# morphological-sibling trap case. No new names invented here.
+
+
+def test_rewritten_spaced_compound_joins_input_preserving() -> None:
+    parsed = parse("Gebrie Medhin")
+    assert parsed.given == "Gebriemedhin"  # input spelling, not canonical
+    assert parsed.patronym is None
+    assert parsed.given_is_compound is True
+    # key-level evidence sits below the exact spaced-join confidence
+    assert 0.0 < parsed.compound_confidence < parse("Haile Mariam").compound_confidence
+    note = parsed.notes[0]
+    assert "phonetic-key" in note
+    assert "Gebre" in note and "Medhin" in note  # matched elements auditable
+
+
+def test_rewritten_spaced_compound_confidence_rises_on_overflow() -> None:
+    ambiguous = parse("Hailie Mariam Desalegn")
+    overflow = parse("Hailie Mariam Tesfaye Abebe")
+    assert ambiguous.given == "Hailiemariam"
+    assert overflow.given == "Hailiemariam"
+    assert overflow.compound_confidence > ambiguous.compound_confidence
+    # ... and each fuzzy constant sits below its exact counterpart.
+    assert overflow.compound_confidence < parse("Haile Mariam Tesfaye Abebe").compound_confidence
+    assert ambiguous.compound_confidence < parse("Haile Mariam Desalegn").compound_confidence
+
+
+def test_sibling_element_does_not_fuzzy_join() -> None:
+    # Hailu keys HL:ao, Haile keys HL:ae -- the v2 final-vowel slot is what
+    # makes the fallback safe against distinct related names.
+    parsed = parse("Hailu Mariam")
+    assert parsed.given == "Hailu"
+    assert parsed.patronym == "Mariam"
+    assert parsed.given_is_compound is False
+    assert parsed.compound_confidence == 1.0
+
+
+def test_fuzzy_join_structural_roles_reparse_stable() -> None:
+    # The full _SAMPLES stability property includes given_is_compound, which
+    # an input-preserving fuzzy join deliberately does not survive (the
+    # rewritten joined spelling is not in the lexicon -- documented in
+    # parse.parser); the structural roles must still be stable.
+    parsed = parse("Gebrie Medhin Desalegn")
+    again = parse(str(parsed))
+    assert (again.given, again.patronym, again.avonym) == (
+        parsed.given,
+        parsed.patronym,
+        parsed.avonym,
+    )
+
+
 def test_mixed_script_detected() -> None:
     assert parse("Abebe ጸሐይ").script == "mixed"
 

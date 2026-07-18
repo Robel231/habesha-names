@@ -23,12 +23,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Variant engine: rewrites that change the final stem vowel (e.g.
   Gebre → Gebra) are now classified key-breaking and no longer combine
   with other rewrites.
+- Parser: a spaced compound whose element is a **rewritten spelling**
+  ("Gebrie Medhin", "Hailie Mariam") now joins via a phonetic-key
+  fallback on the prefix/second-element indexes. The joined token keeps
+  the input spelling ("Gebriemedhin" — the key evidences structure, not
+  the canonical spelling), the parse note names the matched elements,
+  and such joins carry new, lower `compound_confidence` values
+  (0.75 overflow / 0.5 ambiguous, vs 0.9 / 0.65 for exact-spelling
+  joins). Distinct sibling names (Hailu vs Haile-) do not join — the
+  HabeshaKey v2 final-vowel slot keys them apart. `variants()` output is
+  unchanged (the variant engine uses exact element matches only).
 
 ### Fixed
 
 - **Bekele ↔ Bikila no longer collide** (0.90 → 0.40): the 0.1.0
   known-limitation false match is retired; the pair is now a pinned
   different-person record in the golden corpus.
+- **Spaced-compound spelling rewrites no longer misalign**: the last two
+  0.1.0 known-limitation records — Gebremedhin ↔ "Gebrie Medhin"
+  (0.42 → 0.93) and Hailemariam ↔ "Hailie Mariam" (0.43 → 0.95) — are
+  retired; the golden corpus now has **zero `known_fail` records**.
 
 ## [0.1.0] - 2026-07-14
 

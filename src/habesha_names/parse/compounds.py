@@ -17,6 +17,21 @@ Latin forms are matched case-insensitively; fidel forms are compared after
 :func:`~habesha_names.fidel.normalize.normalize`, so homophone spellings
 behave identically. Indexes are built lazily from the lexicon on first use;
 this module holds no other state.
+
+Task 15 (spaced-compound alignment): :func:`match_pair` additionally falls
+back to HabeshaKey lookup when a token is not a recognized spelling of any
+prefix / second element, so rewritten spellings of compound elements still
+join ("Gebrie Medhin" -- Gebrie is corpus-attested for Gebre). The v2 key's
+final-vowel slot is what makes this safe: morphological siblings (Hailu vs
+Haile) key apart and never false-join. A fallback match is reported with
+``CompoundMatch.exact = False`` and its ``joined`` form preserves the INPUT
+spelling ("Gebriemedhin") -- the key only evidences that the elements sound
+alike, not that the canonical spelling is right, and the phonetic term in
+``match.token.sim`` then scores the join exactly as it would score the same
+spellings compared as single tokens. The fallback is deliberately absent
+from :func:`split_joined` and :func:`expand_abbreviation` (an unsplit
+joined token already matches via its whole-token key; abbreviation
+remainders stay exact) -- see the PROGRESS.md review queue.
 """
 
 from __future__ import annotations
@@ -28,6 +43,7 @@ from functools import cache
 from habesha_names._data import CompoundPrefix, CompoundSecond, lexicon
 from habesha_names.fidel.normalize import normalize
 from habesha_names.fidel.syllable import is_ethiopic
+from habesha_names.match.phonetic import phonetic_key
 
 #: "G/Medhin" / "G.Medhin": one ASCII letter, a slash or period, a remainder.
 _ABBREVIATION_RE = re.compile(r"^([A-Za-z])[/.](.+)$")
@@ -35,11 +51,20 @@ _ABBREVIATION_RE = re.compile(r"^([A-Za-z])[/.](.+)$")
 
 @dataclass(frozen=True)
 class CompoundMatch:
-    """A detected prefix + second-element compound."""
+    """A detected prefix + second-element compound.
+
+    ``exact`` is True when every element matched a lexicon spelling
+    (canonical, recognized variant, or fidel form) exactly; False when the
+    Task 15 phonetic-key fallback matched a rewritten element. ``joined``
+    is the canonical joined form for exact matches, but preserves the input
+    spelling for fallback matches (the key does not evidence the canonical
+    spelling). Either way it is in the script of the matched input.
+    """
 
     prefix: CompoundPrefix
     second: CompoundSecond
-    joined: str  #: canonical joined form, in the script of the matched input
+    joined: str
+    exact: bool = True
 
 
 @dataclass(frozen=True)
@@ -89,11 +114,42 @@ def _abbreviation_index() -> dict[str, tuple[tuple[str, float], ...]]:
     return {entry.abbrev.lower(): entry.candidates for entry in lexicon().abbreviations}
 
 
+@cache
+def _prefix_key_index() -> dict[str, CompoundPrefix]:
+    """HabeshaKey -> prefix, over every recognized spelling (first wins)."""
+    index: dict[str, CompoundPrefix] = {}
+    for spelling, prefix in _prefix_keys():
+        key = phonetic_key(spelling)
+        if key:
+            index.setdefault(key, prefix)
+    return index
+
+
+@cache
+def _second_key_index() -> dict[str, CompoundSecond]:
+    """HabeshaKey -> second element, over every recognized spelling."""
+    index: dict[str, CompoundSecond] = {}
+    for second in lexicon().compound_seconds:
+        for spelling in (second.latin, *second.variants, second.fidel):
+            key = phonetic_key(spelling)
+            if key:
+                index.setdefault(key, second)
+    return index
+
+
 def _joined_form(prefix: CompoundPrefix, second: CompoundSecond, sample: str) -> str:
     """Canonical joined form, in the script of ``sample`` (a matched input token)."""
     if is_ethiopic(sample):
         return normalize(prefix.fidel) + normalize(second.fidel)
     return prefix.latin + second.latin.lower()
+
+
+def _input_joined(first: str, second: str) -> str:
+    """Join the input tokens themselves (fallback matches must not claim the
+    canonical spelling -- the key only says the elements sound alike)."""
+    if is_ethiopic(first):
+        return normalize(first) + normalize(second)
+    return first + second.lower()
 
 
 def split_joined(token: str) -> CompoundMatch | None:
@@ -117,16 +173,35 @@ def split_joined(token: str) -> CompoundMatch | None:
 def match_pair(first: str, second: str) -> CompoundMatch | None:
     """Detect a spaced compound written as two adjacent tokens.
 
+    A token that is no recognized spelling of any element falls back to
+    HabeshaKey lookup (Task 15), so rewritten element spellings still join;
+    such a match has ``exact=False`` and an input-preserving ``joined``.
+
     >>> match_pair("Haile", "Mariam").joined
     'Hailemariam'
     >>> match_pair("Abebe", "Bikila") is None
     True
+    >>> match_pair("Gebrie", "Medhin").joined  # phonetic-key fallback
+    'Gebriemedhin'
+    >>> match_pair("Gebrie", "Medhin").exact
+    False
+    >>> match_pair("Hailu", "Mariam") is None  # Hailu is a distinct name
+    True
     """
     prefix = _prefix_index().get(normalize(first).lower())
     element = _second_index().get(normalize(second).lower())
+    exact = prefix is not None and element is not None
+    if prefix is None:
+        # phonetic_key("") is "" and empty keys are never indexed, so a
+        # letterless token simply misses here.
+        prefix = _prefix_key_index().get(phonetic_key(first))
+    if element is None:
+        element = _second_key_index().get(phonetic_key(second))
     if prefix is None or element is None:
         return None
-    return CompoundMatch(prefix, element, _joined_form(prefix, element, first))
+    if exact:
+        return CompoundMatch(prefix, element, _joined_form(prefix, element, first))
+    return CompoundMatch(prefix, element, _input_joined(first, second), exact=False)
 
 
 def expand_abbreviation(token: str) -> Expansion | None:

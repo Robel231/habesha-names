@@ -210,7 +210,11 @@ def _structural_dims(tokens: tuple[str, ...]) -> list[_TokenDim]:
         if claimed[i] or claimed[i + 1]:
             continue
         pair = match_pair(tokens[i], tokens[i + 1])
-        if pair is not None:
+        # Exact matches only: the Task 15 phonetic-key fallback evidences
+        # structure, not spelling, and the alternatives below are built from
+        # the CANONICAL element spellings -- emitting those for a fuzzy hit
+        # would smuggle an unweighted spelling rewrite into the ranking.
+        if pair is not None and pair.exact:
             claimed[i] = claimed[i + 1] = True
             alternatives = _compound_alternatives(
                 pair.prefix.latin, pair.second.latin, joined_input=False

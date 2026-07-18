@@ -29,9 +29,16 @@ anywhere in the parse (minimum, if several): 1.0 when unambiguous (already
 joined in the input, or no compound involved), 0.9 when a spaced pair was
 joined and NOT joining would overflow the three roles, 0.65 when both
 readings fit ("Haile Mariam Desalegn"), and the chosen candidate's lexicon
-weight for a slash abbreviation. ``given_is_compound`` refers to the given
-name only. The constants are agent-chosen heuristics, not measured priors
-(PROGRESS.md review queue).
+weight for a slash abbreviation. A spaced pair joined through the Task 15
+phonetic-key fallback (a rewritten element spelling, e.g. "Gebrie Medhin")
+uses the lower 0.75 / 0.5 constants and keeps the input spelling in the
+joined token; the note names the phonetic-key evidence.
+``given_is_compound`` refers to the given name only. The constants are
+agent-chosen heuristics, not measured priors (PROGRESS.md review queue).
+Note one asymmetry of input-preserving fallback joins: re-parsing the
+joined output token ("Gebriemedhin") keeps the structural roles stable but
+cannot re-detect the compound (the rewritten spelling is not in the
+lexicon), so ``given_is_compound`` reads False on such a round-trip.
 """
 
 from __future__ import annotations
@@ -49,10 +56,15 @@ Script = Literal["ethiopic", "latin", "mixed"]
 
 _MAX_ROLES = 3
 #: Compound-decision confidence defaults -- agent-chosen heuristics
-#: (verified: false; PROGRESS.md review queue).
+#: (verified: false; PROGRESS.md review queue). The FUZZY constants apply
+#: when a spaced pair joins through the phonetic-key fallback (Task 15):
+#: key-level evidence is weaker than a recognized spelling, so each sits
+#: below its exact counterpart while keeping overflow > ambiguous.
 _CONFIDENCE_UNAMBIGUOUS = 1.0
 _CONFIDENCE_SPACED_OVERFLOW = 0.9
 _CONFIDENCE_SPACED_AMBIGUOUS = 0.65
+_CONFIDENCE_FUZZY_OVERFLOW = 0.75
+_CONFIDENCE_FUZZY_AMBIGUOUS = 0.5
 
 _INITIAL_RE = re.compile(r"^[A-Za-z]\.?$")
 
@@ -156,14 +168,20 @@ def _resolve_compounds(tokens: list[str], notes: list[str]) -> tuple[list[str], 
             pair = match_pair(token, tokens[i + 1])
             if pair is not None:
                 unjoined_total = len(resolved) + len(tokens) - i
-                spaced = (
-                    _CONFIDENCE_SPACED_OVERFLOW
-                    if unjoined_total > _MAX_ROLES
-                    else _CONFIDENCE_SPACED_AMBIGUOUS
-                )
+                overflow = unjoined_total > _MAX_ROLES
+                if pair.exact:
+                    spaced = (
+                        _CONFIDENCE_SPACED_OVERFLOW if overflow else _CONFIDENCE_SPACED_AMBIGUOUS
+                    )
+                    evidence = ""
+                else:
+                    spaced = _CONFIDENCE_FUZZY_OVERFLOW if overflow else _CONFIDENCE_FUZZY_AMBIGUOUS
+                    evidence = (
+                        f"phonetic-key element match, {pair.prefix.latin} + {pair.second.latin}; "
+                    )
                 notes.append(
                     f"{_role_name(len(resolved))} '{token} {tokens[i + 1]}' read as compound"
-                    f" {pair.joined!r} (confidence {spaced:g};"
+                    f" {pair.joined!r} ({evidence}confidence {spaced:g};"
                     " the two-token reading is also possible)"
                 )
                 confidence = min(confidence, spaced)
