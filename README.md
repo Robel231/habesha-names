@@ -209,11 +209,12 @@ series; everything else is internal. Transliteration outputs are part of
 the contract: changing any transliteration table cell changes outputs and
 therefore bumps the minor version, never a patch release.
 
-Known limitations (both recorded as `known_fail` entries in the golden test
-corpus): Bekele ↔ Bikila score 0.90 because the phonetic key holds a single
-first-vowel class slot, and spelling rewrites inside *spaced* compound
-forms can misalign against the joined form ("Gebrie Medhin" vs
-"Gebremedhin"). A richer vowel representation is planned for v0.2.
+Known limitation (recorded as `known_fail` entries in the golden test
+corpus): spelling rewrites inside *spaced* compound forms can misalign
+against the joined form ("Gebrie Medhin" vs "Gebremedhin"); a
+variant-aware compound fix is planned for v0.2. The 0.1.0 Bekele ↔ Bikila
+0.90 collision is fixed in the v0.2 development line — the phonetic key
+now tracks first and last stem-vowel classes, so the pair scores 0.40.
 
 ## Contributing
 

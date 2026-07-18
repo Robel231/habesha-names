@@ -15,19 +15,24 @@ import pytest
 
 from habesha_names.match.phonetic import phonetic_key
 
-# IMPLEMENTATION_PLAN Task 6: keys within a group MUST be equal.
+# IMPLEMENTATION_PLAN Task 6 + IMPLEMENTATION_PLAN_V02 Task 14: keys within
+# a group MUST be equal (the Task 14 v2 vowel slots must not split them).
 EQUAL_GROUPS = [
     ("Tsehay", "Sehay", "Tsehai"),
     ("Tesfaye", "Tesfay", "Tesfai"),
     ("Mohammed", "Mohamed", "Muhammed"),
     ("Kebede", "Kebbede"),
+    ("Haymanot", "Haimanot"),
+    ("Maryam", "Mariam", "Mariyam"),
 ]
 
-# IMPLEMENTATION_PLAN Task 6: keys MUST differ (similar but different names).
+# IMPLEMENTATION_PLAN Task 6 + Task 14: keys MUST differ (similar but
+# different names; Bekele/Bikila is the v2 first+last-vowel-slot fix).
 UNEQUAL_PAIRS = [
     ("Alemu", "Almaz"),
     ("Tesfaye", "Tesfahun"),
     ("Abebe", "Abebech"),
+    ("Bekele", "Bikila"),
 ]
 
 ALL_PIN_NAMES = sorted({name for group in EQUAL_GROUPS for name in group}
@@ -90,8 +95,9 @@ def test_letterless_input_yields_empty_key() -> None:
 
 
 def test_key_format_is_stable_ascii() -> None:
-    # Skeleton (may include the terminal "A" marker), colon, optional vowel class.
-    pattern = re.compile(r"^[A-Z]*:[aeo]?$")
+    # Skeleton (may include the terminal "A" marker), colon, then the
+    # first+last stem-vowel classes (both empty for a vowelless stem).
+    pattern = re.compile(r"^[A-Z]*:(?:[aeo]{2})?$")
     for name in ALL_PIN_NAMES:
         assert pattern.fullmatch(phonetic_key(name)), phonetic_key(name)
 

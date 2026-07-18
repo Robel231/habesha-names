@@ -81,7 +81,7 @@ _GLIDE_ALTS: tuple[tuple[str, tuple[_Alt, ...]], ...] = (
 #: Two-letter sequences and their alternates (left-to-right greedy scan).
 #: Most fold to the same HabeshaKey symbol; the ones flagged key-breaking
 #: change the consonant skeleton (ou->w, wa<->ua, gn<->ny) or may change
-#: the first-vowel class (we<->wo), so they only ever apply alone.
+#: a stem-vowel class slot (we<->wo), so they only ever apply alone.
 _DIGRAPH_ALTS: dict[str, tuple[_Alt, ...]] = {
     "ts": (("s", 0.6, False), ("tz", 0.4, False)),
     "tz": (("ts", 0.7, False), ("s", 0.5, False)),
@@ -250,6 +250,9 @@ _Site = tuple[int, int, tuple[_Alt, ...]]
 def _token_sites(token: str) -> list[_Site]:
     """Character-level choice points for one lowercase alphabetic token."""
     first_vowel = next((i for i, ch in enumerate(token) if ch in _VOWELS), -1)
+    last_vowel = next(
+        (i for i in range(len(token) - 1, -1, -1) if token[i] in _VOWELS), -1
+    )
     claimed = [False] * len(token)
     sites: list[_Site] = []
 
@@ -293,15 +296,21 @@ def _token_sites(token: str) -> list[_Site]:
         elif ch == "e" and i > 0:
             if final:
                 alts.append(("ie", _W_E_TO_IE, False))
-            if i != first_vowel:
-                alts.append(("a", _W_E_TO_A, False))
-            elif token.count("e") <= 2:
-                # Changing the FIRST vowel changes the HabeshaKey vowel
-                # class (key-breaking). Gated to tokens with at most two
-                # e's: on e-heavier names the greedy Jaro-Winkler matching
-                # scrambles and the variant drifts below 0.8 similarity
-                # (Bekele -> Bakele scores 0.78).
+            if i == first_vowel:
+                if token.count("e") <= 2:
+                    # Changing the FIRST vowel changes a HabeshaKey vowel
+                    # slot (key-breaking). Gated to tokens with at most two
+                    # e's: on e-heavier names the greedy Jaro-Winkler
+                    # matching scrambles and the variant drifts below 0.8
+                    # similarity (Bekele -> Bakele scores 0.78).
+                    alts.append(("a", _W_E_TO_A, True))
+            elif i == last_vowel:
+                # Task 14 (HabeshaKey v2): the key now holds a final-vowel
+                # slot, so changing the last vowel breaks the key too
+                # (Gebre -> Gebra still emitted, but alone).
                 alts.append(("a", _W_E_TO_A, True))
+            else:
+                alts.append(("a", _W_E_TO_A, False))
         if (
             ch not in _VOWELS
             and 0 < i < len(token) - 1

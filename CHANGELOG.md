@@ -7,7 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_(nothing yet)_
+### Changed
+
+- **HabeshaKey v2** (phonetic key): the key now records the stem's first
+  AND last vowel classes instead of a single first-vowel slot
+  (`Tsehay` → `SHA:ee`, previously `SHA:e`). Interior vowels still carry
+  no signal (Fatuma = Fatima, Tewodros = Tewdros), but final-vowel
+  distinctions — morphologically salient in Habesha names
+  (Haile/Hailu, Berhane/Berhanu) — now separate keys. Key strings are
+  not a stable API surface, but match scores shift where keys split:
+  same-name spellings differing in final-vowel class (Ahmed/Ahmad,
+  Mohammed/Mohammad, Hiwot/Hiiwet) now score 0.85 via the lexicon
+  variant term instead of 0.90 via the phonetic term. Per the project's
+  versioning policy, output-changing tuning lands in a minor release.
+- Variant engine: rewrites that change the final stem vowel (e.g.
+  Gebre → Gebra) are now classified key-breaking and no longer combine
+  with other rewrites.
+
+### Fixed
+
+- **Bekele ↔ Bikila no longer collide** (0.90 → 0.40): the 0.1.0
+  known-limitation false match is retired; the pair is now a pinned
+  different-person record in the golden corpus.
 
 ## [0.1.0] - 2026-07-14
 

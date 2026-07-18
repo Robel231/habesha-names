@@ -136,7 +136,15 @@ def test_parse_notes_carried_with_side_prefix() -> None:
 
 @pytest.mark.parametrize(
     ("a", "b"),
-    [("Alemu", "Almaz"), ("Tesfaye", "Tesfahun"), ("Tesfaye", "Tesfa"), ("Abebe", "Abebech")],
+    [
+        ("Alemu", "Almaz"),
+        ("Tesfaye", "Tesfahun"),
+        ("Tesfaye", "Tesfa"),
+        ("Abebe", "Abebech"),
+        # Task 14 (HabeshaKey v2): first+last vowel slots separate the
+        # full-skeleton collision that scored 0.90 in 0.1.0.
+        ("Bekele", "Bikila"),
+    ],
 )
 def test_plan_confusables_stay_below_different_threshold(a: str, b: str) -> None:
     # ARCHITECTURE §6: different people with similar names -> <= 0.6.

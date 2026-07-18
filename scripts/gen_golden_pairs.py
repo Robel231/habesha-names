@@ -74,12 +74,15 @@ FULL_NAME_SAME = (
     ("ኃይለ ሥላሴ", "Haile Selassie", "phonetic key bridges the Task 3 Selassie xfail"),
 )
 
-#: Single-token different-person confusables pinned by the plan (§6, Task 6).
+#: Single-token different-person confusables pinned by the plan (§6, Task 6;
+#: Bekele/Bikila added by Task 14 -- the HabeshaKey v2 first+last vowel slots
+#: separate them, retiring the 0.1.0 known_fail, and this pin keeps it so).
 CONFUSABLE_DIFFERENT = (
     ("Alemu", "Almaz"),
     ("Tesfaye", "Tesfahun"),
     ("Tesfaye", "Tesfa"),
     ("Abebe", "Abebech"),
+    ("Bekele", "Bikila"),
 )
 
 #: Full-name different-person pairs (distinct lexicon names).

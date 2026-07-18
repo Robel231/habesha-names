@@ -16,6 +16,7 @@ dist/
 # Internal working docs (local only, not published)
 PROGRESS.md
 IMPLEMENTATION_PLAN.md
+IMPLEMENTATION_PLAN_V02.md
 AGENT_KICKOFF.md
 
 # Third-party evaluation corpora and mining output (local only, never
