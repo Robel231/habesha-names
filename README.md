@@ -147,6 +147,26 @@ than a guess from spelling shape:
 
 ```
 
+### To fidel (reverse transliteration)
+
+Latin spellings back to Ethiopic script. Lexicon-first: a recognized
+spelling returns the entry's stored conventional fidel — including the
+homophone letters (ፀ, ሐ …) that rules alone could never pick, because the
+practical romanization is lossy. Unrecognized spellings are inverted by
+rule onto post-collapse fidel: a phonetic spelling that transliterates
+back consistently, not necessarily the conventional orthography.
+
+```python
+>>> from habesha_names import to_fidel
+>>> to_fidel("Tsehay")                       # recognized: conventional fidel
+'ፀሐይ'
+>>> to_fidel("Tsehai") == to_fidel("Tsehay")  # recorded variants too
+True
+>>> transliterate(to_fidel("Fikir"))          # rule path renders back
+'Fikir'
+
+```
+
 ### Normalize and script detection
 
 ```python
@@ -224,8 +244,8 @@ status are documented in [DATA_PROVENANCE.md](DATA_PROVENANCE.md).
 
 The public API — `parse`, `match`, `variants`, `transliterate`,
 `normalize`, `phonetic_key`, `is_ethiopic`, and (new in the 0.2 line)
-`guess_gender` — is stable within a minor series; everything else is
-internal. Transliteration outputs are part of
+`guess_gender` and `to_fidel` — is stable within a minor series;
+everything else is internal. Transliteration outputs are part of
 the contract: changing any transliteration table cell changes outputs and
 therefore bumps the minor version, never a patch release.
 

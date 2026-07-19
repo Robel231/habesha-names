@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`to_fidel(latin, scheme="practical") -> str`** (planned ARCHITECTURE
+  §5 API, completing the public surface): reverse transliteration to
+  Ethiopic script. Lexicon-first — a recognized canonical/variant
+  spelling (given names, compound prefixes/second elements) returns the
+  entry's stored conventional fidel verbatim, homophone series included;
+  anything else is inverted by rule onto canonical post-collapse fidel
+  (the practical scheme is lossy, so the rules never guess a collapsed
+  homophone series — mirroring how `transliterate` normalizes first).
+  Rule-path output is `normalize`-stable and keeps the input's phonetic
+  key; it is a phonetic spelling, not necessarily the conventional
+  orthography (ፊኪር for "Fikir" — convention writes ፍቅር, which only a
+  lexicon entry can assert). Every output syllable is composed from the
+  generated Unicode tables; the disambiguation preferences are flagged
+  heuristics pending native-speaker review.
 - **`guess_gender(name) -> GenderGuess`** (planned ARCHITECTURE §5 API):
   lexicon-backed gender inference from the **given** token only —
   patronym and avonym tokens are the father's and grandfather's given

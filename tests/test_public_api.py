@@ -7,7 +7,7 @@ from pathlib import Path
 
 import habesha_names
 
-# ARCHITECTURE §5 minus the v0.2 name still to come (to_fidel, Task 21).
+# The full ARCHITECTURE §5 surface (completed by to_fidel, Task 21).
 PUBLIC_CALLABLES = [
     "guess_gender",
     "is_ethiopic",
@@ -15,6 +15,7 @@ PUBLIC_CALLABLES = [
     "normalize",
     "parse",
     "phonetic_key",
+    "to_fidel",
     "transliterate",
     "variants",
 ]
@@ -29,11 +30,6 @@ def test_every_public_callable_has_a_doctested_docstring() -> None:
         obj = getattr(habesha_names, name)
         assert callable(obj), name
         assert obj.__doc__ is not None and ">>>" in obj.__doc__, name
-
-
-def test_v02_names_are_not_exported_yet() -> None:
-    # guess_gender landed in Task 20; to_fidel remains a Task 21 name.
-    assert not hasattr(habesha_names, "to_fidel")
 
 
 def test_version() -> None:

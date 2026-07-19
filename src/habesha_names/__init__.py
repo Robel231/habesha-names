@@ -24,6 +24,7 @@ from habesha_names.gender import guess_gender
 from habesha_names.match.full import match
 from habesha_names.match.phonetic import phonetic_key
 from habesha_names.parse.parser import parse
+from habesha_names.translit.to_fidel import to_fidel
 from habesha_names.translit.to_latin import transliterate
 from habesha_names.translit.variants import variants
 
@@ -37,6 +38,7 @@ __all__ = [
     "normalize",
     "parse",
     "phonetic_key",
+    "to_fidel",
     "transliterate",
     "variants",
 ]
