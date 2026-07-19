@@ -33,6 +33,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   joins). Distinct sibling names (Hailu vs Haile-) do not join — the
   HabeshaKey v2 final-vowel slot keys them apart. `variants()` output is
   unchanged (the variant engine uses exact element matches only).
+- Variant engine: five corpus-evidenced rewrite rules added (all weights
+  flagged for native-speaker review): **epenthetic i/e insertion** in
+  consonant clusters (Ahmed → Ahimed, Mekdes → Mekides/Mekedes,
+  Gebremedhin → Gebremedihin, Almaz → Alimaz), **guarded interior-vowel
+  deletion** (Tewodros → Tewdros, Mulugeta → Mulgeta), **e↔i wobble**
+  between consonants (Yohannes → Yohannis), **ei↔ie transposition**
+  (Hussein → Hussien), and a key-breaking **first-vowel o→e wobble**
+  (Mohammed → Mehammed). The variant-emission likelihood floor dropped
+  0.02 → 0.01 to admit attested two-rewrite chains (Berhanu → Birehanu).
+  No rule touches a word-final vowel: final `-u/-e/-ie/-a` endings mark
+  morphologically related but distinct names (Haile/Hailu,
+  Berhane/Berhanu/Birhan) and are deliberately not bridged.
 
 ### Fixed
 

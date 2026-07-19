@@ -20,7 +20,22 @@ has two layers:
   the input itself.
 - **Character-level rewrites** within each token: ts<->tz<->s, q<->k,
   h<->kh, th->t, ie<->e, terminal -ay/-ai/-aye, gemination
-  doubling/collapse, e->a (sixth-order vowel ambiguity), final w<->ou.
+  doubling/collapse, e->a (sixth-order vowel ambiguity), final w<->ou,
+  and the task-16 corpus-evidence rules: epenthetic vowel insertion in
+  consonant clusters (Mekdes -> Mekides/Mekedes, Ahmed -> Ahimed),
+  guarded interior-vowel deletion (Tewodros -> Tewdros), e<->i wobble
+  between consonants (Yohannes -> Yohannis), ei<->ie transposition
+  (Hussein -> Hussien), and a first-vowel o->e wobble
+  (Mohammed -> Mehammed, 1st-vs-4th-order fidel vowel confusion).
+
+**Ending-pair constraint (task-16, binding until Robel rules)**: final
+-u/-e/-ie/-a endings mark morphologically related but DISTINCT names
+(Haile/Hailu, Berhane/Berhanu/Birhan, Kassa/Kassie/Kassu), so no rule
+here rewrites a word-final vowel: insertion and deletion only ever act
+between two consonants, the e<->i wobble requires a following consonant,
+and the ei<->ie transposition is suppressed at word-final position. The
+pre-existing final e<->ie pair (task-7, reviewed for 0.1.0) is the one
+deliberate exception, kept pending the same ruling.
 
 Rewrites are classified by whether they preserve the HabeshaKey
 (``match.phonetic``) of the base spelling. Key-preserving rewrites may
@@ -54,7 +69,10 @@ from habesha_names.translit.to_latin import transliterate
 DEFAULT_N = 25
 
 # Engine constraints -- agent-chosen, review-queued (see module docstring).
-_MIN_WEIGHT = 0.02  #: cumulative-likelihood floor for emitted variants
+# _MIN_WEIGHT lowered 0.02 -> 0.01 in task-16: corpus-attested spellings
+# combine two mid-weight rewrites (e.g. Berhanu -> Birehanu = e->i wobble
+# x epenthetic e, 0.15 x 0.12 = 0.018) and the old floor discarded them.
+_MIN_WEIGHT = 0.01  #: cumulative-likelihood floor for emitted variants
 _MAX_REWRITES = 3  #: max simultaneous rewrites when all preserve the key
 _EXPLORE_LIMIT = 64  #: combinations explored per enumeration stage
 _MAX_POPS = 4096  #: hard safety cap on best-first heap pops
@@ -87,7 +105,12 @@ _DIGRAPH_ALTS: dict[str, tuple[_Alt, ...]] = {
     "tz": (("ts", 0.7, False), ("s", 0.5, False)),
     "kh": (("h", 0.7, False),),
     "th": (("t", 0.6, False),),
-    "ie": (("e", 0.6, False),),
+    # task-16: ei<->ie transposition (Hussein <-> Hussien). Both orders keep
+    # the same stem-vowel classes, so the swap is key-preserving; the
+    # word-final occurrence is suppressed in _token_sites (ending-pair
+    # constraint -- see module docstring).
+    "ie": (("e", 0.6, False), ("ei", 0.2, False)),
+    "ei": (("ie", 0.3, False),),
     "ou": (("w", 0.3, True),),
     # task-3b (Robel): both spellings occur in the wild for each pair.
     "we": (("wo", 0.6, True),),  # Welde <-> Wolde, Weizero <-> Woizero
@@ -107,7 +130,32 @@ _W_W_TO_OU = 0.3  #: word-final w only (Getachew -> Getachou)
 _W_E_TO_IE = 0.2  #: word-final e only
 _W_E_TO_A = 0.15  #: sixth-order vowel ambiguity (Gebre -> Gabre/Gebra)
 
+# task-16 rules -- weights are invented magnitudes shaped by corpus gap
+# frequencies (review-queued): i-epenthesis is the dominant attested form
+# (Ahimed 655 vs Ahemed 130 for Ahmed), deletion and the wobbles are rarer.
+_W_EPENTHETIC_I = 0.3  #: insert epenthetic i into a consonant cluster
+_W_EPENTHETIC_E = 0.12  #: insert epenthetic e into a consonant cluster
+_W_VOWEL_DELETE = 0.1  #: drop a guarded interior vowel (Tewodros -> Tewdros)
+_W_E_I_WOBBLE = 0.15  #: e<->i between consonants (Yohannes -> Yohannis)
+_W_O_TO_E_FIRST = 0.2  #: first-vowel o->e (Mohammed -> Mehammed); key-breaking
+
 _VOWELS = frozenset("aeiou")
+
+#: One-sound consonant digraphs: epenthesis never splits them and a vowel
+#: deletion never fuses one (ts/sh/ch/... fold to a single HabeshaKey
+#: symbol, so creating or destroying one would change the skeleton; gn/ny
+#: do not fold in the key but are kept here as single sounds per task-3b).
+_ONE_SOUND_PAIRS = frozenset({"ts", "tz", "sh", "ch", "kh", "gh", "ph", "th", "gn", "ny"})
+
+#: Stem-vowel classes as the HabeshaKey buckets them (match.phonetic).
+#: y is included because the key folds non-initial y to i, making it an
+#: e-class stem vowel for guard purposes.
+_VOWEL_CLASSES = {"a": "a", "e": "e", "i": "e", "o": "o", "u": "o", "y": "e"}
+
+
+def _is_consonant(ch: str) -> bool:
+    """Consonant for the task-16 cluster rules; y is excluded (glide)."""
+    return ch not in _VOWELS and ch != "y"
 
 #: "G/Medhin" / "G.Medhin": one letter, a slash or period, a remainder.
 _ABBREVIATION_RE = re.compile(r"^([a-z])[/.](.+)$")
@@ -257,13 +305,45 @@ def _token_sites(token: str) -> list[_Site]:
     last_vowel = next(
         (i for i in range(len(token) - 1, -1, -1) if token[i] in _VOWELS), -1
     )
+    # Stem-vowel positions as the HabeshaKey sees them (non-initial y acts
+    # as an i-class vowel); the task-16 guards prove a rewrite cannot move
+    # a first/last stem-vowel-class slot of the key.
+    stems = [i for i, ch in enumerate(token) if ch in _VOWELS or (i > 0 and ch == "y")]
     claimed = [False] * len(token)
+    ranges: list[tuple[int, int]] = []
     sites: list[_Site] = []
 
     def claim(start: int, end: int, alts: tuple[_Alt, ...]) -> None:
         for k in range(start, end):
             claimed[k] = True
+        ranges.append((start, end))
         sites.append((start, end, alts))
+
+    def deletion_ok(k: int) -> bool:
+        """True when dropping the vowel at k provably preserves the key.
+
+        task-16 guards: the vowel sits between two distinct consonants
+        that do not fuse into a one-sound digraph; it is never the first
+        stem vowel, and it is the last stem vowel only when a same-class
+        vowel precedes it AND a coda cluster follows (Tigist -> Tigst).
+        A word-final vowel is untouchable by construction (ending-pair
+        constraint, module docstring).
+        """
+        if not (0 < k < len(token) - 1) or len(stems) < 2:
+            return False
+        prev_ch, next_ch = token[k - 1], token[k + 1]
+        if not (_is_consonant(prev_ch) and _is_consonant(next_ch)):
+            return False
+        if prev_ch == next_ch or prev_ch + next_ch in _ONE_SOUND_PAIRS:
+            return False
+        if k == stems[0]:
+            return False
+        if k == stems[-1] and (
+            _VOWEL_CLASSES[token[stems[-2]]] != _VOWEL_CLASSES[token[k]]
+            or len(token) - 1 - k < 2
+        ):
+            return False
+        return True
 
     for suffix, glide_alts in _GLIDE_ALTS:
         if token.endswith(suffix) and len(token) > len(suffix):
@@ -271,12 +351,24 @@ def _token_sites(token: str) -> list[_Site]:
             break
     i = 0
     while i < len(token) - 1:
-        digraph_alts = _DIGRAPH_ALTS.get(token[i : i + 2])
+        pair = token[i : i + 2]
+        digraph_alts = _DIGRAPH_ALTS.get(pair)
         if digraph_alts is not None and not claimed[i] and not claimed[i + 1]:
-            claim(i, i + 2, digraph_alts)
-            i += 2
-        else:
-            i += 1
+            if pair in ("ie", "ei") and i + 2 == len(token):
+                # Ending-pair constraint (task-16): never transpose a
+                # word-final ie/ei -- final -ie belongs to the -u/-e/-ie/-a
+                # morphological endings reserved for Robel's ruling.
+                digraph_alts = tuple(a for a in digraph_alts if a[0] not in ("ie", "ei"))
+            if pair in ("we", "wo") and deletion_ok(i + 1):
+                # The vowel of we/wo is claimed with the digraph, yet its
+                # attested drop (Tewodros -> Tewdros) must stay reachable:
+                # expressed as an extra alternative of this same site.
+                digraph_alts = (*digraph_alts, ("w", _W_VOWEL_DELETE, False))
+            if digraph_alts:
+                claim(i, i + 2, digraph_alts)
+                i += 2
+                continue
+        i += 1
     i = 0
     while i < len(token) - 1:
         if token[i] == token[i + 1] and not claimed[i] and not claimed[i + 1]:
@@ -284,6 +376,29 @@ def _token_sites(token: str) -> list[_Site]:
             i += 2
         else:
             i += 1
+    # task-16: epenthetic-vowel insertion points inside consonant clusters
+    # (Mekdes -> Mekides/Mekedes). Zero-width sites: _apply_chars inserts
+    # the vowel before position j; they claim no characters, so cluster
+    # consonants keep their own rewrite sites. Guards: never split a
+    # one-sound unit (digraph/double), and the inserted e-class vowel must
+    # not become a first/last stem-vowel-class slot of a different class.
+    for j in range(1, len(token)):
+        c1, c2 = token[j - 1], token[j]
+        if not (_is_consonant(c1) and _is_consonant(c2)) or c1 == c2:
+            continue
+        if c1 + c2 in _ONE_SOUND_PAIRS or any(s < j < e for s, e in ranges):
+            continue
+        before = [p for p in stems if p < j]
+        after = [p for p in stems if p >= j]
+        if not (before or after):
+            continue  # vowelless token: an inserted vowel would rewrite the key
+        if not before and _VOWEL_CLASSES[token[after[0]]] != "e":
+            continue
+        if not after and _VOWEL_CLASSES[token[before[-1]]] != "e":
+            continue
+        sites.append(
+            (j, j, (("i", _W_EPENTHETIC_I, False), ("e", _W_EPENTHETIC_E, False)))
+        )
     for i, ch in enumerate(token):
         if claimed[i]:
             continue
@@ -315,6 +430,23 @@ def _token_sites(token: str) -> list[_Site]:
                 alts.append(("a", _W_E_TO_A, True))
             else:
                 alts.append(("a", _W_E_TO_A, False))
+        # task-16 vowel rules; each is provably key-preserving via the
+        # guards except first-vowel o->e, which moves a class slot
+        # (o -> e class) and is therefore key-breaking (applies alone).
+        if (
+            ch in "ei"
+            and 0 < i < len(token) - 1
+            and _is_consonant(token[i - 1])
+            and _is_consonant(token[i + 1])
+        ):
+            # e<->i wobble between consonants (Yohannes -> Yohannis); the
+            # following-consonant requirement keeps word-final vowels out.
+            alts.append(("i" if ch == "e" else "e", _W_E_I_WOBBLE, False))
+        if ch == "o" and i == first_vowel:
+            # 1st-vs-4th-order fidel vowel confusion (Mohammed -> Mehammed).
+            alts.append(("e", _W_O_TO_E_FIRST, True))
+        if ch in _VOWELS and deletion_ok(i):
+            alts.append(("", _W_VOWEL_DELETE, False))
         if (
             ch not in _VOWELS
             and 0 < i < len(token) - 1
@@ -324,7 +456,7 @@ def _token_sites(token: str) -> list[_Site]:
             alts.append((ch + ch, _W_DOUBLE, False))
         if alts:
             claim(i, i + 1, tuple(sorted(alts, key=lambda alt: (-alt[1], alt[0]))))
-    sites.sort(key=lambda site: site[0])
+    sites.sort(key=lambda site: (site[0], site[1]))
     return sites
 
 
@@ -393,8 +525,11 @@ def _apply_chars(
     tokens: tuple[str, ...], dims: Sequence[_CharDim], state: tuple[int, ...]
 ) -> tuple[str, ...]:
     result = list(tokens)
+    # Right-to-left per token; at an equal start the wider site applies
+    # first so a zero-width insertion at the same position lands BEFORE
+    # the rewritten span (task-16 epenthesis sites).
     for (t_index, start, end, alts), index in sorted(
-        zip(dims, state), key=lambda pair: (pair[0][0], -pair[0][1])
+        zip(dims, state), key=lambda pair: (pair[0][0], -pair[0][1], -pair[0][2])
     ):
         if index:
             token = result[t_index]

@@ -128,6 +128,99 @@ def test_bethlehem_pair() -> None:
     assert {"Betelhem", "Betlehem"} <= set(variants("Bethlehem"))
 
 
+def test_epenthetic_vowel_insertion() -> None:
+    # task-16 (plan Task 16 rule candidates): epenthetic i/e insertion in
+    # consonant clusters -- the Latin-side mirror of 6th-order epenthesis.
+    assert "Ahimed" in variants("Ahmed")
+    assert {"Mekides", "Mekedes"} <= set(variants("Mekdes"))
+    assert "Alimaz" in variants("Almaz")
+    assert "Gebremedihin" in variants("Gebremedhin")
+    assert "Tewoderos" in variants("Tewodros")
+
+
+def test_epenthesis_never_splits_one_sound_digraphs() -> None:
+    # gn is one sound (task-3b gn<->ny rule); ts likewise -- epenthesis
+    # must not insert a vowel inside them.
+    produced = set(variants("Agegnehu"))
+    assert "Ageginehu" not in produced
+    assert "Agegenehu" not in produced
+    produced = set(variants("Tsehay"))
+    assert "Tisehay" not in produced
+    assert "Tesehay" not in produced
+
+
+def test_interior_vowel_deletion() -> None:
+    # task-16: guarded interior-vowel deletion (plan: Tewodros <-> Tewdros).
+    assert "Tewdros" in variants("Tewodros")
+    # A word-final vowel is never deleted (ending-pair constraint).
+    assert "Kebed" not in variants("Kebede")
+    assert "Hail" not in variants("Haile")
+
+
+def test_e_i_wobble() -> None:
+    # task-16: e<->i between consonants (plan: Yohannes <-> Yohannis).
+    assert "Yohannis" in variants("Yohannes")
+    assert "Yohannes" in variants("Yohannis")
+    # Word-final vowels are out of scope (ending-pair constraint).
+    assert "Abebi" not in variants("Abebe")
+
+
+def test_ei_ie_transposition() -> None:
+    # task-16: ei<->ie transposition (plan: Hussein <-> Hussien), both
+    # directions; composes with undoubling (mechanics: Husien).
+    assert {"Hussien", "Husien"} <= set(variants("Hussein"))
+    assert "Hussein" in variants("Hussien")
+    # Never at word-final position: final -ie is an ending-pair form.
+    assert "Kassei" not in variants("Kassie")
+
+
+def test_first_vowel_o_e_wobble() -> None:
+    # task-16: 1st-vs-4th-order fidel vowel confusion on the first vowel
+    # (plan: Mohammed <-> Mehammed). Key-breaking: applies alone and only
+    # to the first vowel.
+    assert "Mehammed" in variants("Mohammed")
+    assert "Tewodres" not in variants("Tewodros")
+
+
+def test_min_weight_floor_admits_attested_chains() -> None:
+    # task-16: _MIN_WEIGHT 0.02 -> 0.01 so a wobble x epenthesis chain
+    # (0.15 x 0.12 = 0.018) survives -- engine mechanics on a lexicon name.
+    assert "Birehanu" in variants("Berhanu")
+
+
+def test_bethlehem_family_rule_treatment() -> None:
+    # plan Task 16 Bethlehem-family decision: RULE treatment -- th->t
+    # composed with epenthetic e reaches the highest-frequency attested
+    # form. The deeper family members (Betelihem, Bethelhem) need
+    # three-rewrite chains that rank outside the top-25 window; they are
+    # review-queued as lexicon-variant candidates for Robel (PROGRESS.md).
+    assert "Betelehem" in variants("Bethlehem")
+
+
+def test_no_ending_pair_rules() -> None:
+    # task-16 HARD CONSTRAINT (plan trap list): final -u/-e/-ie/-a endings
+    # mark morphologically related but DISTINCT names; whether any pair is
+    # same-name/sibling/distinct is Robel's open ruling, so no rule may
+    # bridge them. (The pre-existing final e<->ie and last-vowel e->a
+    # rewrites from 0.1.0 are the documented exceptions pending the same
+    # ruling -- review queue.)
+    sibling_pairs = [
+        ("Haile", "Hailu"),
+        ("Berhanu", "Berihun"),
+        ("Berhanu", "Berhane"),
+        ("Berhanu", "Birhan"),
+        ("Alemu", "Alem"),
+        ("Zewde", "Zewdu"),
+        ("Kassa", "Kassu"),
+        ("Kassa", "Kassie"),
+        ("Worku", "Workie"),
+        ("Girma", "Girmay"),
+    ]
+    for base, sibling in sibling_pairs:
+        assert sibling not in variants(base), f"{sibling} generated from {base}"
+        assert base not in variants(sibling), f"{base} generated from {sibling}"
+
+
 def test_compound_splits_joins_abbreviations() -> None:
     # ARCHITECTURE 4.2: Gebremedhin <-> Gebre Medhin <-> Gebre-Medhin
     # <-> G/Medhin <-> G.Medhin.

@@ -944,6 +944,30 @@
     },
     {
       "a": "Tesfaye",
+      "b": "Tesifaye",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Tesfaye",
+      "b": "Tesifay",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Tesfaye",
+      "b": "Tesifai",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Tesfaye",
       "b": "Tasfaye",
       "expected": "same",
       "source": "rule engine: top variants() output",
@@ -984,15 +1008,23 @@
     },
     {
       "a": "Kebede",
-      "b": "Kebedde",
+      "b": "Kebide",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.9714
+      "score_at_generation": 0.9
     },
     {
       "a": "Alemu",
       "b": "Alamu",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Alemu",
+      "b": "Alimu",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
@@ -1005,6 +1037,22 @@
       "source": "rule engine: top variants() output",
       "needs_human": true,
       "score_at_generation": 0.9667
+    },
+    {
+      "a": "Alemu",
+      "b": "Almu",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9467
+    },
+    {
+      "a": "Alemu",
+      "b": "Alammu",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9
     },
     {
       "a": "Bekele",
@@ -1032,11 +1080,11 @@
     },
     {
       "a": "Bekele",
-      "b": "Bekkele",
+      "b": "Bekile",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.9667
+      "score_at_generation": 0.9
     },
     {
       "a": "Getachew",
@@ -1064,6 +1112,14 @@
     },
     {
       "a": "Getachew",
+      "b": "Getachiw",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.95
+    },
+    {
+      "a": "Getachew",
       "b": "Getackhew",
       "expected": "same",
       "source": "rule engine: top variants() output",
@@ -1072,11 +1128,19 @@
     },
     {
       "a": "Getachew",
-      "b": "Gettachew",
+      "b": "Gitachew",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.9741
+      "score_at_generation": 0.925
+    },
+    {
+      "a": "Gebre",
+      "b": "Gebire",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9611
     },
     {
       "a": "Gebre",
@@ -1101,6 +1165,22 @@
       "source": "rule engine: top variants() output",
       "needs_human": true,
       "score_at_generation": 0.85
+    },
+    {
+      "a": "Gebre",
+      "b": "Gibre",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Gebre",
+      "b": "Gebere",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9144
     },
     {
       "a": "Gebremedhin",
@@ -1136,19 +1216,19 @@
     },
     {
       "a": "Gebremedhin",
-      "b": "Gebrie Medhin",
+      "b": "Gebiremedhin",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.9288
+      "score_at_generation": 0.9806
     },
     {
       "a": "Gebremedhin",
-      "b": "Gebramedhin",
+      "b": "Gebremedihin",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.9436
+      "score_at_generation": 0.9652
     },
     {
       "a": "Hailemariam",
@@ -1192,11 +1272,27 @@
     },
     {
       "a": "Mohammed",
-      "b": "Mokhammed",
+      "b": "Mehammed",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.9704
+      "score_at_generation": 0.85
+    },
+    {
+      "a": "Bethlehem",
+      "b": "Bethilehem",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.98
+    },
+    {
+      "a": "Bethlehem",
+      "b": "Betilehem",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.919
     },
     {
       "a": "Bethlehem",
@@ -1213,22 +1309,6 @@
       "source": "rule engine: top variants() output",
       "needs_human": true,
       "score_at_generation": 0.85
-    },
-    {
-      "a": "Bethlehem",
-      "b": "Bethlekhem",
-      "expected": "same",
-      "source": "rule engine: top variants() output",
-      "needs_human": true,
-      "score_at_generation": 0.98
-    },
-    {
-      "a": "Bethlehem",
-      "b": "Bethlehhem",
-      "expected": "same",
-      "source": "rule engine: top variants() output",
-      "needs_human": true,
-      "score_at_generation": 0.98
     },
     {
       "a": "Desalegn",
@@ -1256,11 +1336,11 @@
     },
     {
       "a": "Desalegn",
-      "b": "Desallegn",
+      "b": "Desalign",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.9778
+      "score_at_generation": 0.95
     },
     {
       "a": "Abebe Bikila Wolde",
