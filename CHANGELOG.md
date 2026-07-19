@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`guess_gender(name) -> GenderGuess`** (planned ARCHITECTURE §5 API):
+  lexicon-backed gender inference from the **given** token only —
+  patronym and avonym tokens are the father's and grandfather's given
+  names, so they are never used as evidence about the bearer. Lookup runs
+  in three tiers of descending confidence (exact spelling 0.9, recorded
+  variant 0.8, phonetic key 0.6 — flagged heuristics pending
+  native-speaker review), each scaled by the matched entry's gender
+  distribution; a name without a lexicon hit returns `('unknown', 0.0)`
+  honestly, never a guess from spelling shape. Every decision (ignored
+  tokens, matched entries, distributions, misses) is recorded in
+  `GenderGuess.notes`.
+
 ### Changed
 
 - **HabeshaKey v2** (phonetic key): the key now records the stem's first

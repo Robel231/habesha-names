@@ -20,6 +20,7 @@ everything else, including the submodules, is internal and may change.
 
 from habesha_names.fidel.normalize import normalize
 from habesha_names.fidel.syllable import is_ethiopic
+from habesha_names.gender import guess_gender
 from habesha_names.match.full import match
 from habesha_names.match.phonetic import phonetic_key
 from habesha_names.parse.parser import parse
@@ -30,6 +31,7 @@ __version__ = "0.2.0.dev0"
 
 __all__ = [
     "__version__",
+    "guess_gender",
     "is_ethiopic",
     "match",
     "normalize",

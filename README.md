@@ -128,6 +128,25 @@ True
 
 ```
 
+### Guess gender
+
+Lexicon-backed and honest about its limits: only the given name is used
+(the patronym is the *father's* given name — it says nothing about the
+bearer), and a name the lexicon does not know returns `'unknown'` rather
+than a guess from spelling shape:
+
+```python
+>>> from habesha_names import guess_gender
+>>> guess = guess_gender("Ato Abebe Bikila")
+>>> (guess.gender, guess.confidence)
+('m', 0.9)
+>>> guess_gender("ፀሐይ ገብረመድህን").gender
+'f'
+>>> guess_gender("Maram").gender
+'unknown'
+
+```
+
 ### Normalize and script detection
 
 ```python
@@ -204,8 +223,9 @@ status are documented in [DATA_PROVENANCE.md](DATA_PROVENANCE.md).
 ## Versioning and stability
 
 The public API — `parse`, `match`, `variants`, `transliterate`,
-`normalize`, `phonetic_key`, `is_ethiopic` — is stable within the 0.1.x
-series; everything else is internal. Transliteration outputs are part of
+`normalize`, `phonetic_key`, `is_ethiopic`, and (new in the 0.2 line)
+`guess_gender` — is stable within a minor series; everything else is
+internal. Transliteration outputs are part of
 the contract: changing any transliteration table cell changes outputs and
 therefore bumps the minor version, never a patch release.
 
