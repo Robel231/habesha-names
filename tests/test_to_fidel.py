@@ -82,8 +82,12 @@ def test_multi_token_input_converts_per_token() -> None:
 
 
 def test_non_letter_characters_pass_through() -> None:
+    # Task 18 (wave 1): "Gebre" is now also a given-name entry, and given
+    # names win a spelling before prefixes (documented precedence, asserted
+    # in test_compound_element_spellings_return_stored_fidel above) — so the
+    # hyphen-joined tokens resolve to the given-name fidel, not the prefix's.
     lex = lexicon()
-    gebre = next(p for p in lex.compound_prefixes if p.latin == "Gebre")
+    gebre = next(e for e in lex.given_names if e.canonical == "Gebre")
     medhin = next(s for s in lex.compound_seconds if s.latin == "Medhin")
     assert to_fidel("Gebre-Medhin") == f"{gebre.fidel}-{medhin.fidel}"
 
@@ -96,29 +100,50 @@ def test_ethiopic_input_passes_through_verbatim() -> None:
 # --- rule path: mandated properties ----------------------------------------
 
 
+#: Canonicals whose OWN key the rule path cannot reproduce, pinned exactly
+#: (Task 18 wave 1 introduced the first one). "yoseph": the phonetic key
+#: folds the "ph" digraph to F, but "ph" is not among the practical inverse
+#: table's input folds (tz/th/kh/gh), so the rule path reads p + h as two
+#: consonants and the recomposed key keeps them split (YSPH vs YSF). Same
+#: digraph-fusing root cause as the ckh/skh exception classes below;
+#: review-queued in PROGRESS.md (a ph fold is an engine change, Robel's call).
+CANONICAL_KEY_EXCEPTIONS = frozenset({"yoseph"})
+
+
 def test_rule_path_canonicals_keep_key_and_are_normalize_stable() -> None:
     # phonetic_key(transliterate(to_fidel(x))) == phonetic_key(x) over the
     # lexicon canonicals, via the rule path directly (the public function
-    # would serve these from the lexicon).
+    # would serve these from the lexicon). Key failures must equal the
+    # pinned exception set; normalize-stability has no exceptions.
+    key_failures: set[str] = set()
     for entry in lexicon().given_names:
         for run in _letter_runs(entry.canonical):
             out = _invert_run(run, "practical")
-            assert phonetic_key(transliterate(out)) == phonetic_key(run), run
+            if phonetic_key(transliterate(out)) != phonetic_key(run):
+                key_failures.add(run)
             assert normalize(out) == out, run
             assert is_ethiopic(out), run
+    assert key_failures == CANONICAL_KEY_EXCEPTIONS
 
 
 #: Engine-generated spellings whose OWN HabeshaKey the rule path provably
 #: cannot reproduce, pinned exactly (same discipline as the golden corpus's
 #: known_fail markers: retiring one requires consciously editing this set).
-#: Two classes, both review-queued in PROGRESS.md:
-#: - the variant engine's h->kh rewrite landing right after "c" (Abebech ->
-#:   Abebeckh): the key reads c + kh as two consonants, but every possible
-#:   letter reading of the folded string fuses "ch" into one; and
+#: Regenerated from this test's own output at Task 18 (wave 1): the 150 new
+#: entries grew the swept variant population, 13 -> 60 (all 13 stayed, 47
+#: joined, none left). Three classes, all review-queued in PROGRESS.md:
+#: - the variant engine's h->kh rewrite landing right after "c", "s", or
+#:   "p" (Abebech -> Abebeckh, Eshetu -> Eskhetu, Ephrem -> Epkherem, plus
+#:   wave-1 Belachew/Getachew/Michael/Mengesha/Negash/Shiferaw/Teshome
+#:   families): the key reads c/s/p + kh as two consonants, but every
+#:   possible letter reading of the folded string fuses ch/sh/ph into one;
 #: - a deletion variant ending in a non-permissible consonant cluster
 #:   (Abebech -> Ababch): forward epenthesis re-inserts "i" before the
 #:   final consonant, which becomes a new last stem vowel of a different
-#:   class than the input's.
+#:   class than the input's; and
+#: - plain "ph" in wave-1 Yoseph's vowel-wobble variants (yeseph/yosiph/
+#:   yossiph): the key folds ph -> F but "ph" is not an inverse-table input
+#:   fold, so the rule path keeps p + h split (see CANONICAL_KEY_EXCEPTIONS).
 KNOWN_KEY_EXCEPTIONS = frozenset(
     {
         "ababch",
@@ -129,11 +154,58 @@ KNOWN_KEY_EXCEPTIONS = frozenset(
         "abebeckh",
         "abebickh",
         "abibeckh",
+        "askhanafi",
+        "askhenaffi",
+        "askhenafi",
+        "askhenfi",
+        "askhennafi",
+        "askhinafi",
+        "askhnafi",
+        "belackhew",
+        "belackhiw",
+        "belckhew",
+        "bellackhew",
+        "bilackhew",
+        "epkherem",
+        "epkhirem",
+        "epkhrem",
+        "epkhrim",
+        "eskhatu",
+        "eskhettu",
+        "eskhetu",
+        "eskhitu",
+        "eskhtu",
         "getackhew",
         "getackhiw",
         "getckhew",
         "gettackhew",
         "gitackhew",
+        "meckhael",
+        "menegeskha",
+        "mengaskha",
+        "mengeskha",
+        "mengiskha",
+        "mengskha",
+        "menigeskha",
+        "mickhael",
+        "mingeskha",
+        "negaskh",
+        "neggaskh",
+        "nigaskh",
+        "skheferaw",
+        "skhifaraw",
+        "skhiferaw",
+        "skhiferraw",
+        "skhifferaw",
+        "skhifiraw",
+        "teskhme",
+        "teskhome",
+        "teskhomie",
+        "teskhomme",
+        "tiskhome",
+        "yeseph",
+        "yosiph",
+        "yossiph",
     }
 )
 
@@ -164,10 +236,14 @@ def test_rule_path_generated_variants_keep_key_and_are_normalize_stable() -> Non
 
 
 def test_rule_path_round_trips_task3b_epenthesis_seeds() -> None:
-    # Plan/decisions-log spellings whose fidel is not in the lexicon: the
-    # composed output must render back to the exact input spelling.
+    # Plan/decisions-log spellings: the composed output must render back to
+    # the exact input spelling. Task 18 (wave 1): all four are now lexicon-
+    # recognized (Tigist and Kidist as canonicals, Fikir on Fikre, Yohanis
+    # on Yohannes), so the public function serves stored fidel — the rule
+    # path is exercised directly, same as the Kebede/tzehay tests below.
     for spelling in ("Fikir", "Tigist", "Kidist", "Yohanis"):
-        assert transliterate(to_fidel(spelling)) == spelling, spelling
+        out = _invert_run(spelling.lower(), "practical")
+        assert transliterate(out) == spelling, spelling
 
 
 def test_rule_path_epenthesis_gap_falls_back_to_key_equality() -> None:
@@ -223,6 +299,16 @@ def test_deterministic() -> None:
     assert to_fidel("Tsehay Gebremedhin") == to_fidel("Tsehay Gebremedhin")
 
 
+#: Runs where the fold alone changes the key but the FULL invert round-trip
+#: still preserves it, so they cannot live in KNOWN_KEY_EXCEPTIONS (the sweep
+#: above asserts exact equality and these pass it). Task 18 wave 1, all three
+#: from Yoseph: the h->kh rewrite lands after "p" (yoseph -> yosepkh); the
+#: kh->h fold recovers "yoseph", whose "ph" fuses to F in the key, while the
+#: raw run keys p + kh split (YSPH) -- key-changing fold, but composing with
+#: the inverse table (which keeps p + h split too) cancels the difference.
+FOLD_ONLY_KEY_EXCEPTIONS = frozenset({"yosepkh", "yosipkh", "yossepkh"})
+
+
 def test_fold_run_is_key_neutral_for_the_swept_domain() -> None:
     # The input folds (tz/th/kh/gh) mirror the phonetic key's own digraph
     # folds; outside the pinned exceptions the fold never changes the key.
@@ -231,7 +317,7 @@ def test_fold_run_is_key_neutral_for_the_swept_domain() -> None:
             if "/" in variant or "." in variant:
                 continue
             for run in _letter_runs(variant):
-                if run in KNOWN_KEY_EXCEPTIONS:
+                if run in KNOWN_KEY_EXCEPTIONS or run in FOLD_ONLY_KEY_EXCEPTIONS:
                     continue
                 assert phonetic_key(_fold_run(run)) == phonetic_key(run), run
 

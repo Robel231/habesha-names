@@ -39,16 +39,23 @@ def test_lexicon_is_a_lazy_cached_singleton() -> None:
 
 
 def test_given_names_seed_size() -> None:
-    # Task 4: ~50 highest-frequency names.
-    assert len(lexicon().given_names) >= 50
+    # Task 4 seeded ~50; Task 18 (wave 1) integrated Robel's 150 authored
+    # entries: 56 + 150 = 206.
+    assert len(lexicon().given_names) == 206
 
 
 def test_every_entry_is_verified() -> None:
     # Native-speaker review completed (task-3b, 2026-07-14): Robel reviewed
     # and flipped every current entry. New entries must start false again,
     # so this pin makes an unreviewed addition a conscious test change.
+    # Task 18 (wave 1, 2026-07-20): 150 authored entries integrated with
+    # verified=false pending Robel's in-repo flip — the given-name pin is
+    # the exact 56/150 split until then. Restore the all-verified assert
+    # when he flips.
     lex = lexicon()
-    assert all(name.verified is True for name in lex.given_names)
+    verified = sum(1 for name in lex.given_names if name.verified)
+    assert verified == 56
+    assert sum(1 for name in lex.given_names if not name.verified) == 150
     assert all(title.verified is True for title in lex.titles)
     assert all(prefix.verified is True for prefix in lex.compound_prefixes)
     assert all(second.verified is True for second in lex.compound_seconds)

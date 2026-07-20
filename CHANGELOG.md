@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Lexicon wave 1**: 150 given-name entries authored by the repo owner
+  (native speaker) from the tier-1 corpus mining queue, integrated exactly
+  as authored with `verified: false` pending his in-repo review flip
+  (DATA_PROVENANCE rules: no corpus counts or corpus-derived content ship).
+  The given-name lexicon grows 56 → 206 entries; corpus coverage
+  (occurrences sharing a key with a lexicon entry) rises 18.2% → 49.9%.
+  Everything lexicon-first widens accordingly: `to_fidel` serves many more
+  conventional spellings (e.g. "Gebre-Medhin" now resolves through the new
+  Gebre given-name entry to ገብሬ-መድህን — given names win a spelling before
+  compound prefixes; "Fikir" returns ፍቅሬ via its recording on the Fikre
+  entry instead of a rule-path phonetic spelling), `guess_gender` covers
+  far more names, and `match` gains recorded-variant evidence. The golden
+  corpus regenerates 214 → 1039 pairs, including 3 `known_fail` records of
+  current engine limits (the practical inverse table has no "ph" fold —
+  Yoseph-family spellings key differently through the rule path — and the
+  deliberately-accepted distinct entries Ali/Ayele share a phonetic key).
+
 - **`to_fidel(latin, scheme="practical") -> str`** (planned ARCHITECTURE
   §5 API, completing the public surface): reverse transliteration to
   Ethiopic script. Lexicon-first — a recognized canonical/variant

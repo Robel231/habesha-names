@@ -162,8 +162,8 @@ back consistently, not necessarily the conventional orthography.
 'ፀሐይ'
 >>> to_fidel("Tsehai") == to_fidel("Tsehay")  # recorded variants too
 True
->>> transliterate(to_fidel("Fikir"))          # rule path renders back
-'Fikir'
+>>> transliterate(to_fidel("Yohannis"))       # unrecognized: rule path
+'Yohanis'
 
 ```
 

@@ -271,8 +271,8 @@ def to_fidel(latin: str, scheme: str = "practical") -> str:
     is exactly what rules cannot recover. Anything else is inverted by
     rule onto canonical post-collapse fidel: the result is
     ``normalize``-stable and keeps the input's phonetic key, but it is a
-    phonetic spelling, not necessarily the conventional one (ፊኪር for
-    "Fikir", where convention writes ፍቅር).
+    phonetic spelling, not necessarily the conventional one (ዮሃኒስ for
+    "Yohannis", where convention writes ዮሐንስ).
 
     Whitespace-separated tokens are converted independently; characters
     outside A-Z (hyphens, digits, fidel) pass through unchanged. Raises
@@ -283,10 +283,10 @@ def to_fidel(latin: str, scheme: str = "practical") -> str:
     'ፀሐይ'
     >>> to_fidel("Tsehay") == to_fidel("tsehai")  # recognized variant
     True
-    >>> to_fidel("Gebre-Medhin")
-    'ገብረ-መድህን'
-    >>> transliterate(to_fidel("Fikir"))  # rule path renders back exactly
-    'Fikir'
+    >>> to_fidel("Gebre-Medhin")  # given-name entry wins the spelling
+    'ገብሬ-መድህን'
+    >>> transliterate(to_fidel("Yohannis"))  # rule path keeps the sound
+    'Yohanis'
     """
     if scheme not in SCHEMES:
         known = ", ".join(sorted(SCHEMES))

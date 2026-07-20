@@ -205,11 +205,22 @@ def test_bethlehem_family_rule_treatment() -> None:
 
 def test_no_ending_pair_rules() -> None:
     # task-16 HARD CONSTRAINT (plan trap list): final -u/-e/-ie/-a endings
-    # mark morphologically related but DISTINCT names; no rule may bridge
+    # mark morphologically related but DISTINCT names; no RULE may bridge
     # them. RULED by Robel 2026-07-20: the final e<->ie rewrite is
     # CONFIRMED (key-preserving, cannot cross the -u/-e/-a splits) and the
-    # last-stem-vowel e->a rewrite is RETIRED (task-16b) -- no exceptions
-    # remain.
+    # last-stem-vowel e->a rewrite is RETIRED (task-16b) -- no rule
+    # exceptions remain. Task 18 (wave 1): Robel's authored Kassa entry
+    # RECORDS Kassu and Kassie as variants (ending-pair ruling 3, 2026-07-20:
+    # Kassa ships as-is) -- recorded lexicon data is his call and may bridge;
+    # the constraint here is on generated output, so a sibling recorded on
+    # the base's own entry is carved out per direction rather than asserted
+    # absent. Every other pair must stay unbridged in both directions.
+    from habesha_names._data import lexicon
+
+    recorded = {
+        entry.canonical: {v.lower() for v in entry.variants}
+        for entry in lexicon().given_names
+    }
     sibling_pairs = [
         ("Haile", "Hailu"),
         ("Berhanu", "Berihun"),
@@ -222,9 +233,16 @@ def test_no_ending_pair_rules() -> None:
         ("Worku", "Workie"),
         ("Girma", "Girmay"),
     ]
+    bridged_by_robels_data = []
     for base, sibling in sibling_pairs:
+        if sibling.lower() in recorded.get(base, set()):
+            bridged_by_robels_data.append((base, sibling))
+            continue
         assert sibling not in variants(base), f"{sibling} generated from {base}"
-        assert base not in variants(sibling), f"{base} generated from {sibling}"
+        if base.lower() not in recorded.get(sibling, set()):
+            assert base not in variants(sibling), f"{base} generated from {sibling}"
+    # the carve-out is exactly the two ruling-3 recordings, nothing more
+    assert bridged_by_robels_data == [("Kassa", "Kassu"), ("Kassa", "Kassie")]
 
 
 def test_compound_splits_joins_abbreviations() -> None:
