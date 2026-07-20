@@ -113,7 +113,7 @@ The Latin spellings of a name your database is likely to contain:
 ```python
 >>> from habesha_names import variants
 >>> variants("Haile", n=5)
-['Haile', 'Hayle', 'Hailie', 'Haila', 'Khaile']
+['Haile', 'Hayle', 'Hailie', 'Khaile', 'Haille']
 
 ```
 

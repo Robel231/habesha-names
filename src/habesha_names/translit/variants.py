@@ -28,14 +28,18 @@ has two layers:
   (Hussein -> Hussien), and a first-vowel o->e wobble
   (Mohammed -> Mehammed, 1st-vs-4th-order fidel vowel confusion).
 
-**Ending-pair constraint (task-16, binding until Robel rules)**: final
+**Ending-pair constraint (task-16; RULED by Robel 2026-07-20)**: final
 -u/-e/-ie/-a endings mark morphologically related but DISTINCT names
 (Haile/Hailu, Berhane/Berhanu/Birhan, Kassa/Kassie/Kassu), so no rule
 here rewrites a word-final vowel: insertion and deletion only ever act
 between two consonants, the e<->i wobble requires a following consonant,
 and the ei<->ie transposition is suppressed at word-final position. The
-pre-existing final e<->ie pair (task-7, reviewed for 0.1.0) is the one
-deliberate exception, kept pending the same ruling.
+ruling confirmed the final e<->ie pair (key-preserving -- it bridges
+renderings within one final-vowel class, never across the -u/-e/-a
+splits) and RETIRED the last-stem-vowel e->a application (task-16b):
+Berhane -> Berhana crosses exactly the final-vowel-class boundary the
+ruling treats as name-distinguishing. e->a now applies to first and
+interior stem vowels only.
 
 Rewrites are classified by whether they preserve the HabeshaKey
 (``match.phonetic``) of the base spelling. Key-preserving rewrites may
@@ -128,7 +132,9 @@ _W_K_TO_Q = 0.3
 _W_H_TO_KH = 0.15
 _W_W_TO_OU = 0.3  #: word-final w only (Getachew -> Getachou)
 _W_E_TO_IE = 0.2  #: word-final e only
-_W_E_TO_A = 0.15  #: sixth-order vowel ambiguity (Gebre -> Gabre/Gebra)
+_W_E_TO_A = 0.15  #: sixth-order vowel ambiguity (Gebre -> Gabre); first and
+#: interior vowels only -- the last-stem-vowel application was retired by
+#: the task-16 ending-pair ruling (2026-07-20).
 
 # task-16 rules -- weights are invented magnitudes shaped by corpus gap
 # frequencies (review-queued): i-epenthesis is the dominant attested form
@@ -423,12 +429,13 @@ def _token_sites(token: str) -> list[_Site]:
                     # matching scrambles and the variant drifts below 0.8
                     # similarity (Bekele -> Bakele scores 0.78).
                     alts.append(("a", _W_E_TO_A, True))
-            elif i == last_vowel:
-                # Task 14 (HabeshaKey v2): the key now holds a final-vowel
-                # slot, so changing the last vowel breaks the key too
-                # (Gebre -> Gebra still emitted, but alone).
-                alts.append(("a", _W_E_TO_A, True))
-            else:
+            elif i != last_vowel:
+                # Interior vowels only. The LAST stem vowel is excluded:
+                # the last-stem-vowel e->a application (Gebre -> Gebra,
+                # Berhane -> Berhana) was RETIRED by the task-16 ending-pair
+                # ruling (Robel, 2026-07-20) -- it bridged exactly the
+                # final-vowel-class boundary that marks morphologically
+                # distinct names (Berhane/Berhana-style possessive endings).
                 alts.append(("a", _W_E_TO_A, False))
         # task-16 vowel rules; each is provably key-preserving via the
         # guards except first-vowel o->e, which moves a class slot

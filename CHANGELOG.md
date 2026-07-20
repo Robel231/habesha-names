@@ -48,9 +48,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Mohammed/Mohammad, Hiwot/Hiiwet) now score 0.85 via the lexicon
   variant term instead of 0.90 via the phonetic term. Per the project's
   versioning policy, output-changing tuning lands in a minor release.
-- Variant engine: rewrites that change the final stem vowel (e.g.
-  Gebre → Gebra) are now classified key-breaking and no longer combine
-  with other rewrites.
 - Parser: a spaced compound whose element is a **rewritten spelling**
   ("Gebrie Medhin", "Hailie Mariam") now joins via a phonetic-key
   fallback on the prefix/second-element indexes. The joined token keeps
@@ -73,6 +70,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   No rule touches a word-final vowel: final `-u/-e/-ie/-a` endings mark
   morphologically related but distinct names (Haile/Hailu,
   Berhane/Berhanu/Birhan) and are deliberately not bridged.
+
+### Removed
+
+- **Last-stem-vowel e→a rewrite retired** (variant engine), per the
+  native-speaker ending-pair ruling (2026-07-20): the final stem vowel is
+  morphologically load-bearing in Habesha names — Berhane → Berhana
+  crosses the same final-vowel-class boundary as the
+  Berhane/Berhanu/Birhan possessive series ("light" / "his light" /
+  "my light"), so rewriting it manufactures a *different* name, not a
+  spelling variant (likewise Gebre → Gebra, Abebe → Abeba — Abeba being
+  a plausibly distinct female name). e→a still applies to first and
+  interior stem vowels (Gebre → Gabre unchanged). Recorded lexicon
+  variants already cover the reviewed Arabic-style e/a spelling pairs
+  (Ahmed/Ahmad, Mohammed/Mohammad, Solomon/Soloman), so the retirement
+  only narrows variant output for out-of-lexicon names. The confirmed
+  word-final e↔ie rewrite (Zewde → Zewdie) is unaffected — it bridges
+  renderings within one final-vowel class, never across the -u/-e/-a
+  ending splits.
 
 ### Fixed
 

@@ -1000,15 +1000,15 @@
     },
     {
       "a": "Kebede",
-      "b": "Kebeda",
+      "b": "Kebide",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.85
+      "score_at_generation": 0.9
     },
     {
       "a": "Kebede",
-      "b": "Kebide",
+      "b": "Kibede",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
@@ -1072,15 +1072,15 @@
     },
     {
       "a": "Bekele",
-      "b": "Bekela",
+      "b": "Bekile",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.85
+      "score_at_generation": 0.9
     },
     {
       "a": "Bekele",
-      "b": "Bekile",
+      "b": "Bikele",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
@@ -1097,14 +1097,6 @@
     {
       "a": "Getachew",
       "b": "Gatachew",
-      "expected": "same",
-      "source": "rule engine: top variants() output",
-      "needs_human": true,
-      "score_at_generation": 0.85
-    },
-    {
-      "a": "Getachew",
-      "b": "Getachaw",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
@@ -1135,6 +1127,14 @@
       "score_at_generation": 0.925
     },
     {
+      "a": "Getachew",
+      "b": "Gettachew",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
       "a": "Gebre",
       "b": "Gebire",
       "expected": "same",
@@ -1160,14 +1160,6 @@
     },
     {
       "a": "Gebre",
-      "b": "Gebra",
-      "expected": "same",
-      "source": "rule engine: top variants() output",
-      "needs_human": true,
-      "score_at_generation": 0.85
-    },
-    {
-      "a": "Gebre",
       "b": "Gibre",
       "expected": "same",
       "source": "rule engine: top variants() output",
@@ -1181,6 +1173,14 @@
       "source": "rule engine: top variants() output",
       "needs_human": true,
       "score_at_generation": 0.9144
+    },
+    {
+      "a": "Gebre",
+      "b": "Gebirie",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.9333
     },
     {
       "a": "Gebremedhin",
@@ -1304,11 +1304,11 @@
     },
     {
       "a": "Bethlehem",
-      "b": "Bethleham",
+      "b": "Bethlehim",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
-      "score_at_generation": 0.85
+      "score_at_generation": 0.9556
     },
     {
       "a": "Desalegn",
@@ -1328,19 +1328,19 @@
     },
     {
       "a": "Desalegn",
-      "b": "Desalagn",
-      "expected": "same",
-      "source": "rule engine: top variants() output",
-      "needs_human": true,
-      "score_at_generation": 0.85
-    },
-    {
-      "a": "Desalegn",
       "b": "Desalign",
       "expected": "same",
       "source": "rule engine: top variants() output",
       "needs_human": true,
       "score_at_generation": 0.95
+    },
+    {
+      "a": "Desalegn",
+      "b": "Disalegn",
+      "expected": "same",
+      "source": "rule engine: top variants() output",
+      "needs_human": true,
+      "score_at_generation": 0.925
     },
     {
       "a": "Abebe Bikila Wolde",

@@ -76,8 +76,14 @@ def test_gemination_doubling_and_collapse() -> None:
 
 
 def test_sixth_order_vowel_ambiguity() -> None:
-    # ARCHITECTURE 4.2: Gäbrä -> Gebre|Gabre|Gebra.
-    assert {"Gabre", "Gebra"} <= set(variants("Gebre"))
+    # ARCHITECTURE 4.2: Gäbrä -> Gebre|Gabre. Gebra was retired by the
+    # task-16 ending-pair ruling (Robel, 2026-07-20, task-16b): the
+    # last-stem-vowel e->a application bridged the final-vowel-class
+    # boundary that marks morphologically distinct names
+    # (Berhane/Berhana-style endings).
+    produced = set(variants("Gebre"))
+    assert "Gabre" in produced
+    assert "Gebra" not in produced
 
 
 def test_q_k_alternation() -> None:
@@ -199,11 +205,11 @@ def test_bethlehem_family_rule_treatment() -> None:
 
 def test_no_ending_pair_rules() -> None:
     # task-16 HARD CONSTRAINT (plan trap list): final -u/-e/-ie/-a endings
-    # mark morphologically related but DISTINCT names; whether any pair is
-    # same-name/sibling/distinct is Robel's open ruling, so no rule may
-    # bridge them. (The pre-existing final e<->ie and last-vowel e->a
-    # rewrites from 0.1.0 are the documented exceptions pending the same
-    # ruling -- review queue.)
+    # mark morphologically related but DISTINCT names; no rule may bridge
+    # them. RULED by Robel 2026-07-20: the final e<->ie rewrite is
+    # CONFIRMED (key-preserving, cannot cross the -u/-e/-a splits) and the
+    # last-stem-vowel e->a rewrite is RETIRED (task-16b) -- no exceptions
+    # remain.
     sibling_pairs = [
         ("Haile", "Hailu"),
         ("Berhanu", "Berihun"),
