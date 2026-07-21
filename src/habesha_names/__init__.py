@@ -28,7 +28,7 @@ from habesha_names.translit.to_fidel import to_fidel
 from habesha_names.translit.to_latin import transliterate
 from habesha_names.translit.variants import variants
 
-__version__ = "0.2.0"
+__version__ = "0.2.0a1"
 
 __all__ = [
     "__version__",
