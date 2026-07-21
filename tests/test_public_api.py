@@ -33,7 +33,7 @@ def test_every_public_callable_has_a_doctested_docstring() -> None:
 
 
 def test_version() -> None:
-    assert habesha_names.__version__ == "0.2.0.dev0"
+    assert habesha_names.__version__ == "0.2.0"
 
 
 def test_package_docstring_examples() -> None:

@@ -5,31 +5,42 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-07-21
 
-### Changed
-
-- **`VARIANT_WEIGHT` raised 0.85 → 0.90** (`habesha_names.match.token`). A
-  token pair matched through a recorded lexicon variant asserts a
-  ground-truth equivalence, so it now clears the 0.85 same-person gate with
-  margin instead of landing exactly on it: previously **287 golden "same"
-  pairs passed with a margin of precisely 0.0000**, and a multi-token name
-  that took any penalty elsewhere could drop under the gate on arithmetic
-  alone. **This changes published output** — `sim("Bekele", "Beqele")` now
-  returns `0.9` (was `0.85`) — and is a minor-bump output change under the
-  project's versioning policy. `VARIANT_WEIGHT` now ties `PHONETIC_WEIGHT`;
-  the tie resolves to `"phonetic"`, preserving the documented
-  more-explainable-method-wins ordering. No golden-corpus verdict changed:
-  pass/fail counts and every `known_fail` record are identical before and
-  after, and corpus recall/coverage are byte-identical (the eval path never
-  calls `match()`).
-
-- **All 380 given-name entries are now `verified: true`.** The repo owner
-  flipped the 324 entries carried at `verified: false` since waves 1, 2a and
-  2b, locking in the lexicon as reviewed; the loader test's all-verified
-  assertion is restored accordingly.
+Second minor release. Two new public functions (`guess_gender`,
+`to_fidel`), a bundled lexicon nearly seven times the size of 0.1.0's, a
+richer phonetic key, spaced-compound alignment, five new variant rules, and
+the first human-curated golden pairs. **Match scores, variant output, and
+`phonetic_key` strings change** — every such change is listed under Changed
+and is the reason this is a minor bump rather than a patch.
 
 ### Added
+
+- **`guess_gender(name) -> GenderGuess`** (planned ARCHITECTURE §5 API):
+  lexicon-backed gender inference from the **given** token only —
+  patronym and avonym tokens are the father's and grandfather's given
+  names, so they are never used as evidence about the bearer. Lookup runs
+  in three tiers of descending confidence (exact spelling 0.9, recorded
+  variant 0.8, phonetic key 0.6 — flagged heuristics pending
+  native-speaker review), each scaled by the matched entry's gender
+  distribution; a name without a lexicon hit returns `('unknown', 0.0)`
+  honestly, never a guess from spelling shape. Every decision (ignored
+  tokens, matched entries, distributions, misses) is recorded in
+  `GenderGuess.notes`.
+- **`to_fidel(latin, scheme="practical") -> str`** (planned ARCHITECTURE
+  §5 API, completing the public surface): reverse transliteration to
+  Ethiopic script. Lexicon-first — a recognized canonical/variant
+  spelling (given names, compound prefixes/second elements) returns the
+  entry's stored conventional fidel verbatim, homophone series included;
+  anything else is inverted by rule onto canonical post-collapse fidel
+  (the practical scheme is lossy, so the rules never guess a collapsed
+  homophone series — mirroring how `transliterate` normalizes first).
+  Rule-path output is `normalize`-stable and keeps the input's phonetic
+  key; it is a phonetic spelling, not necessarily the conventional
+  orthography (ፊኪር for "Fikir" — convention writes ፍቅር, which only a
+  lexicon entry can assert). Every output syllable is composed from the
+  generated Unicode tables; the disambiguation preferences are flagged
+  heuristics pending native-speaker review.
 
 - **Curated golden pairs — the first human baseline** (`tests/golden/curated.json`):
   ten multi-token pairs authored by the repo owner, covering dropped
@@ -48,92 +59,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   pins**, so no threshold can separate them without contradicting the
   task-3b review-zone decision.
 
-- **Known-fail retirement via recorded variants**: four `known_fail` golden
-  pairs retired by recording the raw transliteration as an attested variant
-  on its entry, where the repo owner judged that form a spelling people
-  actually type — `Fiseha`/Fisha, `Wubshet`/Wibshet, `Wube`/Wibe,
-  `Wondwosen`/Wendiwesen — plus `Werku` recorded on the existing `Worku`
-  entry. `known_fail` drops **7 → 3**. The remaining three are deliberate:
-  `Firehiwot`/Firehyiwet and `Afework`/Afewerik were ruled ENGINE ARTIFACTS
-  rather than real spellings (the practical table renders ሕይወት as "hyiwet"
-  and ርቅ as "rik"; no one writes them that way), so they stay recorded as
-  honest engine limits instead of being papered over with invented
-  variants; `Ali`/`Ayele` remains a shared-phonetic-key pair of
-  deliberately distinct entries.
+### Changed
 
-- **Lexicon wave 2b**: 143 further given-name entries authored by the repo
-  owner, integrated as authored with `verified: false`. The candidate queue
-  was re-mined against the post-wave-2a lexicon first, so the wave rules on
-  current evidence rather than names an earlier wave already absorbed.
-  Seven candidates were rejected: the `Gebre-`/`Welde-` compound family
-  (Gebreyohannes, Gebreyesus, Gebreher, Gebreyes, Weldeyohannes,
-  Weldesenbet), which the compound engine already matches at 0.95+ without
-  lexicon entries, and Werku, a spelling of the existing Worku entry.
-  The given-name lexicon grows 237 → **380** entries and corpus coverage
-  49.9% → **62.2%**, both **meeting the 0.2.0 targets** (≥250 entries,
-  ≥60% coverage) for the first time. Attested-variant recall rises to
-  **97.1%** (strict 95.7%). The golden corpus regenerates 1151 → 1737
-  pairs, and `known_fail` grows 3 → **7**: four new records are all
-  fidel↔canonical pairs whose conventional Latin spelling is far from the
-  raw transliteration (Afework, Wubshet, Wondwosen, Wube), the same class
-  as the existing Fiseha/Firehiwot records. Recording the raw rendering as
-  a variant would likely retire them — a data decision, not an engine one.
-
-- **Lexicon wave 2a**: 31 further given-name entries authored by the repo
-  owner (native speaker) from the remaining tier-1 mining queue, integrated
-  exactly as authored with `verified: false` pending his in-repo review
-  flip. One candidate (Gebreyohannes) was rejected as a `Gebre-` compound
-  already served by compound handling. The given-name lexicon grows
-  206 → 237 entries; corpus coverage rises 49.9% → 53.5%, attested-variant
-  recall 96.5% → 96.7% (strict 94.9% → 95.1%). The golden corpus
-  regenerates 1039 → 1151 pairs with `known_fail` unchanged at 3 — no new
-  engine limit surfaced. The wave adds the deliberately-distinct pairs
-  Berhane/Birhan (per the 2026-07-20 ending-pair ruling) and Abeba/Abebe.
-
-- **Lexicon wave 1**: 150 given-name entries authored by the repo owner
-  (native speaker) from the tier-1 corpus mining queue, integrated exactly
-  as authored with `verified: false` pending his in-repo review flip
-  (DATA_PROVENANCE rules: no corpus counts or corpus-derived content ship).
-  The given-name lexicon grows 56 → 206 entries; corpus coverage
-  (occurrences sharing a key with a lexicon entry) rises 18.2% → 49.9%.
-  Everything lexicon-first widens accordingly: `to_fidel` serves many more
+- **Bundled lexicon: 56 → 380 given-name entries**, authored by the repo
+  owner (native speaker) across three waves from a corpus-mined candidate
+  queue, and **all 380 ship `verified: true`**. Corpus coverage
+  (occurrences sharing a key with a lexicon entry) rises 18.2% → **62.3%**
+  and attested-variant recall to **97.1%** (strict 95.7%). Everything
+  lexicon-first widens accordingly: `to_fidel` serves many more
   conventional spellings (e.g. "Gebre-Medhin" now resolves through the new
   Gebre given-name entry to ገብሬ-መድህን — given names win a spelling before
   compound prefixes; "Fikir" returns ፍቅሬ via its recording on the Fikre
   entry instead of a rule-path phonetic spelling), `guess_gender` covers
   far more names, and `match` gains recorded-variant evidence. The golden
-  corpus regenerates 214 → 1039 pairs, including 3 `known_fail` records of
-  current engine limits (the practical inverse table has no "ph" fold —
-  Yoseph-family spellings key differently through the rule path — and the
-  deliberately-accepted distinct entries Ali/Ayele share a phonetic key).
-
-- **`to_fidel(latin, scheme="practical") -> str`** (planned ARCHITECTURE
-  §5 API, completing the public surface): reverse transliteration to
-  Ethiopic script. Lexicon-first — a recognized canonical/variant
-  spelling (given names, compound prefixes/second elements) returns the
-  entry's stored conventional fidel verbatim, homophone series included;
-  anything else is inverted by rule onto canonical post-collapse fidel
-  (the practical scheme is lossy, so the rules never guess a collapsed
-  homophone series — mirroring how `transliterate` normalizes first).
-  Rule-path output is `normalize`-stable and keeps the input's phonetic
-  key; it is a phonetic spelling, not necessarily the conventional
-  orthography (ፊኪር for "Fikir" — convention writes ፍቅር, which only a
-  lexicon entry can assert). Every output syllable is composed from the
-  generated Unicode tables; the disambiguation preferences are flagged
-  heuristics pending native-speaker review.
-- **`guess_gender(name) -> GenderGuess`** (planned ARCHITECTURE §5 API):
-  lexicon-backed gender inference from the **given** token only —
-  patronym and avonym tokens are the father's and grandfather's given
-  names, so they are never used as evidence about the bearer. Lookup runs
-  in three tiers of descending confidence (exact spelling 0.9, recorded
-  variant 0.8, phonetic key 0.6 — flagged heuristics pending
-  native-speaker review), each scaled by the matched entry's gender
-  distribution; a name without a lexicon hit returns `('unknown', 0.0)`
-  honestly, never a guess from spelling shape. Every decision (ignored
-  tokens, matched entries, distributions, misses) is recorded in
-  `GenderGuess.notes`.
-
-### Changed
+  corpus regenerates 214 → **1752** pairs. Wave detail:
+  - **Wave 1**: 150 entries (56 → 206), coverage 18.2% → 49.9%, corpus
+    214 → 1039 pairs with 3 `known_fail` records of engine limits (the
+    practical inverse table has no "ph" fold — Yoseph-family spellings key
+    differently through the rule path — and the deliberately-accepted
+    distinct entries Ali/Ayele share a phonetic key).
+  - **Wave 2a**: 31 entries (206 → 237), coverage 49.9% → 53.5%, recall
+    96.5% → 96.7%; corpus 1039 → 1151, `known_fail` unchanged at 3. Adds
+    the deliberately-distinct pairs Berhane/Birhan (per the 2026-07-20
+    ending-pair ruling) and Abeba/Abebe. One candidate (Gebreyohannes) was
+    rejected as a `Gebre-` compound already served by compound handling.
+  - **Wave 2b**: 143 entries (237 → 380), coverage 53.5% → 62.2%, recall
+    97.1% (strict 95.7%); corpus 1151 → 1737. Seven candidates rejected:
+    the `Gebre-`/`Welde-` compound family (Gebreyohannes, Gebreyesus,
+    Gebreher, Gebreyes, Weldeyohannes, Weldesenbet), which the compound
+    engine already matches at 0.95+ without lexicon entries, and Werku, a
+    spelling of the existing Worku entry. `known_fail` grew 3 → 7 here:
+    four fidel↔canonical pairs whose conventional Latin spelling is far
+    from the raw transliteration (Afework, Wubshet, Wondwosen, Wube).
+  - **Known-fail retirement via recorded variants**: four of those pairs
+    were then retired by recording the raw transliteration as an attested
+    variant on its entry, where the repo owner judged that form a spelling
+    people actually type — `Fiseha`/Fisha, `Wubshet`/Wibshet, `Wube`/Wibe,
+    `Wondwosen`/Wendiwesen — plus `Werku` recorded on the existing `Worku`
+    entry. The remaining two of the four are deliberate: `Firehiwot`
+    /Firehyiwet and `Afework`/Afewerik were ruled ENGINE ARTIFACTS rather
+    than real spellings (the practical table renders ሕይወት as "hyiwet" and
+    ርቅ as "rik"; no one writes them that way), so they stay recorded as
+    honest engine limits instead of being papered over with invented
+    variants.
 
 - **HabeshaKey v2** (phonetic key): the key now records the stem's first
   AND last vowel classes instead of a single first-vowel slot
@@ -168,6 +136,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   No rule touches a word-final vowel: final `-u/-e/-ie/-a` endings mark
   morphologically related but distinct names (Haile/Hailu,
   Berhane/Berhanu/Birhan) and are deliberately not bridged.
+- **`VARIANT_WEIGHT` raised 0.85 → 0.90** (`habesha_names.match.token`). A
+  token pair matched through a recorded lexicon variant asserts a
+  ground-truth equivalence, so it now clears the 0.85 same-person gate with
+  margin instead of landing exactly on it: previously **287 golden "same"
+  pairs passed with a margin of precisely 0.0000**, and a multi-token name
+  that took any penalty elsewhere could drop under the gate on arithmetic
+  alone. **This changes published output** — `sim("Bekele", "Beqele")` now
+  returns `0.9` (was `0.85`) — and is a minor-bump output change under the
+  project's versioning policy. `VARIANT_WEIGHT` now ties `PHONETIC_WEIGHT`;
+  the tie resolves to `"phonetic"`, preserving the documented
+  more-explainable-method-wins ordering. No golden-corpus verdict changed:
+  pass/fail counts and every `known_fail` record are identical before and
+  after, and corpus recall/coverage are byte-identical (the eval path never
+  calls `match()`).
 
 ### Removed
 
@@ -177,7 +159,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   crosses the same final-vowel-class boundary as the
   Berhane/Berhanu/Birhan possessive series ("light" / "his light" /
   "my light"), so rewriting it manufactures a *different* name, not a
-  spelling variant (likewise Gebre → Gebra, Abebe → Abeba — Abeba being
+  spelling variant (likewise Gebre → Gabre, Abebe → Abeba — Abeba being
   a plausibly distinct female name). e→a still applies to first and
   interior stem vowels (Gebre → Gabre unchanged). Recorded lexicon
   variants already cover the reviewed Arabic-style e/a spelling pairs
@@ -189,13 +171,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Bekele ↔ Bikila no longer collide** (0.90 → 0.40): the 0.1.0
-  known-limitation false match is retired; the pair is now a pinned
-  different-person record in the golden corpus.
-- **Spaced-compound spelling rewrites no longer misalign**: the last two
-  0.1.0 known-limitation records — Gebremedhin ↔ "Gebrie Medhin"
-  (0.42 → 0.93) and Hailemariam ↔ "Hailie Mariam" (0.43 → 0.95) — are
-  retired; the golden corpus now has **zero `known_fail` records**.
+All three limitations carried into 0.1.0 are addressed; the third only in
+part, and deliberately so.
+
+- **Bekele ↔ Bikila no longer collide** (0.90 → 0.40): the first 0.1.0
+  known-limitation false match is retired via the richer phonetic key; the
+  pair is now a pinned different-person record in the golden corpus.
+- **Spaced-compound spelling rewrites no longer misalign**: the second
+  0.1.0 known limitation — Gebremedhin ↔ "Gebrie Medhin" (0.42 → 0.93) and
+  Hailemariam ↔ "Hailie Mariam" (0.43 → 0.95) — is retired via the
+  parser's phonetic-key compound fallback.
+- **The golden corpus is no longer purely mechanical, and the tuning
+  constants are no longer merely "accepted as-is"** — the third 0.1.0
+  known limitation. `tests/golden/curated.json` is a tracked,
+  human-authored second source whose pairs drop `needs_human` and win
+  outright over a colliding generated pair, and the deferred retune ran
+  against the expanded corpus: every in-scope constant was swept
+  one-at-a-time over a grid against a fixed pair population. It moved
+  exactly one constant — `VARIANT_WEIGHT`, above. `KEY_MISMATCH_DAMP` and
+  `PHONETIC_WEIGHT` were swept and deliberately left at their shipped
+  values (each sits inside a plateau where no corpus pair changes verdict),
+  and the parser confidence constants were accepted as shipped, `match()`
+  never reading them. **What remains unfinished is stated under Known
+  limitations rather than claimed as done**: the corpus is still
+  overwhelmingly generated, and the five role constants stay unmeasurable
+  at its current composition.
+
+### Known limitations (carried into 0.2.0)
+
+- **The golden corpus records 7 `known_fail` pairs**, against a 0.2.0
+  target of 0. Each is an asserted, documented engine limit — the suite
+  requires it to keep failing until the engine or the data changes.
+  Three are generated: ፍሬሕይወት/Firehiwot (0.56) and አፈወርቅ/Afework (0.55),
+  fidel↔canonical pairs whose conventional Latin spelling is far from the
+  raw transliteration (retiring them needs a transliteration-table
+  decision, not more data), plus Ali ↔ Ayele (0.90), two distinct names
+  that legitimately share a phonetic key. Four are curated: two
+  skipped-generation truncations ("Abebe Kebede Tadesse" vs "Abebe
+  Tadesse", 0.81) that the matcher's truncation tolerance places in the
+  review zone rather than reading as non-matches, and two "one role
+  matches, one differs" pairs ("Dawit Alemu" vs "Dawit Girma" 0.69,
+  "Gebreyesus Hailu" vs "Gebre Hailu" 0.74) whose scores interleave with
+  the analyst-review-zone pins the 0.1.0 score bands promise — the engine
+  sees one structure there, so no threshold separates them.
+- **Five matcher constants remain accepted-as-shipped, not calibrated** —
+  the `given`/`patronym`/`avonym` role weights, `swap_penalty` and
+  `missing_scale`. 33 of 1752 golden pairs are multi-token, and no value
+  anywhere in these constants' plausible ranges changes a single verdict.
+  Calibrating them would be fitting to noise; more curated multi-token
+  pairs are what would make them measurable.
+- **Coverage is 62.3%**, so roughly a third of corpus name occurrences
+  still get rule-based handling only, which is weaker for names whose
+  conventional spelling diverges from their transliteration.
 
 ## [0.1.0] - 2026-07-14
 

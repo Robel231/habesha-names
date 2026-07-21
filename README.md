@@ -237,8 +237,11 @@ contract and the reasoning are documented in the
 The bundled lexicons (given names, titles, compound elements) are
 common-name reference data — seeded during development, then reviewed
 entry-by-entry by a native speaker — not scraped data and not records of
-any individual. Per-file origins, generation sources, and verification
-status are documented in [DATA_PROVENANCE.md](DATA_PROVENANCE.md).
+any individual. As of 0.2.0 every bundled entry is reviewed and ships
+`"verified": true` — 380 given names, 12 titles, and the compound
+prefixes and second elements. Per-file origins, generation sources, and
+verification status are documented in
+[DATA_PROVENANCE.md](DATA_PROVENANCE.md).
 
 ## Versioning and stability
 
@@ -249,18 +252,46 @@ everything else is internal. Transliteration outputs are part of
 the contract: changing any transliteration table cell changes outputs and
 therefore bumps the minor version, never a patch release.
 
-Known limitations: the golden test corpus currently has **zero**
-`known_fail` records — the 0.1.0 engine limits are fixed in the v0.2
-development line (Bekele ↔ Bikila 0.90 → 0.40 via the richer phonetic key;
-spaced-compound spelling rewrites like "Gebrie Medhin" vs "Gebremedhin"
-now align via a phonetic-key compound fallback in the parser). What is
-still imperfect: the bundled lexicon is small (56 given-name entries, so
-most real-world names get rule-based handling only — a large lexicon
-expansion is in progress for 0.2.0); same-name spelling pairs that differ
-in final-vowel class and have no lexicon entry rest on damped edit
-similarity alone; and the compound fallback's confidence values, like all
-tuning constants, are heuristics pending calibration against a
-human-curated corpus.
+## Known limitations
+
+All three limitations carried into 0.1.0 are resolved in the 0.2 line:
+Bekele ↔ Bikila no longer collide (0.90 → 0.40, via the richer phonetic
+key), spaced-compound spelling rewrites like "Gebrie Medhin" vs
+"Gebremedhin" now align through a phonetic-key fallback in the parser, and
+the golden corpus is no longer purely mechanical — it carries a
+native-speaker-curated pair set, against which the matcher's variant weight
+was calibrated.
+
+What is still imperfect:
+
+- **The golden corpus records 7 `known_fail` pairs.** These are documented
+  engine limits, not silent bugs: the test suite asserts each one *keeps*
+  failing until the engine or the data changes. Three come from the
+  generated corpus — two names whose conventional Latin spelling is far
+  from the raw transliteration, so the Fidel spelling and the Latin
+  canonical score below the same-person gate (ፍሬሕይወት/Firehiwot,
+  አፈወርቅ/Afework), plus Ali ↔ Ayele, two distinct names that legitimately
+  share a phonetic key and so score 0.90. Four come from the curated set
+  and mark two structural limits: a name shortened by a skipped generation
+  ("Abebe Kebede Tadesse" vs "Abebe Tadesse") lands in the review zone
+  (0.81) rather than reading as a non-match, and a pair where one role
+  matches and the other differs ("Dawit Alemu" vs "Dawit Girma", 0.69) is
+  scored the same way whether the two are siblings or strangers — which is
+  the review-zone behaviour the score bands promise, so it cannot be
+  tightened without contradicting them.
+- **Lexicon coverage.** 380 given-name entries cover roughly 62% of name
+  occurrences in the development corpus; the remainder gets rule-based
+  handling only, which is weaker for names whose conventional spelling
+  diverges from their transliteration.
+- **Final-vowel-class pairs.** Same-name spellings that differ in
+  final-vowel class and have no lexicon entry rest on damped edit
+  similarity alone — deliberately, since that ending often marks a
+  genuinely different name (Haile/Hailu, Berhane/Berhanu).
+- **Role tuning.** The matcher's role weights, swap penalty, and
+  missing-role scale remain accepted-as-shipped heuristics. The curated
+  corpus is still small enough that no value in their plausible ranges
+  changes a verdict, so calibrating them would be fitting to noise.
+  `VARIANT_WEIGHT` is the one constant the curated pairs did move.
 
 ## Contributing
 
@@ -269,7 +300,8 @@ match, romanizations we do not generate, parsing mistakes on real name
 structures. Note that linguistic decisions — transliteration table cells,
 lexicon entries, variant rules — require native-speaker sign-off (Robel)
 before they land; new lexicon entries ship `"verified": false` until
-reviewed.
+reviewed, which is why the shipped lexicon is entirely `verified: true` —
+the flag tracks the queue, not the release.
 
 ## Development
 
