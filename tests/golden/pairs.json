@@ -1049,8 +1049,7 @@
       "expected": "same",
       "source": "lexicon: fidel spelling vs canonical Latin",
       "needs_human": true,
-      "score_at_generation": 0.5767,
-      "known_fail": true
+      "score_at_generation": 0.85
     },
     {
       "a": "ካህሳይ",
@@ -2084,8 +2083,7 @@
       "expected": "same",
       "source": "lexicon: fidel spelling vs canonical Latin",
       "needs_human": true,
-      "score_at_generation": 0.5486,
-      "known_fail": true
+      "score_at_generation": 0.85
     },
     {
       "a": "ታሰው",
@@ -2261,8 +2259,7 @@
       "expected": "same",
       "source": "lexicon: fidel spelling vs canonical Latin",
       "needs_human": true,
-      "score_at_generation": 0.4803,
-      "known_fail": true
+      "score_at_generation": 0.85
     },
     {
       "a": "ይርጋ",
@@ -2566,8 +2563,7 @@
       "expected": "same",
       "source": "lexicon: fidel spelling vs canonical Latin",
       "needs_human": true,
-      "score_at_generation": 0.51,
-      "known_fail": true
+      "score_at_generation": 0.85
     },
     {
       "a": "መልካሙ",
@@ -4080,6 +4076,14 @@
       "source": "lexicon: canonical vs seeded variant",
       "needs_human": true,
       "score_at_generation": 0.9611
+    },
+    {
+      "a": "Worku",
+      "b": "Werku",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.85
     },
     {
       "a": "Desta",
@@ -6248,6 +6252,14 @@
       "source": "lexicon: canonical vs seeded variant",
       "needs_human": true,
       "score_at_generation": 0.95
+    },
+    {
+      "a": "Fiseha",
+      "b": "Fisha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.85
     },
     {
       "a": "Kahsay",
@@ -10234,6 +10246,14 @@
       "score_at_generation": 0.9333
     },
     {
+      "a": "Wubshet",
+      "b": "Wibshet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.85
+    },
+    {
       "a": "Tasew",
       "b": "Tassew",
       "expected": "same",
@@ -10776,6 +10796,14 @@
       "source": "lexicon: canonical vs seeded variant",
       "needs_human": true,
       "score_at_generation": 0.9378
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wendiwesen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.85
     },
     {
       "a": "Yirga",
@@ -11640,6 +11668,14 @@
       "source": "lexicon: canonical vs seeded variant",
       "needs_human": true,
       "score_at_generation": 0.9533
+    },
+    {
+      "a": "Wube",
+      "b": "Wibe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.85
     },
     {
       "a": "Melkamu",

@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Known-fail retirement via recorded variants**: four `known_fail` golden
+  pairs retired by recording the raw transliteration as an attested variant
+  on its entry, where the repo owner judged that form a spelling people
+  actually type — `Fiseha`/Fisha, `Wubshet`/Wibshet, `Wube`/Wibe,
+  `Wondwosen`/Wendiwesen — plus `Werku` recorded on the existing `Worku`
+  entry. `known_fail` drops **7 → 3**. The remaining three are deliberate:
+  `Firehiwot`/Firehyiwet and `Afework`/Afewerik were ruled ENGINE ARTIFACTS
+  rather than real spellings (the practical table renders ሕይወት as "hyiwet"
+  and ርቅ as "rik"; no one writes them that way), so they stay recorded as
+  honest engine limits instead of being papered over with invented
+  variants; `Ali`/`Ayele` remains a shared-phonetic-key pair of
+  deliberately distinct entries.
+
 - **Lexicon wave 2b**: 143 further given-name entries authored by the repo
   owner, integrated as authored with `verified: false`. The candidate queue
   was re-mined against the post-wave-2a lexicon first, so the wave rules on
