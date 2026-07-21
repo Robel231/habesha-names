@@ -101,13 +101,23 @@ def test_ethiopic_input_passes_through_verbatim() -> None:
 
 
 #: Canonicals whose OWN key the rule path cannot reproduce, pinned exactly
-#: (Task 18 wave 1 introduced the first one). "yoseph": the phonetic key
-#: folds the "ph" digraph to F, but "ph" is not among the practical inverse
-#: table's input folds (tz/th/kh/gh), so the rule path reads p + h as two
-#: consonants and the recomposed key keeps them split (YSPH vs YSF). Same
-#: digraph-fusing root cause as the ckh/skh exception classes below;
-#: review-queued in PROGRESS.md (a ph fold is an engine change, Robel's call).
-CANONICAL_KEY_EXCEPTIONS = frozenset({"yoseph"})
+#: (Task 18 wave 1 introduced the first one; Task 19 wave 2b the second).
+#: TWO DISTINCT CAUSES — this set is not one class:
+#: - "yoseph": the phonetic key folds the "ph" digraph to F, but "ph" is not
+#:   among the practical inverse table's input folds (tz/th/kh/gh), so the
+#:   rule path reads p + h as two consonants and the recomposed key keeps
+#:   them split (YSPH vs YSF). Same digraph-fusing root cause as the ckh/skh
+#:   exception classes below; a ph fold is an engine change, Robel's call.
+#: - "afework" (wave 2b): the conventional spelling ends in the "rk"
+#:   cluster, so forward epenthesis re-inserts "i" before the final
+#:   consonant ("Afeworik") and the inserted vowel becomes a last stem vowel
+#:   of a different class (FWRK:ao -> FWRK:ae). Same class as the "ababch" /
+#:   "tarakgn" entries below, but here it hits a CANONICAL, which is new.
+#:   Note the public function is unaffected: "Afework" is a recognized
+#:   canonical, so `to_fidel` serves its stored fidel from the lexicon and
+#:   never reaches the rule path.
+#: Both review-queued in PROGRESS.md.
+CANONICAL_KEY_EXCEPTIONS = frozenset({"afework", "yoseph"})
 
 
 def test_rule_path_canonicals_keep_key_and_are_normalize_stable() -> None:
@@ -131,20 +141,26 @@ def test_rule_path_canonicals_keep_key_and_are_normalize_stable() -> None:
 #: known_fail markers: retiring one requires consciously editing this set).
 #: Regenerated from this test's own output at Task 18 (wave 1): the 150 new
 #: entries grew the swept variant population, 13 -> 60 (all 13 stayed, 47
-#: joined, none left); and again at Task 19 (wave 2a), 60 -> 76 (all 60
-#: stayed, 16 joined, none left). Three classes, all review-queued in
+#: joined, none left); again at Task 19 wave 2a, 60 -> 76 (all 60 stayed,
+#: 16 joined, none left); and again at wave 2b, 76 -> 183 (all 76 stayed,
+#: 107 joined, none left — the wave added many sh-/ch- initial names, and
+#: this class scales with them). Three classes, all review-queued in
 #: PROGRESS.md:
 #: - the variant engine's h->kh rewrite landing right after "c", "s", or
 #:   "p" (Abebech -> Abebeckh, Eshetu -> Eskhetu, Ephrem -> Epkherem, plus
-#:   wave-1 Belachew/Getachew/Michael/Mengesha/Negash/Shiferaw/Teshome and
-#:   wave-2a Beshir/Gashaw/Gemechu/Shimelis families): the key reads
-#:   c/s/p + kh as two consonants, but every possible letter reading of the
-#:   folded string fuses ch/sh/ph into one;
-#: - a deletion variant ending in a non-permissible consonant cluster
-#:   (Abebech -> Ababch, wave-2a Tarekegn -> tarakgn): forward epenthesis
-#:   re-inserts "i" before the final consonant, which becomes a new last
-#:   stem vowel of a different class than the input's (TRKGN:aa -> TRKGN:ae);
-#:   and
+#:   wave-1 Belachew/Getachew/Michael/Mengesha/Negash/Shiferaw/Teshome,
+#:   wave-2a Beshir/Gashaw/Gemechu/Shimelis and wave-2b Ashagre/Balcha/
+#:   Chala/Chekol/Chernet/Endeshaw/Gizachew/Masresha/Mersha/Meshesha/
+#:   Shafi/Sherif/Shibeshi/Shifa/Shikur/Shume/Sileshi/Woinshet/Wubshet/
+#:   Yemisrach/Zinash families — 100 of the 107 wave-2b joins): the key
+#:   reads c/s/p + kh as two consonants, but every possible letter reading
+#:   of the folded string fuses ch/sh/ph into one;
+#: - a spelling ending in a non-permissible consonant cluster (Abebech ->
+#:   Ababch, wave-2a Tarekegn -> tarakgn, wave-2b the 7-member Afework
+#:   family): forward epenthesis re-inserts "i" before the final consonant,
+#:   which becomes a new last stem vowel of a different class than the
+#:   input's (TRKGN:aa -> TRKGN:ae, FWRK:ao -> FWRK:ae). Afework is also the
+#:   first CANONICAL in this class — see CANONICAL_KEY_EXCEPTIONS; and
 #: - plain "ph" in wave-1 Yoseph's vowel-wobble variants (yeseph/yosiph/
 #:   yossiph): the key folds ph -> F but "ph" is not an inverse-table input
 #:   fold, so the rule path keeps p + h split (see CANONICAL_KEY_EXCEPTIONS).
@@ -158,13 +174,28 @@ KNOWN_KEY_EXCEPTIONS = frozenset(
         "abebeckh",
         "abebickh",
         "abibeckh",
+        "afawork",
+        "afeworq",
+        "affawork",
+        "affework",
+        "affiwork",
+        "affwork",
+        "afiwork",
+        "askhagere",
+        "askhagire",
+        "askhagre",
+        "askhagrie",
         "askhanafi",
         "askhenaffi",
         "askhenafi",
         "askhenfi",
         "askhennafi",
+        "askhgre",
         "askhinafi",
         "askhnafi",
+        "balckha",
+        "baleckha",
+        "balickha",
         "belackhew",
         "belackhiw",
         "belckhew",
@@ -173,6 +204,22 @@ KNOWN_KEY_EXCEPTIONS = frozenset(
         "beskhir",
         "bilackhew",
         "biskhir",
+        "ckhala",
+        "ckhalla",
+        "ckhekkol",
+        "ckhekol",
+        "ckherenet",
+        "ckherinet",
+        "ckhernet",
+        "ckhernit",
+        "ckhikol",
+        "ckhirnet",
+        "endaskhaw",
+        "endeskhaw",
+        "endiskhaw",
+        "endskhaw",
+        "enedeskhaw",
+        "enideskhaw",
         "epkherem",
         "epkhirem",
         "epkhrem",
@@ -192,8 +239,19 @@ KNOWN_KEY_EXCEPTIONS = frozenset(
         "getackhiw",
         "getckhew",
         "gettackhew",
+        "gezackhew",
         "gimeckhu",
         "gitackhew",
+        "gizackhew",
+        "gizackhiw",
+        "gizckhew",
+        "gizzackhew",
+        "masereskha",
+        "masireskha",
+        "masraskha",
+        "masreskha",
+        "masriskha",
+        "masrskha",
         "meckhael",
         "menegeskha",
         "mengaskha",
@@ -201,31 +259,96 @@ KNOWN_KEY_EXCEPTIONS = frozenset(
         "mengiskha",
         "mengskha",
         "menigeskha",
+        "mereskha",
+        "meriskha",
+        "merskha",
+        "meshaskha",
+        "mesheskha",
+        "meshiskha",
+        "meshskha",
+        "meskhasha",
+        "meskhesha",
+        "meskheskha",
+        "meskhisha",
+        "meskhsha",
         "mickhael",
         "mingeskha",
+        "mirskha",
+        "misheskha",
+        "miskhesha",
         "negaskh",
         "neggaskh",
         "nigaskh",
+        "seleskhi",
+        "shebeskhi",
+        "shibaskhi",
+        "shibbeskhi",
+        "shibeskhi",
+        "shibiskhi",
+        "shibskhi",
+        "silaskhi",
+        "sileskhi",
+        "siliskhi",
+        "silleskhi",
+        "silskhi",
+        "skhaffi",
+        "skhafi",
+        "skhebeshi",
+        "skhefa",
         "skheferaw",
+        "skhekur",
         "skhemelis",
+        "skheref",
+        "skherif",
+        "skherrif",
+        "skhibashi",
+        "skhibbeshi",
+        "skhibeshi",
+        "skhibeskhi",
+        "skhibishi",
+        "skhifa",
         "skhifaraw",
         "skhiferaw",
         "skhiferraw",
+        "skhiffa",
         "skhifferaw",
         "skhifiraw",
+        "skhikkur",
+        "skhikur",
         "skhimalis",
         "skhimeles",
         "skhimelis",
         "skhimilis",
+        "skhirif",
+        "skhume",
+        "skhumie",
+        "skhumme",
         "tarakgn",
         "teskhme",
         "teskhome",
         "teskhomie",
         "teskhomme",
         "tiskhome",
+        "woineskhet",
+        "woiniskhet",
+        "woinskhet",
+        "woinskhit",
+        "wubeskhet",
+        "wubiskhet",
+        "wubskhet",
+        "wubskhit",
+        "yemesrackh",
+        "yemiserackh",
+        "yemisirackh",
+        "yemisrackh",
+        "yemmisrackh",
+        "yemsrackh",
         "yeseph",
         "yosiph",
         "yossiph",
+        "zenaskh",
+        "zinaskh",
+        "zinnaskh",
     }
 )
 

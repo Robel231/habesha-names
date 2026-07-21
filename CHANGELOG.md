@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Lexicon wave 2b**: 143 further given-name entries authored by the repo
+  owner, integrated as authored with `verified: false`. The candidate queue
+  was re-mined against the post-wave-2a lexicon first, so the wave rules on
+  current evidence rather than names an earlier wave already absorbed.
+  Seven candidates were rejected: the `Gebre-`/`Welde-` compound family
+  (Gebreyohannes, Gebreyesus, Gebreher, Gebreyes, Weldeyohannes,
+  Weldesenbet), which the compound engine already matches at 0.95+ without
+  lexicon entries, and Werku, a spelling of the existing Worku entry.
+  The given-name lexicon grows 237 → **380** entries and corpus coverage
+  49.9% → **62.2%**, both **meeting the 0.2.0 targets** (≥250 entries,
+  ≥60% coverage) for the first time. Attested-variant recall rises to
+  **97.1%** (strict 95.7%). The golden corpus regenerates 1151 → 1737
+  pairs, and `known_fail` grows 3 → **7**: four new records are all
+  fidel↔canonical pairs whose conventional Latin spelling is far from the
+  raw transliteration (Afework, Wubshet, Wondwosen, Wube), the same class
+  as the existing Fiseha/Firehiwot records. Recording the raw rendering as
+  a variant would likely retire them — a data decision, not an engine one.
+
 - **Lexicon wave 2a**: 31 further given-name entries authored by the repo
   owner (native speaker) from the remaining tier-1 mining queue, integrated
   exactly as authored with `verified: false` pending his in-repo review

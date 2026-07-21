@@ -1910,6 +1910,1154 @@
       "score_at_generation": 1.0
     },
     {
+      "a": "ኤደን",
+      "b": "Eden",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ስለሺ",
+      "b": "Sileshi",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "በዛብህ",
+      "b": "Bezabih",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አብዱልቃድር",
+      "b": "Abdulkadir",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ለምለም",
+      "b": "Lemlem",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ረታ",
+      "b": "Reta",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ብስራት",
+      "b": "Bisrat",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ተድላ",
+      "b": "Tedla",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ረጋሳ",
+      "b": "Regassa",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "አረጋ",
+      "b": "Arega",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዘገዬ",
+      "b": "Zegeye",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ገሰሰ",
+      "b": "Gesese",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ባልቻ",
+      "b": "Balcha",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ቸርነት",
+      "b": "Chernet",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ፍቅርቴ",
+      "b": "Fikirte",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "ወይንሸት",
+      "b": "Woinshet",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.85
+    },
+    {
+      "a": "የማነ",
+      "b": "Yemane",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አፈወርቅ",
+      "b": "Afework",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.5529,
+      "known_fail": true
+    },
+    {
+      "a": "አወቀ",
+      "b": "Awoke",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ፋሲል",
+      "b": "Fasil",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ጽዮን",
+      "b": "Tsion",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "ውብሸት",
+      "b": "Wubshet",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.5486,
+      "known_fail": true
+    },
+    {
+      "a": "ታሰው",
+      "b": "Tasew",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ታከለ",
+      "b": "Takele",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ደሴ",
+      "b": "Dessie",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "ቃልኪዳን",
+      "b": "Kalkidan",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ክንፈ",
+      "b": "Kinfe",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሚልዮን",
+      "b": "Million",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ባህሩ",
+      "b": "Bahiru",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "እጅጉ",
+      "b": "Ejigu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ጥሩነህ",
+      "b": "Tiruneh",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዳኜ",
+      "b": "Dagne",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ነቢዩ",
+      "b": "Nebiyu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ላቀው",
+      "b": "Lakew",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሙስጠፋ",
+      "b": "Mustefa",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ክብረት",
+      "b": "Kibret",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ናትናኤል",
+      "b": "Natnael",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ጥበቡ",
+      "b": "Tibebu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "በኃይሉ",
+      "b": "Behailu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ወልዱ",
+      "b": "Woldu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.85
+    },
+    {
+      "a": "መሸሻ",
+      "b": "Meshesha",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሚኪያስ",
+      "b": "Mikiyas",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አንዷለም",
+      "b": "Andualem",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ወንድወሰን",
+      "b": "Wondwosen",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.4803,
+      "known_fail": true
+    },
+    {
+      "a": "ይርጋ",
+      "b": "Yirga",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "መርሻ",
+      "b": "Mersha",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሰሚራ",
+      "b": "Semira",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ኢሳይያስ",
+      "b": "Esayas",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ገረመው",
+      "b": "Geremew",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዮዲት",
+      "b": "Yodit",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሮቤል",
+      "b": "Robel",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ቱሉ",
+      "b": "Tulu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሽፋ",
+      "b": "Shifa",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ተስፋ",
+      "b": "Tesfa",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ተወልደ",
+      "b": "Tewolde",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "ሐያት",
+      "b": "Hayat",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዳዲ",
+      "b": "Dadi",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ደጉ",
+      "b": "Degu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዮርዳኖስ",
+      "b": "Yordanos",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አበጋዝ",
+      "b": "Abegaz",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "መርጋ",
+      "b": "Merga",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ገመዳ",
+      "b": "Gemeda",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ግዛቸው",
+      "b": "Gizachew",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዳምጠው",
+      "b": "Damtew",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አስረስ",
+      "b": "Asres",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አባይነህ",
+      "b": "Abayneh",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "አቡበከር",
+      "b": "Abubeker",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አበባው",
+      "b": "Abebaw",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አጽብሃ",
+      "b": "Atsbeha",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "በዳዳ",
+      "b": "Bedada",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "እንድሻው",
+      "b": "Endeshaw",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ቤዛ",
+      "b": "Beza",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሊዲያ",
+      "b": "Lidiya",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ቶሎሳ",
+      "b": "Tolosa",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አስማረ",
+      "b": "Asmare",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ግሩም",
+      "b": "Girum",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "በዳኔ",
+      "b": "Bedane",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "በፈቃዱ",
+      "b": "Befikadu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9417
+    },
+    {
+      "a": "ፋንታሁን",
+      "b": "Fantahun",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሽኩር",
+      "b": "Shikur",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "እስጢፋኖስ",
+      "b": "Estifanos",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ውቤ",
+      "b": "Wube",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.51,
+      "known_fail": true
+    },
+    {
+      "a": "መልካሙ",
+      "b": "Melkamu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዮናታን",
+      "b": "Yonatan",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አስናቀ",
+      "b": "Asnake",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "እንግዳ",
+      "b": "Engida",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ጫላ",
+      "b": "Chala",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሱልጣን",
+      "b": "Sultan",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሙሉቀን",
+      "b": "Muluken",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ቶላ",
+      "b": "Tola",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሮማን",
+      "b": "Roman",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዓለምፀሐይ",
+      "b": "Alemtsehay",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "መሰለ",
+      "b": "Mesele",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ቤዛዊት",
+      "b": "Bezawit",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ደሪቤ",
+      "b": "Deribe",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሶፊያ",
+      "b": "Sofiya",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ኢያሱ",
+      "b": "Eyasu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ሙሉነህ",
+      "b": "Muluneh",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ማስረሻ",
+      "b": "Masresha",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዳምጤ",
+      "b": "Damte",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አምሃ",
+      "b": "Ameha",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9467
+    },
+    {
+      "a": "ጉደታ",
+      "b": "Gudeta",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ጎበና",
+      "b": "Gobena",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "መገርሳ",
+      "b": "Megersa",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሁንዴ",
+      "b": "Hunde",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ገለታ",
+      "b": "Geleta",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዕፀገነት",
+      "b": "Etsegenet",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "ተክላይ",
+      "b": "Teklay",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ብርቱካን",
+      "b": "Birtukan",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "እሌኒ",
+      "b": "Eleni",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "አዲስዓለም",
+      "b": "Addisalem",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9704
+    },
+    {
+      "a": "ሜላት",
+      "b": "Melat",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "የምስራች",
+      "b": "Yemisrach",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "ወርቄ",
+      "b": "Worke",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.85
+    },
+    {
+      "a": "አሻግሬ",
+      "b": "Ashagre",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዝናሽ",
+      "b": "Zinash",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ዋቅጅራ",
+      "b": "Wakjira",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ጽጌረዳ",
+      "b": "Tsigereda",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ታመነ",
+      "b": "Tamene",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "እስማኤል",
+      "b": "Esmael",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "አንዳርጌ",
+      "b": "Andarge",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ፋንታዬ",
+      "b": "Fantaye",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ተማም",
+      "b": "Temam",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ጅማ",
+      "b": "Jimma",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "ሸሪፍ",
+      "b": "Sherif",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሽበሺ",
+      "b": "Shibeshi",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ፈጠነ",
+      "b": "Fetene",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ትዝታ",
+      "b": "Tizita",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "ሹሜ",
+      "b": "Shume",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ጉርሙ",
+      "b": "Gurmu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አስማማው",
+      "b": "Asmamaw",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ብዙነህ",
+      "b": "Bizuneh",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ቸኮል",
+      "b": "Chekol",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "አምዴ",
+      "b": "Amde",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ፋሲካ",
+      "b": "Fasika",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሻፊ",
+      "b": "Shafi",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ክብሮም",
+      "b": "Kibrom",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ፈረደ",
+      "b": "Ferede",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ይትባረክ",
+      "b": "Yitbarek",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሐድጉ",
+      "b": "Hadgu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ብዙአየሁ",
+      "b": "Bizuayehu",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ሙሉዓለም",
+      "b": "Mulualem",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
+      "a": "ምስራቅ",
+      "b": "Misrak",
+      "expected": "same",
+      "source": "lexicon: fidel spelling vs canonical Latin",
+      "needs_human": true,
+      "score_at_generation": 1.0
+    },
+    {
       "a": "Abebech",
       "b": "Abebetch",
       "expected": "same",
@@ -8454,6 +9602,3558 @@
       "score_at_generation": 0.9
     },
     {
+      "a": "Sileshi",
+      "b": "Seleshi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Sileshi",
+      "b": "Silesh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Sileshi",
+      "b": "Sileshe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Sileshi",
+      "b": "Silashi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Sileshi",
+      "b": "Sleshi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9571
+    },
+    {
+      "a": "Sileshi",
+      "b": "Selshi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9071
+    },
+    {
+      "a": "Sileshi",
+      "b": "Sileshie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Bezabih",
+      "b": "Bezabeh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Bezabih",
+      "b": "Bezabhe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Bezabih",
+      "b": "Bezabehe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9214
+    },
+    {
+      "a": "Bezabih",
+      "b": "Bezabihe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Abdulkadir",
+      "b": "Abdulkader",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.96
+    },
+    {
+      "a": "Abdulkadir",
+      "b": "Abdilkadir",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Abdulkadir",
+      "b": "Abdelkadir",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Abdulkadir",
+      "b": "Abdlkadir",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9767
+    },
+    {
+      "a": "Abdulkadir",
+      "b": "Abdulkedir",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.96
+    },
+    {
+      "a": "Abdulkadir",
+      "b": "Abdelkader",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9067
+    },
+    {
+      "a": "Abdulkadir",
+      "b": "Abdulkadier",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9818
+    },
+    {
+      "a": "Abdulkadir",
+      "b": "Abidulkadir",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9758
+    },
+    {
+      "a": "Lemlem",
+      "b": "Lemelem",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9278
+    },
+    {
+      "a": "Lemlem",
+      "b": "Lemilem",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Reta",
+      "b": "Retta",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Bisrat",
+      "b": "Bisirat",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Bisrat",
+      "b": "Biserat",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Bisrat",
+      "b": "Besrat",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Bisrat",
+      "b": "Beserat",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Tedla",
+      "b": "Tedila",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Tedla",
+      "b": "Tedela",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Tedla",
+      "b": "Tedlla",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Tedla",
+      "b": "Tedella",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Tedla",
+      "b": "Tedilla",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Regassa",
+      "b": "Regasa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Arega",
+      "b": "Arga",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9467
+    },
+    {
+      "a": "Arega",
+      "b": "Araga",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Arega",
+      "b": "Ariga",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Zegeye",
+      "b": "Zegye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Zegeye",
+      "b": "Zegey",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Gesese",
+      "b": "Gessese",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9278
+    },
+    {
+      "a": "Gesese",
+      "b": "Gesesse",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Gesese",
+      "b": "Gessesse",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9028
+    },
+    {
+      "a": "Gesese",
+      "b": "Gesses",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Balcha",
+      "b": "Balicha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Balcha",
+      "b": "Balecha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Chernet",
+      "b": "Cherinet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Chernet",
+      "b": "Cherenet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9464
+    },
+    {
+      "a": "Chernet",
+      "b": "Cherent",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Chernet",
+      "b": "Cherint",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Chernet",
+      "b": "Chirnet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9238
+    },
+    {
+      "a": "Chernet",
+      "b": "Chrenet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Fikirte",
+      "b": "Fikrte",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Fikirte",
+      "b": "Fikerte",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Fikirte",
+      "b": "Fikirete",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9464
+    },
+    {
+      "a": "Fikirte",
+      "b": "Fikrite",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Fikirte",
+      "b": "Fikeret",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Fikirte",
+      "b": "Fikerete",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Fikirte",
+      "b": "Fikirite",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Fikirte",
+      "b": "Fikiret",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Woinshet",
+      "b": "Woineshet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9528
+    },
+    {
+      "a": "Woinshet",
+      "b": "Woynshet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Woinshet",
+      "b": "Woinishet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9778
+    },
+    {
+      "a": "Woinshet",
+      "b": "Woynishet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.937
+    },
+    {
+      "a": "Woinshet",
+      "b": "Woyinshet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9704
+    },
+    {
+      "a": "Woinshet",
+      "b": "Woyneshet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Woinshet",
+      "b": "Woyineshet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9133
+    },
+    {
+      "a": "Woinshet",
+      "b": "Woyinishet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9467
+    },
+    {
+      "a": "Yemane",
+      "b": "Yimane",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Yemane",
+      "b": "Yemene",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Afework",
+      "b": "Afwork",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Awoke",
+      "b": "Aweke",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Awoke",
+      "b": "Awake",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Fasil",
+      "b": "Fassil",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Fasil",
+      "b": "Faisel",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9022
+    },
+    {
+      "a": "Fasil",
+      "b": "Fasile",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Tsion",
+      "b": "Tsiyon",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Tsion",
+      "b": "Tseion",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Wubshet",
+      "b": "Wubishet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Wubshet",
+      "b": "Wubeshet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9375
+    },
+    {
+      "a": "Wubshet",
+      "b": "Woubshet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9625
+    },
+    {
+      "a": "Wubshet",
+      "b": "Woubishet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Tasew",
+      "b": "Tassew",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Tasew",
+      "b": "Tasewe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Takele",
+      "b": "Takle",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Dessie",
+      "b": "Desse",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Dessie",
+      "b": "Desie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Dessie",
+      "b": "Dese",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Dessie",
+      "b": "Desiye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Dessie",
+      "b": "Desye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Dessie",
+      "b": "Dessei",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Dessie",
+      "b": "Dessiye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Kalkidan",
+      "b": "Kalikidan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9449
+    },
+    {
+      "a": "Kalkidan",
+      "b": "Kalekidan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Kinfe",
+      "b": "Kenfe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Kinfe",
+      "b": "Kinefe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Kinfe",
+      "b": "Kinife",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Million",
+      "b": "Milion",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Million",
+      "b": "Miliyon",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Bahiru",
+      "b": "Bahru",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Bahiru",
+      "b": "Baheru",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Bahiru",
+      "b": "Baharu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Ejigu",
+      "b": "Ejegu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Ejigu",
+      "b": "Ejgu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9467
+    },
+    {
+      "a": "Tiruneh",
+      "b": "Teruneh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9143
+    },
+    {
+      "a": "Tiruneh",
+      "b": "Tirunehe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Dagne",
+      "b": "Dagnie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Dagne",
+      "b": "Adugne",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Nebiyu",
+      "b": "Nebiyou",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Nebiyu",
+      "b": "Nebyu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Nebiyu",
+      "b": "Nebyou",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Nebiyu",
+      "b": "Nebeyu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Nebiyu",
+      "b": "Nibeyu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.95
+    },
+    {
+      "a": "Nebiyu",
+      "b": "Nebeyou",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Nebiyu",
+      "b": "Nebiu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Mustefa",
+      "b": "Mustofa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Mustefa",
+      "b": "Mustafa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9095
+    },
+    {
+      "a": "Mustefa",
+      "b": "Musetefa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9375
+    },
+    {
+      "a": "Mustefa",
+      "b": "Musitefa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Kibret",
+      "b": "Kiberet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9278
+    },
+    {
+      "a": "Kibret",
+      "b": "Kibiret",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Kibret",
+      "b": "Kebret",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Kibret",
+      "b": "Kibert",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Natnael",
+      "b": "Natinael",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Natnael",
+      "b": "Natenael",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9375
+    },
+    {
+      "a": "Natnael",
+      "b": "Nathnael",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Natnael",
+      "b": "Natnaiel",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Natnael",
+      "b": "Natenaiel",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9148
+    },
+    {
+      "a": "Natnael",
+      "b": "Nathaniel",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9148
+    },
+    {
+      "a": "Tibebu",
+      "b": "Tebibu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.95
+    },
+    {
+      "a": "Tibebu",
+      "b": "Tibebeu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Behailu",
+      "b": "Behayilu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Behailu",
+      "b": "Behaylu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Behailu",
+      "b": "Behilu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Woldu",
+      "b": "Wold",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.96
+    },
+    {
+      "a": "Woldu",
+      "b": "Wolidu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Meshesha",
+      "b": "Meshasha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9214
+    },
+    {
+      "a": "Mikiyas",
+      "b": "Mikias",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Mikiyas",
+      "b": "Mikyas",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Mikiyas",
+      "b": "Mikeyas",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Andualem",
+      "b": "Anidualem",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9704
+    },
+    {
+      "a": "Andualem",
+      "b": "Andalem",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wondwossen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.98
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wondwesen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9306
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wondewosen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9356
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wondiwosen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.98
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wondewossen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9192
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wondwessen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9128
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wondowosen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9578
+    },
+    {
+      "a": "Wondwosen",
+      "b": "Wondwassen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9378
+    },
+    {
+      "a": "Yirga",
+      "b": "Yerga",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Yirga",
+      "b": "Yirega",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Mersha",
+      "b": "Meresha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Mersha",
+      "b": "Merisha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Semira",
+      "b": "Semera",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Semira",
+      "b": "Simera",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.95
+    },
+    {
+      "a": "Semira",
+      "b": "Semaria",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9278
+    },
+    {
+      "a": "Semira",
+      "b": "Semra",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Esayas",
+      "b": "Isayas",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Esayas",
+      "b": "Essayas",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Esayas",
+      "b": "Esyas",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9022
+    },
+    {
+      "a": "Geremew",
+      "b": "Germew",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9278
+    },
+    {
+      "a": "Geremew",
+      "b": "Geramew",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Yodit",
+      "b": "Yodet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9067
+    },
+    {
+      "a": "Yodit",
+      "b": "Yodite",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Robel",
+      "b": "Robele",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Robel",
+      "b": "Robelie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Robel",
+      "b": "Robiel",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Robel",
+      "b": "Robale",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Tulu",
+      "b": "Tullu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Shifa",
+      "b": "Shefa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Tesfa",
+      "b": "Tesefa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Tesfa",
+      "b": "Tesifa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Tewolde",
+      "b": "Tewelde",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Tewolde",
+      "b": "Tewlde",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Tewolde",
+      "b": "Tewelide",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Tewolde",
+      "b": "Tewolide",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Dadi",
+      "b": "Dade",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Dadi",
+      "b": "Daddi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Yordanos",
+      "b": "Yoredanos",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Yordanos",
+      "b": "Yurdanos",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.925
+    },
+    {
+      "a": "Merga",
+      "b": "Mergiya",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Merga",
+      "b": "Mergia",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Merga",
+      "b": "Mirga",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Merga",
+      "b": "Merega",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Merga",
+      "b": "Meriga",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Merga",
+      "b": "Mirega",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Merga",
+      "b": "Mergya",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Merga",
+      "b": "Merigia",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Gemeda",
+      "b": "Gemmeda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Gizachew",
+      "b": "Gezachew",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.925
+    },
+    {
+      "a": "Damtew",
+      "b": "Damitew",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Damtew",
+      "b": "Dametew",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9278
+    },
+    {
+      "a": "Damtew",
+      "b": "Damitw",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Asres",
+      "b": "Asires",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Asres",
+      "b": "Aseres",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9022
+    },
+    {
+      "a": "Asres",
+      "b": "Asrese",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Asres",
+      "b": "Asresie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Asres",
+      "b": "Asress",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Asres",
+      "b": "Aserese",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Asres",
+      "b": "Asiress",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9238
+    },
+    {
+      "a": "Asres",
+      "b": "Asressie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.925
+    },
+    {
+      "a": "Abayneh",
+      "b": "Abayineh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Abayneh",
+      "b": "Aboneh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Abayneh",
+      "b": "Abayeneh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9464
+    },
+    {
+      "a": "Abayneh",
+      "b": "Abyneh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Abayneh",
+      "b": "Abaynhe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Abayneh",
+      "b": "Abeneh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Abayneh",
+      "b": "Abineh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Abayneh",
+      "b": "Abneh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9238
+    },
+    {
+      "a": "Abubeker",
+      "b": "Abubekir",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.95
+    },
+    {
+      "a": "Abubeker",
+      "b": "Abubaker",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9214
+    },
+    {
+      "a": "Abubeker",
+      "b": "Babeker",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9107
+    },
+    {
+      "a": "Abubeker",
+      "b": "Abubker",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9464
+    },
+    {
+      "a": "Atsbeha",
+      "b": "Atsebeha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9375
+    },
+    {
+      "a": "Atsbeha",
+      "b": "Atsibeha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Atsbeha",
+      "b": "Atsibha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Atsbeha",
+      "b": "Atsebha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Atsbeha",
+      "b": "Atsibiha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9083
+    },
+    {
+      "a": "Atsbeha",
+      "b": "Atsbha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Atsbeha",
+      "b": "Atsbaha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9095
+    },
+    {
+      "a": "Atsbeha",
+      "b": "Atsebiha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9375
+    },
+    {
+      "a": "Bedada",
+      "b": "Bededa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Endeshaw",
+      "b": "Endashaw",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9083
+    },
+    {
+      "a": "Endeshaw",
+      "b": "Enedashaw",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9037
+    },
+    {
+      "a": "Beza",
+      "b": "Bezza",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Beza",
+      "b": "Bieza",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.94
+    },
+    {
+      "a": "Lidiya",
+      "b": "Lidya",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Lidiya",
+      "b": "Lidia",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Lidiya",
+      "b": "Lideya",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Tolosa",
+      "b": "Tolossa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Tolosa",
+      "b": "Tolesa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Tolosa",
+      "b": "Tolessa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Tolosa",
+      "b": "Tollosa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Asmare",
+      "b": "Asimare",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Asmare",
+      "b": "Asamere",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Asmare",
+      "b": "Asemare",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Asmare",
+      "b": "Asmir",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Asmare",
+      "b": "Asemre",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9111
+    },
+    {
+      "a": "Girum",
+      "b": "Girmu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Girum",
+      "b": "Gerum",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Bedane",
+      "b": "Bedanie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Bedane",
+      "b": "Bedani",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Befikadu",
+      "b": "Befekadu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9417
+    },
+    {
+      "a": "Befikadu",
+      "b": "Befkadu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Fantahun",
+      "b": "Fanetahun",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Fantahun",
+      "b": "Fanitahun",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Fantahun",
+      "b": "Fantehun",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.95
+    },
+    {
+      "a": "Shikur",
+      "b": "Shekur",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9111
+    },
+    {
+      "a": "Estifanos",
+      "b": "Esitifanos",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9437
+    },
+    {
+      "a": "Estifanos",
+      "b": "Estefanos",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9481
+    },
+    {
+      "a": "Estifanos",
+      "b": "Estifanous",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.98
+    },
+    {
+      "a": "Estifanos",
+      "b": "Istifanos",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Wube",
+      "b": "Wubie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Wube",
+      "b": "Wubiye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Wube",
+      "b": "Woube",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.94
+    },
+    {
+      "a": "Wube",
+      "b": "Wubeye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Wube",
+      "b": "Wubye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Melkamu",
+      "b": "Melikamu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Melkamu",
+      "b": "Melekamu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Yonatan",
+      "b": "Yonathan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Asnake",
+      "b": "Asenake",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Asnake",
+      "b": "Asinake",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Engida",
+      "b": "Engeda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Engida",
+      "b": "Engda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Engida",
+      "b": "Enegida",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9619
+    },
+    {
+      "a": "Engida",
+      "b": "Enigda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Engida",
+      "b": "Enigida",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9175
+    },
+    {
+      "a": "Chala",
+      "b": "Challa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Sultan",
+      "b": "Sulitan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Sultan",
+      "b": "Suletan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Tola",
+      "b": "Tolla",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Roman",
+      "b": "Ruman",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Alemtsehay",
+      "b": "Alemtsehaye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9818
+    },
+    {
+      "a": "Alemtsehay",
+      "b": "Alemtshay",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.98
+    },
+    {
+      "a": "Mesele",
+      "b": "Messele",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Mesele",
+      "b": "Mesel",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Mesele",
+      "b": "Mesale",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Mesele",
+      "b": "Messel",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Bezawit",
+      "b": "Bezawite",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Deribe",
+      "b": "Derbe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Deribe",
+      "b": "Derebe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Deribe",
+      "b": "Derbie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Deribe",
+      "b": "Derib",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Deribe",
+      "b": "Derebie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9278
+    },
+    {
+      "a": "Deribe",
+      "b": "Derb",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Deribe",
+      "b": "Dereb",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Deribe",
+      "b": "Deribie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Sofiya",
+      "b": "Sofia",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Sofiya",
+      "b": "Sofya",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Eyasu",
+      "b": "Eyassu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Muluneh",
+      "b": "Mulunehi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Masresha",
+      "b": "Maseresha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9449
+    },
+    {
+      "a": "Masresha",
+      "b": "Masiresha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Masresha",
+      "b": "Masersha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Damte",
+      "b": "Damite",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Damte",
+      "b": "Damtie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Damte",
+      "b": "Damitie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Damte",
+      "b": "Damete",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Damte",
+      "b": "Dametie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Ameha",
+      "b": "Amha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9467
+    },
+    {
+      "a": "Ameha",
+      "b": "Amaha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Ameha",
+      "b": "Amiha",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Gobena",
+      "b": "Gubena",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Megersa",
+      "b": "Megerssa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Megersa",
+      "b": "Megeresa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Megersa",
+      "b": "Megeressa",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Hunde",
+      "b": "Hundie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Geleta",
+      "b": "Gelata",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Geleta",
+      "b": "Gelta",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Etsegenet",
+      "b": "Etsgenet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9157
+    },
+    {
+      "a": "Etsegenet",
+      "b": "Etsegent",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9778
+    },
+    {
+      "a": "Etsegenet",
+      "b": "Esegenet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Etsegenet",
+      "b": "Estsegenet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9367
+    },
+    {
+      "a": "Etsegenet",
+      "b": "Etsegnet",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9528
+    },
+    {
+      "a": "Teklay",
+      "b": "Tekilay",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Teklay",
+      "b": "Tekelay",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Teklay",
+      "b": "Tekelaye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9417
+    },
+    {
+      "a": "Teklay",
+      "b": "Teklaye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Teklay",
+      "b": "Tkilay",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Birtukan",
+      "b": "Bertukan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.925
+    },
+    {
+      "a": "Birtukan",
+      "b": "Biretukan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Birtukan",
+      "b": "Birtukuan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9778
+    },
+    {
+      "a": "Birtukan",
+      "b": "Biritukan",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Eleni",
+      "b": "Elleni",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Eleni",
+      "b": "Elen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.96
+    },
+    {
+      "a": "Eleni",
+      "b": "Elene",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.92
+    },
+    {
+      "a": "Eleni",
+      "b": "Elenie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Eleni",
+      "b": "Elieni",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9022
+    },
+    {
+      "a": "Eleni",
+      "b": "Elini",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Addisalem",
+      "b": "Adisalem",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9704
+    },
+    {
+      "a": "Addisalem",
+      "b": "Adissalem",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9407
+    },
+    {
+      "a": "Melat",
+      "b": "Meleta",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Yemisrach",
+      "b": "Yemisirach",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.98
+    },
+    {
+      "a": "Yemisrach",
+      "b": "Yemsrach",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Yemisrach",
+      "b": "Yemeserach",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9274
+    },
+    {
+      "a": "Yemisrach",
+      "b": "Yemiserach",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.98
+    },
+    {
+      "a": "Yemisrach",
+      "b": "Yemsirach",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Yemisrach",
+      "b": "Yemesrach",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9481
+    },
+    {
+      "a": "Yemisrach",
+      "b": "Yemserach",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9481
+    },
+    {
+      "a": "Yemisrach",
+      "b": "Yemesirach",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9507
+    },
+    {
+      "a": "Worke",
+      "b": "Workie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Worke",
+      "b": "Workiye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Worke",
+      "b": "Workye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Worke",
+      "b": "Worakie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Worke",
+      "b": "Worake",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Worke",
+      "b": "Workeye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Worke",
+      "b": "Worike",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Ashagre",
+      "b": "Ashagrie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Ashagre",
+      "b": "Ashagire",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Ashagre",
+      "b": "Ashagere",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9464
+    },
+    {
+      "a": "Ashagre",
+      "b": "Ashager",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Ashagre",
+      "b": "Ashagari",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9214
+    },
+    {
+      "a": "Ashagre",
+      "b": "Ashagirie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Ashagre",
+      "b": "Ashagerie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.927
+    },
+    {
+      "a": "Ashagre",
+      "b": "Ashagreie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Zinash",
+      "b": "Zenash",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Wakjira",
+      "b": "Wakijira",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9375
+    },
+    {
+      "a": "Wakjira",
+      "b": "Wakijra",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Wakjira",
+      "b": "Wakjera",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Wakjira",
+      "b": "Wakejira",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Wakjira",
+      "b": "Wakijera",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9375
+    },
+    {
+      "a": "Wakjira",
+      "b": "Wakejera",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9083
+    },
+    {
+      "a": "Wakjira",
+      "b": "Wakjra",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Tsigereda",
+      "b": "Tsegereda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Tsigereda",
+      "b": "Tsgereda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9704
+    },
+    {
+      "a": "Tsigereda",
+      "b": "Tsgireda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9037
+    },
+    {
+      "a": "Tsigereda",
+      "b": "Tsigiereda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.98
+    },
+    {
+      "a": "Tsigereda",
+      "b": "Tsigreda",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9528
+    },
+    {
+      "a": "Tamene",
+      "b": "Tamen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Esmael",
+      "b": "Ismael",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Esmael",
+      "b": "Esmaiel",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Esmael",
+      "b": "Esmail",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Esmael",
+      "b": "Esemael",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9175
+    },
+    {
+      "a": "Esmael",
+      "b": "Esmaeil",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Andarge",
+      "b": "Andargie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Andarge",
+      "b": "Andarege",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9464
+    },
+    {
+      "a": "Andarge",
+      "b": "Anedarege",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9026
+    },
+    {
+      "a": "Andarge",
+      "b": "Andaregie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.927
+    },
+    {
+      "a": "Andarge",
+      "b": "Andarige",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Andarge",
+      "b": "Anderge",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Fantaye",
+      "b": "Fantay",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Fantaye",
+      "b": "Fantayie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Temam",
+      "b": "Temima",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Jimma",
+      "b": "Jima",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Jimma",
+      "b": "Jemma",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Sherif",
+      "b": "Sheref",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Sherif",
+      "b": "Shrif",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Sherif",
+      "b": "Sherief",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Sherif",
+      "b": "Sherife",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Sherif",
+      "b": "Shiref",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9556
+    },
+    {
+      "a": "Sherif",
+      "b": "Shref",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9022
+    },
+    {
+      "a": "Shibeshi",
+      "b": "Shibesh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Shibeshi",
+      "b": "Shebeshi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Shibeshi",
+      "b": "Shibshi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.975
+    },
+    {
+      "a": "Fetene",
+      "b": "Feten",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Fetene",
+      "b": "Fetyen",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Tizita",
+      "b": "Tizeta",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9222
+    },
+    {
+      "a": "Tizita",
+      "b": "Tizta",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Shume",
+      "b": "Shumye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Shume",
+      "b": "Shumie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Shume",
+      "b": "Shumiye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Shume",
+      "b": "Shumeye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Shume",
+      "b": "Shumi",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.92
+    },
+    {
+      "a": "Shume",
+      "b": "Shumuye",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9429
+    },
+    {
+      "a": "Gurmu",
+      "b": "Gurumu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Gurmu",
+      "b": "Guremu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Gurmu",
+      "b": "Gurimu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Asmamaw",
+      "b": "Asemamaw",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Asmamaw",
+      "b": "Asimamaw",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Asmamaw",
+      "b": "Assmamaw",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Bizuneh",
+      "b": "Bezuneh",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9143
+    },
+    {
+      "a": "Bizuneh",
+      "b": "Bizunhe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9714
+    },
+    {
+      "a": "Amde",
+      "b": "Amede",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Amde",
+      "b": "Amdie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9533
+    },
+    {
+      "a": "Amde",
+      "b": "Amide",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9467
+    },
+    {
+      "a": "Amde",
+      "b": "Amid",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Amde",
+      "b": "Amed",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Amde",
+      "b": "Amidie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9111
+    },
+    {
+      "a": "Amde",
+      "b": "Made",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9167
+    },
+    {
+      "a": "Amde",
+      "b": "Amade",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9467
+    },
+    {
+      "a": "Fasika",
+      "b": "Fassika",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Shafi",
+      "b": "Shafe",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.92
+    },
+    {
+      "a": "Shafi",
+      "b": "Shafie",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Kibrom",
+      "b": "Kiberom",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Kibrom",
+      "b": "Keberom",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Kibrom",
+      "b": "Kebrom",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Kibrom",
+      "b": "Kibirom",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Ferede",
+      "b": "Ferid",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Ferede",
+      "b": "Ferde",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9144
+    },
+    {
+      "a": "Yitbarek",
+      "b": "Yetbarek",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.925
+    },
+    {
+      "a": "Yitbarek",
+      "b": "Yitebarek",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9157
+    },
+    {
+      "a": "Yitbarek",
+      "b": "Yitibarek",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Hadgu",
+      "b": "Hadigu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Hadgu",
+      "b": "Hadegu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9611
+    },
+    {
+      "a": "Hadgu",
+      "b": "Hadigo",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Hadgu",
+      "b": "Hadgo",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.92
+    },
+    {
+      "a": "Hadgu",
+      "b": "Hadego",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Bizuayehu",
+      "b": "Bezuayehu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9333
+    },
+    {
+      "a": "Bizuayehu",
+      "b": "Bizayehu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9741
+    },
+    {
+      "a": "Bizuayehu",
+      "b": "Bezuayhu",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Mulualem",
+      "b": "Mulalem",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9708
+    },
+    {
+      "a": "Mulualem",
+      "b": "Mullualem",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9449
+    },
+    {
+      "a": "Misrak",
+      "b": "Misirak",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Misrak",
+      "b": "Miserak",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9667
+    },
+    {
+      "a": "Misrak",
+      "b": "Mesrak",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
+      "a": "Misrak",
+      "b": "Meserak",
+      "expected": "same",
+      "source": "lexicon: canonical vs seeded variant",
+      "needs_human": true,
+      "score_at_generation": 0.9
+    },
+    {
       "a": "Tsehay",
       "b": "Tsehaye",
       "expected": "same",
@@ -9047,6 +13747,22 @@
       "score_at_generation": 0.5829
     },
     {
+      "a": "Abeba",
+      "b": "Abebaw",
+      "expected": "different",
+      "source": "mechanical near-miss: highest-scoring distinct canonicals",
+      "needs_human": true,
+      "score_at_generation": 0.58
+    },
+    {
+      "a": "Damtew",
+      "b": "Damte",
+      "expected": "different",
+      "source": "mechanical near-miss: highest-scoring distinct canonicals",
+      "needs_human": true,
+      "score_at_generation": 0.58
+    },
+    {
       "a": "Girma",
       "b": "Girmay",
       "expected": "different",
@@ -9069,6 +13785,22 @@
       "source": "mechanical near-miss: highest-scoring distinct canonicals",
       "needs_human": true,
       "score_at_generation": 0.576
+    },
+    {
+      "a": "Melese",
+      "b": "Mesele",
+      "expected": "different",
+      "source": "mechanical near-miss: highest-scoring distinct canonicals",
+      "needs_human": true,
+      "score_at_generation": 0.5733
+    },
+    {
+      "a": "Amare",
+      "b": "Asmare",
+      "expected": "different",
+      "source": "mechanical near-miss: highest-scoring distinct canonicals",
+      "needs_human": true,
+      "score_at_generation": 0.57
     },
     {
       "a": "Berhanu",
@@ -9111,6 +13843,14 @@
       "score_at_generation": 0.56
     },
     {
+      "a": "Fikre",
+      "b": "Fikirte",
+      "expected": "different",
+      "source": "mechanical near-miss: highest-scoring distinct canonicals",
+      "needs_human": true,
+      "score_at_generation": 0.56
+    },
+    {
       "a": "Negash",
       "b": "Nega",
       "expected": "different",
@@ -9119,8 +13859,24 @@
       "score_at_generation": 0.56
     },
     {
+      "a": "Melaku",
+      "b": "Melkamu",
+      "expected": "different",
+      "source": "mechanical near-miss: highest-scoring distinct canonicals",
+      "needs_human": true,
+      "score_at_generation": 0.5567
+    },
+    {
       "a": "Belay",
       "b": "Belayneh",
+      "expected": "different",
+      "source": "mechanical near-miss: highest-scoring distinct canonicals",
+      "needs_human": true,
+      "score_at_generation": 0.555
+    },
+    {
+      "a": "Gizaw",
+      "b": "Gizachew",
       "expected": "different",
       "source": "mechanical near-miss: highest-scoring distinct canonicals",
       "needs_human": true,
@@ -9135,92 +13891,28 @@
       "score_at_generation": 0.555
     },
     {
-      "a": "Tadesse",
-      "b": "Tafesse",
+      "a": "Shiferaw",
+      "b": "Shifa",
       "expected": "different",
       "source": "mechanical near-miss: highest-scoring distinct canonicals",
       "needs_human": true,
-      "score_at_generation": 0.5543
+      "score_at_generation": 0.555
     },
     {
-      "a": "Mulatu",
-      "b": "Mulu",
+      "a": "Tesfahun",
+      "b": "Tesfa",
       "expected": "different",
       "source": "mechanical near-miss: highest-scoring distinct canonicals",
       "needs_human": true,
-      "score_at_generation": 0.5533
+      "score_at_generation": 0.555
     },
     {
-      "a": "Abebe",
-      "b": "Abeba",
+      "a": "Workineh",
+      "b": "Worke",
       "expected": "different",
       "source": "mechanical near-miss: highest-scoring distinct canonicals",
       "needs_human": true,
-      "score_at_generation": 0.552
-    },
-    {
-      "a": "Haile",
-      "b": "Hailu",
-      "expected": "different",
-      "source": "mechanical near-miss: highest-scoring distinct canonicals",
-      "needs_human": true,
-      "score_at_generation": 0.552
-    },
-    {
-      "a": "Zewde",
-      "b": "Zewdu",
-      "expected": "different",
-      "source": "mechanical near-miss: highest-scoring distinct canonicals",
-      "needs_human": true,
-      "score_at_generation": 0.552
-    },
-    {
-      "a": "Abdela",
-      "b": "Abel",
-      "expected": "different",
-      "source": "mechanical near-miss: highest-scoring distinct canonicals",
-      "needs_human": true,
-      "score_at_generation": 0.5467
-    },
-    {
-      "a": "Selam",
-      "b": "Selamawit",
-      "expected": "different",
-      "source": "mechanical near-miss: highest-scoring distinct canonicals",
-      "needs_human": true,
-      "score_at_generation": 0.5467
-    },
-    {
-      "a": "Getahun",
-      "b": "Getaneh",
-      "expected": "different",
-      "source": "mechanical near-miss: highest-scoring distinct canonicals",
-      "needs_human": true,
-      "score_at_generation": 0.5457
-    },
-    {
-      "a": "Tadesse",
-      "b": "Tadele",
-      "expected": "different",
-      "source": "mechanical near-miss: highest-scoring distinct canonicals",
-      "needs_human": true,
-      "score_at_generation": 0.5457
-    },
-    {
-      "a": "Tamirat",
-      "b": "Tamiru",
-      "expected": "different",
-      "source": "mechanical near-miss: highest-scoring distinct canonicals",
-      "needs_human": true,
-      "score_at_generation": 0.5457
-    },
-    {
-      "a": "Meseret",
-      "b": "Meskerem",
-      "expected": "different",
-      "source": "mechanical near-miss: highest-scoring distinct canonicals",
-      "needs_human": true,
-      "score_at_generation": 0.545
+      "score_at_generation": 0.555
     }
   ]
 }
