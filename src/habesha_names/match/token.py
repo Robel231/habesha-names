@@ -18,11 +18,14 @@ Jaro score exceeds 0.7. Both empty strings compare equal (1.0); one empty
 side scores 0.0. The algorithm itself is case-sensitive; ``sim`` normalizes
 (transliterate fidel, lowercase, strip non-letters) before comparing.
 
-``PHONETIC_WEIGHT``, ``VARIANT_WEIGHT``, and ``KEY_MISMATCH_DAMP`` are
-agent-chosen constants tuned only against the mechanical golden corpus
-(verified: false, PROGRESS.md review queue). Normalization, key, and
-variant-set lookups are memoized in bounded ``lru_cache``\\ s -- pure
-memoization, no behavioral state.
+``PHONETIC_WEIGHT`` and ``KEY_MISMATCH_DAMP`` are agent-chosen constants
+tuned only against the mechanical golden corpus (verified: false,
+PROGRESS.md review queue); task-22b swept both and left them as shipped.
+``VARIANT_WEIGHT`` is Robel's ruling (task-22b): 0.90, deliberately above
+the 0.85 gate. It now TIES ``PHONETIC_WEIGHT``; the tie resolves to
+"phonetic", preserving the documented more-explainable-method-wins order.
+Normalization, key, and variant-set lookups are memoized in bounded
+``lru_cache``\\ s -- pure memoization, no behavioral state.
 """
 
 from __future__ import annotations
@@ -37,8 +40,12 @@ from habesha_names.translit.variants import variants
 #: Score guaranteed when two tokens share a HabeshaKey. Provisional (Task 8).
 PHONETIC_WEIGHT = 0.9
 
-#: Score guaranteed when one token is in the other's variant set. Provisional.
-VARIANT_WEIGHT = 0.85
+#: Score guaranteed when one token is in the other's variant set. Ruled by
+#: Robel (task-22b, 2026-07-21): a recorded variant asserts a ground-truth
+#: equivalence, so it sits comfortably ABOVE the 0.85 same-person gate rather
+#: than exactly on it -- a multi-token structure can then absorb a small
+#: penalty elsewhere without the pair failing. Was 0.85 (0.1.0-0.2.0-dev).
+VARIANT_WEIGHT = 0.90
 
 #: Jaro-Winkler multiplier when the two HabeshaKeys differ. Provisional.
 KEY_MISMATCH_DAMP = 0.6
@@ -160,7 +167,7 @@ def sim_detail(a: str, b: str) -> TokenSim:
     >>> sim_detail("Tzehay", "Sehay")
     TokenSim(score=0.9, method='phonetic')
     >>> sim_detail("Bekele", "Beqele")
-    TokenSim(score=0.85, method='variant')
+    TokenSim(score=0.9, method='variant')
     """
     norm_a, norm_b = _norm(a), _norm(b)
     if not norm_a or not norm_b:
@@ -188,7 +195,7 @@ def sim(a: str, b: str) -> float:
     >>> round(sim("Tzehay", "Sehay"), 2)  # phonetic backstop beats JW here
     0.9
     >>> sim("Bekele", "Beqele")  # variant-set overlap (q<->k, keys differ)
-    0.85
+    0.9
     >>> round(sim("Tesfaye", "Tesfa"), 2)  # different name: JW damped
     0.57
     >>> sim("", "Abebe")

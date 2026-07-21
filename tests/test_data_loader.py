@@ -49,14 +49,12 @@ def test_every_entry_is_verified() -> None:
     # Native-speaker review completed (task-3b, 2026-07-14): Robel reviewed
     # and flipped every current entry. New entries must start false again,
     # so this pin makes an unreviewed addition a conscious test change.
-    # Task 18 (wave 1, 2026-07-20) integrated 150 authored entries and Task 19
-    # (wave 2a + 2b, 2026-07-21) another 174, all with verified=false pending
-    # Robel's in-repo flip — the given-name pin is the exact 56/324 split until
-    # then. Restore the all-verified assert when he flips.
+    # Task 18 (wave 1) and Task 19 (waves 2a + 2b) added 324 entries as
+    # verified=false; Robel FLIPPED all 324 in task-22b (2026-07-21), so the
+    # all-verified assert is restored as that interim pin instructed.
     lex = lexicon()
-    verified = sum(1 for name in lex.given_names if name.verified)
-    assert verified == 56
-    assert sum(1 for name in lex.given_names if not name.verified) == 324
+    assert all(name.verified is True for name in lex.given_names)
+    assert sum(1 for name in lex.given_names if not name.verified) == 0
     assert all(title.verified is True for title in lex.titles)
     assert all(prefix.verified is True for prefix in lex.compound_prefixes)
     assert all(second.verified is True for second in lex.compound_seconds)

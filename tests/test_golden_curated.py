@@ -60,18 +60,39 @@ def _key(entry: dict[str, object]) -> frozenset[str]:
 # --- the shipped source -------------------------------------------------------
 
 
-def test_shipped_source_is_valid_and_empty() -> None:
-    # The agent never authors curated pairs; Robel fills this file.
+def test_shipped_source_is_valid() -> None:
+    # The agent never authors curated pairs; Robel fills this file. It shipped
+    # empty (task-22a) and he authored the first batch in task-22b, so the
+    # invariant under test is that it PARSES, not that it is empty.
     assert gen.CURATED_PATH.is_file()
-    assert gen.load_curated() == []
+    pairs = gen.load_curated()
+    assert all(isinstance(pair, gen.CuratedPair) for pair in pairs)
+    assert all(pair.expected in gen.EXPECTATIONS for pair in pairs)
+
+
+def test_shipped_curated_pairs_reach_the_corpus() -> None:
+    # Every authored pair must appear in the committed corpus, carry his
+    # expected value, and be marked as the human baseline.
+    shipped = json.loads((_ROOT / "tests" / "golden" / "pairs.json").read_text(encoding="utf-8"))
+    by_key = {_key(entry): entry for entry in shipped["pairs"]}
+    curated = gen.load_curated()
+    assert shipped["curated_source"]["pairs"] == len(curated)
+    for pair in curated:
+        entry = by_key[frozenset((pair.a, pair.b))]
+        assert entry["expected"] == pair.expected
+        assert entry["needs_human"] is False
+        assert str(entry["source"]).startswith("curated:")
 
 
 def test_empty_source_is_a_documented_no_op() -> None:
+    # The no-op is defined against the GENERATED population, which is the
+    # committed corpus minus whatever Robel has authored.
     shipped = json.loads((_ROOT / "tests" / "golden" / "pairs.json").read_text(encoding="utf-8"))
+    generated = [e for e in shipped["pairs"] if not str(e["source"]).startswith("curated:")]
     corpus = gen.build_corpus([])
     assert corpus.curated == 0
     assert corpus.superseded == 0
-    assert corpus.pairs == shipped["pairs"]
+    assert corpus.pairs == generated
 
 
 # --- curated pairs in the corpus ----------------------------------------------

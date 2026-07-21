@@ -7,7 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`VARIANT_WEIGHT` raised 0.85 → 0.90** (`habesha_names.match.token`). A
+  token pair matched through a recorded lexicon variant asserts a
+  ground-truth equivalence, so it now clears the 0.85 same-person gate with
+  margin instead of landing exactly on it: previously **287 golden "same"
+  pairs passed with a margin of precisely 0.0000**, and a multi-token name
+  that took any penalty elsewhere could drop under the gate on arithmetic
+  alone. **This changes published output** — `sim("Bekele", "Beqele")` now
+  returns `0.9` (was `0.85`) — and is a minor-bump output change under the
+  project's versioning policy. `VARIANT_WEIGHT` now ties `PHONETIC_WEIGHT`;
+  the tie resolves to `"phonetic"`, preserving the documented
+  more-explainable-method-wins ordering. No golden-corpus verdict changed:
+  pass/fail counts and every `known_fail` record are identical before and
+  after, and corpus recall/coverage are byte-identical (the eval path never
+  calls `match()`).
+
+- **All 380 given-name entries are now `verified: true`.** The repo owner
+  flipped the 324 entries carried at `verified: false` since waves 1, 2a and
+  2b, locking in the lexicon as reviewed; the loader test's all-verified
+  assertion is restored accordingly.
+
 ### Added
+
+- **Curated golden pairs — the first human baseline** (`tests/golden/curated.json`):
+  ten multi-token pairs authored by the repo owner, covering dropped
+  avonyms, inverted given/patronym order, skipped generations, variant
+  spellings inside multi-token names, and definitively distinct names. They
+  ship `needs_human: false` and supersede any colliding generated pair (none
+  collided). Their value was immediate: the generated corpus is 98% single
+  -token, which left the role weights, `swap_penalty` and `missing_scale`
+  **unmeasurable** — no value anywhere in their ranges changed a single
+  generated pair. **Six of the ten pass; four are recorded as `known_fail`**,
+  so the corpus now carries **7** `known_fail` records (3 generated + 4
+  curated). These four are honest, newly-visible engine limits, not
+  regressions: two are "skipped generation" pairs the matcher scores 0.8085
+  through its truncation tolerance, and two are "one role matches, one
+  differs" pairs whose scores **interleave with the existing analyst-review
+  pins**, so no threshold can separate them without contradicting the
+  task-3b review-zone decision.
 
 - **Known-fail retirement via recorded variants**: four `known_fail` golden
   pairs retired by recording the raw transliteration as an attested variant

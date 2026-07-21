@@ -10,7 +10,8 @@ algorithm behavior pins, not linguistic claims.
 The ARCHITECTURE 6 property (every variant matches its source at >= 0.8)
 is wired against ``sim`` directly. The original Task 7 carve-out for
 slash/dot abbreviation forms ("G/Medhin") was removed in Task 8: the
-variant-set overlap term wired into ``sim`` scores them 0.85.
+variant-set overlap term wired into ``sim`` scores them ``VARIANT_WEIGHT``
+(0.85 through 0.2.0-dev; raised to 0.90 by Robel's task-22b ruling).
 """
 
 from __future__ import annotations

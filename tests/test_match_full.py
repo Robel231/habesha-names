@@ -15,6 +15,7 @@ import pytest
 
 from habesha_names._data import lexicon
 from habesha_names.match.full import DEFAULT_WEIGHTS, MatchWeights, match
+from habesha_names.match.token import VARIANT_WEIGHT
 
 # Deterministic sample of full names built from lexicon canonicals.
 _CANONICALS = [entry.canonical for entry in lexicon().given_names[:8]]
@@ -133,11 +134,16 @@ def test_pairs_report_tokens_roles_sims_methods() -> None:
 
 def test_variant_overlap_method() -> None:
     # Bekele/Beqele: HabeshaKeys differ (q/k not folded), JW is damped, the
-    # variant-set overlap term wins. Score = (0.45*0.85 + 0.35*1.0) / 0.80.
+    # variant-set overlap term wins. Score = (0.45*VARIANT_WEIGHT + 0.35) / 0.80.
+    # Tracks the constant rather than re-pinning its magnitude: task-22b raised
+    # it 0.85 -> 0.90 on Robel's ruling, and the 0.85 gate is asserted below.
     result = match("Bekele Girma", "Beqele Girma")
     assert result.pairs[0].method == "variant"
-    assert result.pairs[0].sim == pytest.approx(0.85)
-    assert result.score == pytest.approx((0.45 * 0.85 + 0.35) / 0.80)
+    assert result.pairs[0].sim == pytest.approx(VARIANT_WEIGHT)
+    assert result.score == pytest.approx((0.45 * VARIANT_WEIGHT + 0.35) / 0.80)
+    # The ruling's point: a recorded variant clears the same-person gate with
+    # room to spare, instead of landing exactly on it.
+    assert VARIANT_WEIGHT > 0.85
 
 
 def test_parse_notes_carried_with_side_prefix() -> None:

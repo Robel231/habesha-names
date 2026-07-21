@@ -37,5 +37,66 @@
     "pair replaces it (expected value included), and pairs.json records the count",
     "under 'curated_source.superseded_generated'."
   ],
-  "pairs": []
+  "pairs": [
+    {
+      "a": "Abebe Kebede Tadesse",
+      "b": "Abebe Kebede",
+      "expected": "same",
+      "note": "missing avonym: grandfather's name dropped"
+    },
+    {
+      "a": "Fatima Mohammed Ali",
+      "b": "Fatima Mohammed",
+      "expected": "same",
+      "note": "missing avonym: grandfather's name dropped"
+    },
+    {
+      "a": "Abebe Kebede Tadesse",
+      "b": "Kebede Abebe Tadesse",
+      "expected": "same",
+      "note": "swapped roles: given and patronym inverted"
+    },
+    {
+      "a": "Dawit Alemu",
+      "b": "Alemu Dawit",
+      "expected": "same",
+      "note": "swapped roles: given and patronym inverted"
+    },
+    {
+      "a": "Abebe Kebede Tadesse",
+      "b": "Abebe Tadesse",
+      "expected": "different",
+      "note": "missing patronym: a skipped generation, typically rejected in strict KYC"
+    },
+    {
+      "a": "Fatima Mohammed Ali",
+      "b": "Fatima Ali",
+      "expected": "different",
+      "note": "missing patronym: a skipped generation, typically rejected in strict KYC"
+    },
+    {
+      "a": "Bereket Tesfaye",
+      "b": "Bireket Tesfaye",
+      "expected": "same",
+      "note": "variant interaction within a multi-token name: variant in the given name"
+    },
+    {
+      "a": "Usman Ali",
+      "b": "Ousman Ali",
+      "expected": "same",
+      "note": "variant interaction within a multi-token name: variant in the given name"
+    },
+    {
+      "a": "Dawit Alemu",
+      "b": "Dawit Girma",
+      "expected": "different",
+      "note": "definitively different: shared given name, different patronym"
+    },
+    {
+      "a": "Gebreyesus Hailu",
+      "b": "Gebre Hailu",
+      "expected": "different",
+      "note": "definitively different: sharing a prefix does not make it the same name"
+    }
+  ]
 }
