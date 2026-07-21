@@ -131,16 +131,20 @@ def test_rule_path_canonicals_keep_key_and_are_normalize_stable() -> None:
 #: known_fail markers: retiring one requires consciously editing this set).
 #: Regenerated from this test's own output at Task 18 (wave 1): the 150 new
 #: entries grew the swept variant population, 13 -> 60 (all 13 stayed, 47
-#: joined, none left). Three classes, all review-queued in PROGRESS.md:
+#: joined, none left); and again at Task 19 (wave 2a), 60 -> 76 (all 60
+#: stayed, 16 joined, none left). Three classes, all review-queued in
+#: PROGRESS.md:
 #: - the variant engine's h->kh rewrite landing right after "c", "s", or
 #:   "p" (Abebech -> Abebeckh, Eshetu -> Eskhetu, Ephrem -> Epkherem, plus
-#:   wave-1 Belachew/Getachew/Michael/Mengesha/Negash/Shiferaw/Teshome
-#:   families): the key reads c/s/p + kh as two consonants, but every
-#:   possible letter reading of the folded string fuses ch/sh/ph into one;
+#:   wave-1 Belachew/Getachew/Michael/Mengesha/Negash/Shiferaw/Teshome and
+#:   wave-2a Beshir/Gashaw/Gemechu/Shimelis families): the key reads
+#:   c/s/p + kh as two consonants, but every possible letter reading of the
+#:   folded string fuses ch/sh/ph into one;
 #: - a deletion variant ending in a non-permissible consonant cluster
-#:   (Abebech -> Ababch): forward epenthesis re-inserts "i" before the
-#:   final consonant, which becomes a new last stem vowel of a different
-#:   class than the input's; and
+#:   (Abebech -> Ababch, wave-2a Tarekegn -> tarakgn): forward epenthesis
+#:   re-inserts "i" before the final consonant, which becomes a new last
+#:   stem vowel of a different class than the input's (TRKGN:aa -> TRKGN:ae);
+#:   and
 #: - plain "ph" in wave-1 Yoseph's vowel-wobble variants (yeseph/yosiph/
 #:   yossiph): the key folds ph -> F but "ph" is not an inverse-table input
 #:   fold, so the rule path keeps p + h split (see CANONICAL_KEY_EXCEPTIONS).
@@ -165,7 +169,10 @@ KNOWN_KEY_EXCEPTIONS = frozenset(
         "belackhiw",
         "belckhew",
         "bellackhew",
+        "beskher",
+        "beskhir",
         "bilackhew",
+        "biskhir",
         "epkherem",
         "epkhirem",
         "epkhrem",
@@ -175,10 +182,17 @@ KNOWN_KEY_EXCEPTIONS = frozenset(
         "eskhetu",
         "eskhitu",
         "eskhtu",
+        "gaskhaw",
+        "gemackhu",
+        "gemckhu",
+        "gemeckhu",
+        "gemickhu",
+        "gemmeckhu",
         "getackhew",
         "getackhiw",
         "getckhew",
         "gettackhew",
+        "gimeckhu",
         "gitackhew",
         "meckhael",
         "menegeskha",
@@ -193,11 +207,17 @@ KNOWN_KEY_EXCEPTIONS = frozenset(
         "neggaskh",
         "nigaskh",
         "skheferaw",
+        "skhemelis",
         "skhifaraw",
         "skhiferaw",
         "skhiferraw",
         "skhifferaw",
         "skhifiraw",
+        "skhimalis",
+        "skhimeles",
+        "skhimelis",
+        "skhimilis",
+        "tarakgn",
         "teskhme",
         "teskhome",
         "teskhomie",

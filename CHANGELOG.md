@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Lexicon wave 2a**: 31 further given-name entries authored by the repo
+  owner (native speaker) from the remaining tier-1 mining queue, integrated
+  exactly as authored with `verified: false` pending his in-repo review
+  flip. One candidate (Gebreyohannes) was rejected as a `Gebre-` compound
+  already served by compound handling. The given-name lexicon grows
+  206 → 237 entries; corpus coverage rises 49.9% → 53.5%, attested-variant
+  recall 96.5% → 96.7% (strict 94.9% → 95.1%). The golden corpus
+  regenerates 1039 → 1151 pairs with `known_fail` unchanged at 3 — no new
+  engine limit surfaced. The wave adds the deliberately-distinct pairs
+  Berhane/Birhan (per the 2026-07-20 ending-pair ruling) and Abeba/Abebe.
+
 - **Lexicon wave 1**: 150 given-name entries authored by the repo owner
   (native speaker) from the tier-1 corpus mining queue, integrated exactly
   as authored with `verified: false` pending his in-repo review flip
