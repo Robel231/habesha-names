@@ -1,10 +1,28 @@
 """Generate ``tests/golden/pairs.json`` -- the Task 8 golden match corpus.
 
-Every pair is MECHANICALLY derived from the seeded lexicon (Task 4, itself
-``verified: false``) and the plan/architecture name lists; no pair is a
-claim about real people, and the agent that wrote this is not a native
-speaker. All pairs therefore ship ``"needs_human": true`` for Robel to
-review, prune, and extend with real-world confusables.
+The corpus has TWO sources, and the ``source`` field on every pair says
+which one it came from:
+
+1. **Generated** (the original Task 8 population). MECHANICALLY derived from
+   the seeded lexicon (Task 4) and the plan/architecture name lists; no pair
+   is a claim about real people, and the agent that wrote this is not a
+   native speaker. Generated pairs therefore ship ``"needs_human": true``
+   for Robel to review, prune, and extend.
+2. **Curated** (Task 22): ``tests/golden/curated.json``, authored by Robel --
+   real-world confusable pairs with his expected outcome. Curated pairs ship
+   ``"needs_human": false`` and ``"source": "curated: ..."``: they ARE the
+   human baseline, so there is nobody left to route them to. The agent
+   authors NO curated pairs, ever -- same firewall as lexicon entries
+   (DATA_PROVENANCE.md, AGENT_KICKOFF linguistic-data rules).
+
+**Precedence**: curated pairs are added FIRST, so a curated pair that
+collides with a generated one (same unordered {a, b}) WINS -- the human
+baseline replaces the mechanical guess, including its ``expected`` value.
+Consequence to know: the mechanical near-miss block is a fixed RANK window
+(the top ``NEAR_MISS_COUNT`` scoring distinct canonicals), not a fixed
+count, so a curated collision inside that window shrinks it by one rather
+than pulling the next-ranked pair in. That keeps the generated population a
+deterministic function of the lexicon alone.
 
 Expected outcomes follow ARCHITECTURE §6: same-person pairs must score
 >= SAME_MIN, different-person pairs <= DIFFERENT_MAX, and (task-3b policy)
@@ -13,7 +31,14 @@ Expected outcomes follow ARCHITECTURE §6: same-person pairs must score
 generation time violates their band are kept and marked
 ``"known_fail": true`` instead of being dropped -- they are honest records
 of current engine limits, and the golden test asserts they KEEP failing so
-any improvement forces a conscious corpus regeneration.
+any improvement forces a conscious corpus regeneration. This applies to
+curated pairs unchanged: a curated pair the engine currently fails becomes
+a ``known_fail`` RECORD, never a dropped pair.
+
+A missing or malformed ``curated.json`` is a hard, explicit failure (exit
+1 with the reason) -- never a silent skip, which would make Robel's
+authoring look integrated when it isn't. An empty ``"pairs": []`` is the
+documented no-op: the generated corpus, byte-identical.
 
 Usage:
     python scripts/gen_golden_pairs.py          # (re)write the corpus
@@ -25,13 +50,24 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Sequence
+from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 from habesha_names._data import lexicon
 from habesha_names.match.full import match
 from habesha_names.translit.variants import variants
 
 CORPUS_PATH = Path(__file__).resolve().parents[1] / "tests" / "golden" / "pairs.json"
+
+#: Robel's hand-authored confusable pairs (Task 22). Ships empty; the agent
+#: never writes a pair into it.
+CURATED_PATH = Path(__file__).resolve().parents[1] / "tests" / "golden" / "curated.json"
+
+#: How the curated source is named inside pairs.json (stable, POSIX form).
+CURATED_REL = "tests/golden/curated.json"
 
 #: ARCHITECTURE §6 gates: same-person >= 0.85, different-person <= 0.6.
 SAME_MIN = 0.85
@@ -105,8 +141,109 @@ FULL_NAME_REVIEW = (
 #: How many mechanically-found near-miss different pairs to keep.
 NEAR_MISS_COUNT = 25
 
+#: The three outcomes a pair may expect (ARCHITECTURE §6 + task-3b "review").
+EXPECTATIONS = ("same", "different", "review")
 
-def _entry(a: str, b: str, expected: str, source: str) -> dict[str, object]:
+#: Keys a curated pair may carry. Anything else is an authoring mistake and
+#: is reported rather than ignored.
+_CURATED_REQUIRED = ("a", "b", "expected")
+_CURATED_OPTIONAL = ("note",)
+
+
+class CuratedSourceError(Exception):
+    """The curated-pairs file is missing or malformed.
+
+    Always fatal: a silent skip would make Robel's authoring look integrated
+    when it isn't.
+    """
+
+
+@dataclass(frozen=True)
+class CuratedPair:
+    """One human-authored pair: Robel's spellings and his expected outcome."""
+
+    a: str
+    b: str
+    expected: str
+    note: str = ""
+
+    @property
+    def source(self) -> str:
+        """Provenance string written into pairs.json (curated vs generated)."""
+        detail = self.note.strip() or "human-authored confusable pair"
+        return f"curated: {detail}"
+
+
+def _curated_error(path: Path, where: str, problem: str) -> CuratedSourceError:
+    return CuratedSourceError(f"{path}: {where}: {problem}")
+
+
+def load_curated(path: Path | None = None) -> list[CuratedPair]:
+    """Read Robel's curated pairs; raise ``CuratedSourceError`` on any problem.
+
+    An empty ``pairs`` list is valid and means "generated corpus only" --
+    the documented no-op, not an error. ``path`` defaults to
+    ``CURATED_PATH``, resolved at call time.
+    """
+    path = CURATED_PATH if path is None else path
+    if not path.is_file():
+        raise CuratedSourceError(
+            f"{path}: curated-pairs source missing. It is tracked in the repo and "
+            'must exist (ship it with "pairs": [] if there is nothing to curate yet).'
+        )
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise _curated_error(path, "file", f"invalid JSON: {error}") from error
+    if not isinstance(raw, dict):
+        raise _curated_error(path, "file", "expected a top-level JSON object")
+    if raw.get("schema") != 1:
+        raise _curated_error(path, "file", 'expected "schema": 1')
+    # Underscore keys are documentation for the author and are ignored here.
+    unknown = sorted(k for k in raw if not k.startswith("_") and k not in ("schema", "pairs"))
+    if unknown:
+        raise _curated_error(path, "file", f"unknown top-level key(s): {', '.join(unknown)}")
+    items = raw.get("pairs")
+    if not isinstance(items, list):
+        raise _curated_error(path, "file", 'expected a "pairs" list')
+
+    pairs: list[CuratedPair] = []
+    seen: set[frozenset[str]] = set()
+    for index, item in enumerate(items):
+        where = f"pairs[{index}]"
+        if not isinstance(item, dict):
+            raise _curated_error(path, where, "expected a JSON object")
+        missing = [key for key in _CURATED_REQUIRED if key not in item]
+        if missing:
+            raise _curated_error(path, where, f"missing key(s): {', '.join(missing)}")
+        extra = sorted(set(item) - set(_CURATED_REQUIRED) - set(_CURATED_OPTIONAL))
+        if extra:
+            raise _curated_error(path, where, f"unknown key(s): {', '.join(extra)}")
+        for key in ("a", "b"):
+            value = item[key]
+            if not isinstance(value, str) or not value.strip():
+                raise _curated_error(path, where, f"{key!r} must be a non-empty string")
+        note = item.get("note", "")
+        if not isinstance(note, str):
+            raise _curated_error(path, where, "'note' must be a string")
+        if item["expected"] not in EXPECTATIONS:
+            raise _curated_error(
+                path, where, f"'expected' must be one of {', '.join(EXPECTATIONS)}"
+            )
+        a, b = item["a"], item["b"]
+        if a == b:
+            raise _curated_error(path, where, "'a' and 'b' are the same string")
+        pair_key = frozenset((a, b))
+        if pair_key in seen:
+            raise _curated_error(path, where, f"duplicate pair ({a!r}, {b!r})")
+        seen.add(pair_key)
+        pairs.append(CuratedPair(a=a, b=b, expected=item["expected"], note=note))
+    return pairs
+
+
+def _entry(
+    a: str, b: str, expected: str, source: str, *, needs_human: bool = True
+) -> dict[str, object]:
     """Build one corpus entry, scoring it and marking threshold violations."""
     score = round(float(match(a, b)), 4)
     entry: dict[str, object] = {
@@ -114,7 +251,7 @@ def _entry(a: str, b: str, expected: str, source: str) -> dict[str, object]:
         "b": b,
         "expected": expected,
         "source": source,
-        "needs_human": True,
+        "needs_human": needs_human,
         "score_at_generation": score,
     }
     if expected == "same":
@@ -128,17 +265,70 @@ def _entry(a: str, b: str, expected: str, source: str) -> dict[str, object]:
     return entry
 
 
-def build_pairs() -> list[dict[str, object]]:
-    """Derive the full corpus, deduplicated, in deterministic order."""
+@lru_cache(maxsize=1)
+def _near_miss_ranked() -> tuple[tuple[str, str], ...]:
+    """The top-``NEAR_MISS_COUNT`` scoring pairs of DISTINCT lexicon canonicals.
+
+    Distinct entries are different names by construction (the loader rejects
+    any spelling shared between two entries). A fixed RANK window, computed
+    from the lexicon alone -- curated collisions inside it do not pull the
+    next-ranked pair in.
+    """
+    canonicals = [entry.canonical for entry in lexicon().given_names]
+    scored = sorted(
+        (
+            (round(float(match(a, b)), 4), a, b)
+            for i, a in enumerate(canonicals)
+            for b in canonicals[i + 1 :]
+        ),
+        key=lambda item: (-item[0], item[1], item[2]),
+    )
+    return tuple((a, b) for _score, a, b in scored[:NEAR_MISS_COUNT])
+
+
+@dataclass(frozen=True)
+class Corpus:
+    """The rendered pair population plus the curated-source audit counts."""
+
+    pairs: list[dict[str, object]]
+    curated: int
+    superseded: int
+
+
+def build_corpus(curated: Sequence[CuratedPair] | None = None) -> Corpus:
+    """Merge curated (human) and generated (mechanical) pairs, deterministically.
+
+    Curated pairs go in FIRST, so a curated pair beats a colliding generated
+    one; ``superseded`` counts those wins for the audit line in pairs.json.
+    ``curated=None`` reads the shipped source (and fails loudly if it is
+    missing or malformed).
+    """
+    if curated is None:
+        curated = load_curated()
+
     entries: list[dict[str, object]] = []
     seen: set[frozenset[str]] = set()
+    curated_keys: set[frozenset[str]] = set()
+    displaced: set[frozenset[str]] = set()
 
-    def add(a: str, b: str, expected: str, source: str) -> None:
+    def add(a: str, b: str, expected: str, source: str, *, needs_human: bool = True) -> None:
         key = frozenset((a, b))
-        if a == b or key in seen:
+        if a == b:
+            return
+        if key in seen:
+            # Generated pairs also dedup against each other; only a collision
+            # with a CURATED key is a human baseline superseding a guess.
+            if needs_human and key in curated_keys:
+                displaced.add(key)
             return
         seen.add(key)
-        entries.append(_entry(a, b, expected, source))
+        if not needs_human:
+            curated_keys.add(key)
+        entries.append(_entry(a, b, expected, source, needs_human=needs_human))
+
+    for pair in curated:
+        # Curated pairs drop needs_human: they ARE the human baseline.
+        add(pair.a, pair.b, pair.expected, pair.source, needs_human=False)
 
     names = lexicon().given_names
     for entry in names:
@@ -158,42 +348,48 @@ def build_pairs() -> list[dict[str, object]]:
     for a, b, why in FULL_NAME_REVIEW:
         add(a, b, "review", f"expected review-zone pair: {why}")
 
-    # Mechanical near-misses: the highest-scoring pairs of DISTINCT lexicon
-    # canonicals (distinct entries = different names by construction; the
-    # loader rejects any spelling shared between two entries).
-    canonicals = [entry.canonical for entry in names]
-    scored = sorted(
-        (
-            (round(float(match(a, b)), 4), a, b)
-            for i, a in enumerate(canonicals)
-            for b in canonicals[i + 1 :]
-        ),
-        key=lambda item: (-item[0], item[1], item[2]),
-    )
-    for _score, a, b in scored[:NEAR_MISS_COUNT]:
+    for a, b in _near_miss_ranked():
         add(a, b, "different", "mechanical near-miss: highest-scoring distinct canonicals")
-    return entries
+    return Corpus(pairs=entries, curated=len(curated), superseded=len(displaced))
 
 
-def render() -> str:
-    pairs = build_pairs()
-    payload = {
+def build_pairs(curated: Sequence[CuratedPair] | None = None) -> list[dict[str, object]]:
+    """Derive the full corpus, deduplicated, in deterministic order."""
+    return build_corpus(curated).pairs
+
+
+def render(curated: Sequence[CuratedPair] | None = None) -> str:
+    """The exact text of pairs.json for the given (or shipped) curated source."""
+    return render_corpus(curated)[0]
+
+
+def render_corpus(curated: Sequence[CuratedPair] | None = None) -> tuple[str, Corpus]:
+    """``render()`` plus the corpus it was rendered from (for the CLI summary)."""
+    corpus = build_corpus(curated)
+    payload: dict[str, Any] = {
         "schema": 1,
         "note": (
             "GENERATED by scripts/gen_golden_pairs.py -- do not hand-edit; "
-            "regenerate instead. Every pair is agent-derived from the seed "
-            "lexicon (native-speaker reviewed in task-3b) and flagged "
-            "needs_human for Robel, who extends this corpus with real-world "
-            "confusables (flip needs_human on reviewed pairs THROUGH the "
-            "generator or replace it once human curation starts). expected "
-            "'review' pairs must score strictly between the two thresholds "
-            "(analyst review zone). known_fail marks current engine limits: "
-            "the golden test asserts these keep failing."
+            "regenerate instead. Pairs whose source is NOT 'curated:' are "
+            "agent-derived from the seed lexicon (native-speaker reviewed in "
+            "task-3b) and flagged needs_human for Robel. Pairs whose source "
+            "starts 'curated:' come from tests/golden/curated.json, authored "
+            "by Robel: they are the human baseline, carry needs_human false, "
+            "and supersede any generated pair with the same two spellings. "
+            "expected 'review' pairs must score strictly between the two "
+            "thresholds (analyst review zone). known_fail marks current "
+            "engine limits -- curated pairs included: the golden test asserts "
+            "these keep failing until the engine or the data changes."
         ),
+        "curated_source": {
+            "path": CURATED_REL,
+            "pairs": corpus.curated,
+            "superseded_generated": corpus.superseded,
+        },
         "thresholds": {"same_min": SAME_MIN, "different_max": DIFFERENT_MAX},
-        "pairs": pairs,
+        "pairs": corpus.pairs,
     }
-    return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+    return json.dumps(payload, ensure_ascii=False, indent=2) + "\n", corpus
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -204,8 +400,18 @@ def main(argv: list[str] | None = None) -> int:
         help="verify the committed corpus matches regeneration; exit 1 if stale",
     )
     args = parser.parse_args(argv)
-    rendered = render()
-    count = rendered.count('"a":')
+    try:
+        rendered, corpus = render_corpus()
+    except CuratedSourceError as error:
+        # Explicit and fatal: never a silent skip of Robel's authoring.
+        print(f"CURATED SOURCE ERROR: {error}", file=sys.stderr)
+        return 1
+    count = len(corpus.pairs)
+    summary = (
+        f"{count} pairs; curated {corpus.curated} "
+        f"(superseding {corpus.superseded} generated), "
+        f"generated {count - corpus.curated}"
+    )
     if args.check:
         if not CORPUS_PATH.exists():
             print(f"MISSING: {CORPUS_PATH}", file=sys.stderr)
@@ -213,11 +419,11 @@ def main(argv: list[str] | None = None) -> int:
         if CORPUS_PATH.read_text(encoding="utf-8") != rendered:
             print(f"STALE: {CORPUS_PATH} does not match regeneration", file=sys.stderr)
             return 1
-        print(f"OK: pairs.json is current ({count} pairs)")
+        print(f"OK: pairs.json is current ({summary})")
         return 0
     CORPUS_PATH.parent.mkdir(parents=True, exist_ok=True)
     CORPUS_PATH.write_text(rendered, encoding="utf-8")
-    print(f"WROTE: {CORPUS_PATH} ({count} pairs)")
+    print(f"WROTE: {CORPUS_PATH} ({summary})")
     return 0
 
 

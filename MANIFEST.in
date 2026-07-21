@@ -1,9 +1,11 @@
 # sdist completeness: the test suite must be runnable from the sdist.
 # test_golden.py reads tests/golden/pairs.json and re-runs
-# scripts/gen_golden_pairs.py --check; scripts/gen_fidel_tables.py --check
-# regenerates fidel/tables.py. Wheel contents are unaffected (package-data
-# in pyproject.toml governs those).
+# scripts/gen_golden_pairs.py --check, which also reads the curated-pairs
+# source (a missing curated.json is a hard failure by design -- task-22a);
+# scripts/gen_fidel_tables.py --check regenerates fidel/tables.py. Wheel
+# contents are unaffected (package-data in pyproject.toml governs those).
 include CHANGELOG.md
 recursive-include scripts *.py
 recursive-include tests *.py
 include tests/golden/pairs.json
+include tests/golden/curated.json

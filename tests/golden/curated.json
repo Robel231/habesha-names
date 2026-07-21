@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "_purpose": [
+    "Robel's hand-authored golden pairs (Task 22). Real-world confusables with the",
+    "outcome YOU expect from match(): 'same' person, 'different' people, or 'review'",
+    "(the analyst zone strictly between the two thresholds).",
+    "These pairs ARE the human baseline, so they ship needs_human=false in pairs.json.",
+    "The agent never authors a pair here -- same firewall as lexicon entries",
+    "(AGENT_KICKOFF linguistic-data rules, DATA_PROVENANCE.md).",
+    "An empty 'pairs' list is valid: it means 'generated corpus only'."
+  ],
+  "_how_to_use": [
+    "1. Add objects to 'pairs' below (keys: a, b, expected, and an optional note).",
+    "2. Regenerate: .venv\\Scripts\\python.exe scripts\\gen_golden_pairs.py",
+    "   (never hand-edit tests/golden/pairs.json -- the --check gate compares it",
+    "   byte-for-byte against regeneration).",
+    "3. Run: pytest tests\\test_golden.py -q",
+    "A pair the engine currently fails is NOT dropped: it is recorded with",
+    "\"known_fail\": true in pairs.json and the suite asserts it KEEPS failing, so",
+    "fixing it later forces a conscious regeneration. That is the honest record of",
+    "an engine limit; the 0.2.0 target for known_fail is 0."
+  ],
+  "_fields": {
+    "a": "one spelling (Latin or fidel; fidel is fine -- the matcher normalizes)",
+    "b": "the other spelling; must differ from 'a'",
+    "expected": "'same' (score >= 0.85) | 'different' (score <= 0.60) | 'review' (strictly between)",
+    "note": "optional, free text -- appears verbatim in the pair's 'source' field in pairs.json"
+  },
+  "_example_shape_do_not_uncomment": {
+    "a": "<one spelling>",
+    "b": "<the other spelling>",
+    "expected": "different",
+    "note": "<why you say so -- e.g. two distinct names an OCR pass confuses>"
+  },
+  "_collides_with_generated": [
+    "If your pair repeats a generated pair's two spellings, YOURS WINS: the curated",
+    "pair replaces it (expected value included), and pairs.json records the count",
+    "under 'curated_source.superseded_generated'."
+  ],
+  "pairs": []
+}
